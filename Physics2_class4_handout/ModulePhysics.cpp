@@ -66,7 +66,7 @@ update_status ModulePhysics::PreUpdate()
 		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
 		{
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
 			if(pb1 && pb2 && pb1->listener)
 				pb1->listener->OnCollision(pb1, pb2);
 		}
@@ -145,8 +145,8 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	b->SetUserData(pbody);
-	pbody->width = width;
-	pbody->height = height;
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
 
 	return pbody;
 }
