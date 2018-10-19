@@ -111,6 +111,9 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
+	App->textures->Unload(Background_Tex);
+	Background_Tex = nullptr;
+
 	return true;
 }
 
@@ -131,42 +134,94 @@ update_status ModuleSceneIntro::Update()
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
 		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
+		int startChain[166] = {
+			414, 298,
+			414, 215,
+			417, 191,
+			425, 163,
+			426, 142,
+			423, 124,
+			417, 112,
+			408, 99,
+			402, 92,
+			385, 82,
+			368, 79,
+			350, 79,
+			334, 85,
+			326, 91,
+			318, 100,
+			312, 110,
+			307, 128,
+			306, 142,
+			309, 160,
+			315, 174,
+			324, 184,
+			334, 191,
+			346, 196,
+			362, 196,
+			376, 192,
+			386, 183,
+			393, 172,
+			396, 158,
+			397, 142,
+			392, 128,
+			384, 115,
+			369, 128,
+			377, 142,
+			377, 152,
+			372, 167,
+			361, 173,
+			345, 173,
+			334, 166,
+			329, 152,
+			328, 138,
+			331, 124,
+			338, 114,
+			350, 105,
+			364, 103,
+			377, 105,
+			389, 112,
+			399, 123,
+			405, 137,
+			406, 148,
+			405, 161,
+			402, 171,
+			398, 193,
+			395, 210,
+			392, 229,
+			391, 251,
+			390, 280,
+			390, 295,
+			390, 313,
+			390, 341,
+			390, 370,
+			390, 393,
+			390, 412,
+			390, 434,
+			404, 434,
+			430, 434,
+			438, 431,
+			442, 425,
+			444, 414,
+			444, 372,
+			443, 328,
+			441, 317,
+			438, 311,
+			430, 308,
+			422, 309,
+			422, 333,
+			422, 399,
+			422, 407,
+			419, 412,
+			414, 412,
+			411, 407,
+			411, 390,
+			411, 317,
+			413, 311
 		};
+		
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+		startPhysBody = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -196,7 +251,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = ricks.getFirst();
+	/*c = ricks.getFirst();
 
 	while(c != NULL)
 	{
@@ -204,7 +259,7 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }

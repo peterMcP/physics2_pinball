@@ -21,13 +21,16 @@ public:
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
+	//p2List<PhysBody*> startChain;
 
-	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
+	SDL_Texture* circle = nullptr;
+	SDL_Texture* box = nullptr;
+	SDL_Texture* rick = nullptr;
 
-	SDL_Texture* Background_Tex;
+	SDL_Texture* Background_Tex = nullptr;
 
 	uint bonus_fx;
+
+	// background physbodys
+	PhysBody* startPhysBody = nullptr;
 };
