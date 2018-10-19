@@ -16,6 +16,7 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	void DrawBg(SDL_Texture* Background_Tex); 
 
 public:
 	p2List<PhysBody*> circles;
@@ -25,5 +26,8 @@ public:
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+
+	SDL_Texture* Background_Tex;
+
 	uint bonus_fx;
 };

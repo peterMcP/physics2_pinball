@@ -23,13 +23,88 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
+	circle = App->textures->Load("pinball/wheel.png");
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+
+	Background_Tex = App->textures->Load("pinball/Background.png");
+	DrawBg(Background_Tex);
+
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	return ret;
 }
+
+void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
+
+	int points[116] = {
+		25, 19,
+		27, 15,
+		30, 9,
+		35, 6,
+		40, 3,
+		390, 3,
+		395, 6,
+		400, 9,
+		405, 15,
+		407, 19,
+		407, 92,
+		413, 100,
+		420, 108,
+		424, 116,
+		429, 132,
+		431, 146,
+		431, 159,
+		426, 179,
+		420, 206,
+		420, 301,
+		433, 301,
+		440, 304,
+		444, 308,
+		449, 317,
+		449, 424,
+		447, 431,
+		439, 439,
+		432, 441,
+		425, 441,
+		411, 456,
+		398, 456,
+		398, 505,
+		395, 512,
+		391, 518,
+		385, 523,
+		376, 526,
+		261, 526,
+		255, 532,
+		245, 532,
+		239, 538,
+		191, 538,
+		185, 532,
+		173, 532,
+		168, 526,
+		40, 526,
+		30, 523,
+		22, 515,
+		18, 505,
+		18, 179,
+		14, 174,
+		10, 165,
+		9, 163,
+		6, 153,
+		6, 134,
+		8, 125,
+		13, 114,
+		17, 106,
+		25, 98
+	};
+
+	App->physics->CreateChain(0, 0, points, 116);
+	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
+
+}
+
+
 
 // Load assets
 bool ModuleSceneIntro::CleanUp()
