@@ -7,6 +7,9 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 
+// chains pivots header
+#include "chainsPivots.h"
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	circle = box = rick = NULL;
@@ -27,79 +30,22 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 
-	Background_Tex = App->textures->Load("pinball/Background.png");
-	DrawBg(Background_Tex);
-
-
+	board_tex = App->textures->Load("pinball/board.png");
+	background_tex = App->textures->Load("pinball/backgroundWallpaper.png");
+	scoreboard_tex = App->textures->Load("pinball/scoreboard.png");
+	
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
+	// create background chains
+	boardChain = App->physics->CreateChain(0, 18, boardChainPivots, 116, false);
+	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots, 166, false);
 
 	return ret;
 }
 
 void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
 
-	int points[116] = {
-		25, 19,
-		27, 15,
-		30, 9,
-		35, 6,
-		40, 3,
-		390, 3,
-		395, 6,
-		400, 9,
-		405, 15,
-		407, 19,
-		407, 92,
-		413, 100,
-		420, 108,
-		424, 116,
-		429, 132,
-		431, 146,
-		431, 159,
-		426, 179,
-		420, 206,
-		420, 301,
-		433, 301,
-		440, 304,
-		444, 308,
-		449, 317,
-		449, 424,
-		447, 431,
-		439, 439,
-		432, 441,
-		425, 441,
-		411, 456,
-		398, 456,
-		398, 505,
-		395, 512,
-		391, 518,
-		385, 523,
-		376, 526,
-		261, 526,
-		255, 532,
-		245, 532,
-		239, 538,
-		191, 538,
-		185, 532,
-		173, 532,
-		168, 526,
-		40, 526,
-		30, 523,
-		22, 515,
-		18, 505,
-		18, 179,
-		14, 174,
-		10, 165,
-		9, 163,
-		6, 153,
-		6, 134,
-		8, 125,
-		13, 114,
-		17, 106,
-		25, 98
-	};
 
-	App->physics->CreateChain(0, 0, points, 116, false);
 	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
 
 }
@@ -111,8 +57,13 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	App->textures->Unload(Background_Tex);
-	Background_Tex = nullptr;
+	App->textures->Unload(background_tex);
+	background_tex = nullptr;
+	App->textures->Unload(scoreboard_tex);
+	scoreboard_tex = nullptr;
+	App->textures->Unload(board_tex);
+	board_tex = nullptr;
+	
 
 	return true;
 }
@@ -133,95 +84,9 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		// Pivot 0, 0
-		int startChain[166] = {
-			414, 298,
-			414, 215,
-			417, 191,
-			425, 163,
-			426, 142,
-			423, 124,
-			417, 112,
-			408, 99,
-			402, 92,
-			385, 82,
-			368, 79,
-			350, 79,
-			334, 85,
-			326, 91,
-			318, 100,
-			312, 110,
-			307, 128,
-			306, 142,
-			309, 160,
-			315, 174,
-			324, 184,
-			334, 191,
-			346, 196,
-			362, 196,
-			376, 192,
-			386, 183,
-			393, 172,
-			396, 158,
-			397, 142,
-			392, 128,
-			384, 115,
-			369, 128,
-			377, 142,
-			377, 152,
-			372, 167,
-			361, 173,
-			345, 173,
-			334, 166,
-			329, 152,
-			328, 138,
-			331, 124,
-			338, 114,
-			350, 105,
-			364, 103,
-			377, 105,
-			389, 112,
-			399, 123,
-			405, 137,
-			406, 148,
-			405, 161,
-			402, 171,
-			398, 193,
-			395, 210,
-			392, 229,
-			391, 251,
-			390, 280,
-			390, 295,
-			390, 313,
-			390, 341,
-			390, 370,
-			390, 393,
-			390, 412,
-			390, 434,
-			404, 434,
-			430, 434,
-			438, 431,
-			442, 425,
-			444, 414,
-			444, 372,
-			443, 328,
-			441, 317,
-			438, 311,
-			430, 308,
-			422, 309,
-			422, 333,
-			422, 399,
-			422, 407,
-			419, 412,
-			414, 412,
-			411, 407,
-			411, 390,
-			411, 317,
-			413, 311
-		};
 		
-
-		startPhysBody = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
+		
+		//startChainBg = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -260,6 +125,14 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}*/
+
+	// draw background
+	App->renderer->Blit(background_tex, 0, 0, NULL, 1.0f); //, c->data->GetRotation());
+	// draw board
+	App->renderer->Blit(board_tex, 0, 18, NULL, 1.0f);
+	// draw scoreboard
+	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
+
 
 	return UPDATE_CONTINUE;
 }

@@ -27,10 +27,13 @@ public:
 	SDL_Texture* box = nullptr;
 	SDL_Texture* rick = nullptr;
 
-	SDL_Texture* Background_Tex = nullptr;
+	SDL_Texture* board_tex = nullptr;
+	SDL_Texture* background_tex = nullptr;
+	SDL_Texture* scoreboard_tex = nullptr;
 
 	uint bonus_fx;
 
 	// background physbodys
-	PhysBody* startPhysBody = nullptr;
+	PhysBody* startLoopChain = nullptr;
+	PhysBody* boardChain = nullptr;
 };
