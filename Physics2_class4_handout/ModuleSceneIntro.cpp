@@ -99,7 +99,7 @@ void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
 		25, 98
 	};
 
-	App->physics->CreateChain(0, 0, points, 116);
+	App->physics->CreateChain(0, 0, points, 116, false);
 	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
 
 }
