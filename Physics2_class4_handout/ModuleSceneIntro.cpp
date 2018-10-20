@@ -70,10 +70,13 @@ bool ModuleSceneIntro::Start()
 
 	// TEST BALL -------
 	balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
-	balls.add(App->physics->CreateCircle(422, 330, 11));
-	balls.add(App->physics->CreateCircle(422, 341, 11));
-	balls.add(App->physics->CreateCircle(422, 352, 11));
 	balls.add(App->physics->CreateCircle(422, 363, 11));
+	balls.add(App->physics->CreateCircle(422, 352, 11));
+	balls.add(App->physics->CreateCircle(422, 341, 11));
+	balls.add(App->physics->CreateCircle(422, 330, 11));
+
+	
+	
 
 	/*balls.getLast()->data->listener = this;
 	Current_Ball = balls.getLast()->data; 
