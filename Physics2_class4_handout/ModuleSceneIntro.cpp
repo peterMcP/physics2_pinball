@@ -80,7 +80,7 @@ bool ModuleSceneIntro::Start()
 	f->SetFriction(0.7f);*/
 
 	balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
-	Current_Ball = balls.getFirst()->data;
+	
 
 	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
 	f->SetFriction(0.7f);
@@ -122,12 +122,12 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
 		balls.getLast()->data->listener = this;
 		Current_Ball = balls.getLast()->data;
-	}
+	}*/
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
@@ -146,8 +146,8 @@ update_status ModuleSceneIntro::Update()
 	{
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
-		if (Current_Ball != nullptr) {
-			Current_Ball->body->ApplyForce(b2Vec2(0, -420), balls.getLast()->data->body->GetWorldCenter(), true);
+		if (balls.getFirst()->data != nullptr) {
+			balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
 		}
 
 	}
@@ -243,22 +243,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			enterBoardTrigger->to_delete = true;
 		}
 
-		if (bodyB == Lose_Life_Trigger)
+		break; 
+	case INGAME:
+		if(bodyB == Lose_Life_Trigger)
 		{
 			LOG("ball is ready to be destroyed !!!!");
 			if (bodyA != nullptr) {
 				bodyA->to_delete = true;
-				App->physics->DestroyObject(bodyA);
-				delete bodyA;
-				bodyA = nullptr;
 			}
 
-			Ball_Safety_Chain->to_delete = true; 
+			Ball_Safety_Chain->to_delete = true;
 
-			App->player->Lives -= 1; 
-			scene_phase = game_loop::FAILURE; 
+			App->player->Lives -= 1;
+			scene_phase = game_loop::FAILURE;
 		}
 		break;
+
+
 	}
 
 }
@@ -327,6 +328,12 @@ update_status ModuleSceneIntro::PostUpdate()
 
 		}
 		
+		if (balls.getFirst()->data->to_delete) {
+			App->physics->DestroyObject(balls.getFirst()->data);
+			delete balls.getFirst()->data;
+			balls.getFirst()->data = nullptr;
+		}
+
 		break;
 
 	case INGAME:
