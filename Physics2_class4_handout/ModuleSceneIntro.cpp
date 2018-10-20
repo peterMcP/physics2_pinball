@@ -252,6 +252,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				bodyA = nullptr;
 			}
 
+			Ball_Safety_Chain->to_delete = true; 
+
 			App->player->Lives -= 1; 
 			scene_phase = game_loop::FAILURE; 
 		}
@@ -291,11 +293,12 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger->listener = this;
 
 
-				Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
+				Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 30, false, false);
 
 			}
 			
 		}
+
 		if (enterBoardTrigger != nullptr)
 		{
 			if (enterBoardTrigger->to_delete)
@@ -309,6 +312,18 @@ update_status ModuleSceneIntro::PostUpdate()
 				scene_phase = game_loop::INGAME;
 			}
 		}
+
+		if (Ball_Safety_Chain != nullptr) {
+
+			if (Ball_Safety_Chain->to_delete) {
+
+				App->physics->DestroyObject(Ball_Safety_Chain);
+				delete Ball_Safety_Chain;
+				Ball_Safety_Chain = nullptr;
+				
+			}
+
+		}
 		
 		break;
 
@@ -321,7 +336,7 @@ update_status ModuleSceneIntro::PostUpdate()
 	case FAILURE:
 
 		if (App->player->Lives != 0) {
-			scene_phase = game_loop::INGAME;
+			scene_phase = game_loop::START;
 		}
 		else {
 			if (Lose_Life_Trigger != nullptr) {
