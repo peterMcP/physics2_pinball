@@ -87,6 +87,9 @@ bool ModuleSceneIntro::Start()
 
 	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(37, 18, topSeparatorPoints, 12, false, true));
 
 	// ------------------
 
