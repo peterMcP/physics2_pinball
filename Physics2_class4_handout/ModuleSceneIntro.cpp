@@ -349,8 +349,9 @@ update_status ModuleSceneIntro::PostUpdate()
 				//itemBalls = nullptr;
 				break;
 			}
-
-			break;
+			itemBalls = itemBalls->next;
+		}
+		break;
 
 	case BLACK_HOLE:
 		break;
@@ -377,9 +378,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	default:
 		break;
-		}
 
 
-		return UPDATE_CONTINUE;
 	}
+		return UPDATE_CONTINUE;
+	
 }
