@@ -33,8 +33,9 @@ public:
 
 	uint bonus_fx;
 
-	// background physbodys
+	// background chain physbodys
 	PhysBody* startLoopChain = nullptr;
-	PhysBody* boardChain = nullptr;
+	//PhysBody* boardChain = nullptr;
 	PhysBody* boardPart1Chain = nullptr;
+	PhysBody* mainBoardChain = nullptr;
 };
