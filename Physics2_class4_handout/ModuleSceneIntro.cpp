@@ -240,7 +240,11 @@ update_status ModuleSceneIntro::PostUpdate()
 				//b2Body* body = startLoopChain->body;
 				// Adds the main board chain
 				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
-				Next_To_Flipper_Chain_1 = App->physics->CreateChain(0, 18, Next_To_Flipper_1, 54, false, false);
+				Next_To_Flipper_Chain_1 = App->physics->CreateChain(0, 18, Next_To_Flipper_1, 54, false, true);
+
+				Round_Objects.add(App->physics->CreateChain(0, 18, Round_Elements, 24, false));
+				Round_Objects.add(App->physics->CreateChain(43, 55, Round_Elements, 24, false, true));
+				Round_Objects.add(App->physics->CreateChain(-43, 55, Round_Elements, 24, false, true));
 
 
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
