@@ -41,7 +41,7 @@ bool ModuleSceneIntro::Start()
 	ball_tex = App->textures->Load("pinball/ball.png");
 	
 	// audio
-	music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
+	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
 	//App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -71,7 +71,7 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 330, 11));
 	balls.add(App->physics->CreateCircle(422, 341, 11));
 	balls.add(App->physics->CreateCircle(422, 352, 11));
-	// balls.add(App->physics->CreateCircle(422, 463, 11));
+	balls.add(App->physics->CreateCircle(422, 363, 11));
 
 	/*balls.getLast()->data->listener = this;
 	Current_Ball = balls.getLast()->data; 
@@ -204,8 +204,9 @@ update_status ModuleSceneIntro::Update()
 
 	// draw animations// balls etc
 
-	c = balls.getFirst();
 
+		c = balls.getFirst();
+	
 	while (c != NULL)
 	{
 		int x, y;
@@ -254,6 +255,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		break; 
+
 	case INGAME:
 		if(bodyB == Lose_Life_Trigger)
 		{
@@ -313,7 +315,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				//Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
 
 			}
-			
+
 		}
 
 		if (enterBoardTrigger != nullptr)
@@ -342,12 +344,9 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->physics->DestroyObject(itemBalls->data);
 				//balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
-
 			}
-			itemBalls = itemBalls->next;
-		}
-		
-		break;
+
+			break;
 
 	case BLACK_HOLE:
 		break;
@@ -359,23 +358,24 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 		else {
 			if (Lose_Life_Trigger != nullptr) {
-				Lose_Life_Trigger->to_delete = true; 
-				App->physics->DestroyObject(Lose_Life_Trigger); 
+				Lose_Life_Trigger->to_delete = true;
+				App->physics->DestroyObject(Lose_Life_Trigger);
 
 				delete Lose_Life_Trigger;       // change this later in the destroy method       
-				Lose_Life_Trigger = nullptr; 
+				Lose_Life_Trigger = nullptr;
 			}
-			scene_phase = game_loop::ENDGAME; 
+			scene_phase = game_loop::ENDGAME;
 		}
 		break;
 
 	case ENDGAME:
-		break; 
+		break;
 
 	default:
 		break;
-	}
+		}
 
-	
-	return UPDATE_CONTINUE;
+
+		return UPDATE_CONTINUE;
+	}
 }
