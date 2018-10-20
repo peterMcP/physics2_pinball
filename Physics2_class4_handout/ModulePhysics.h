@@ -69,6 +69,6 @@ private:
 	b2MouseJoint* mouse_joint = nullptr;
 	b2Body* ground;
 	b2Body* clickedBody = nullptr;
-	b2WeldJoint* weld_joint = nullptr;
+	b2WeldJoint* flipper_joint_r = nullptr;
 
 };

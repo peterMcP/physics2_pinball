@@ -82,13 +82,13 @@ void ModulePhysics::SetJoints(PhysBody* bodyA, PhysBody* bodyB) {
 	b2WeldJointDef def;
 	def.bodyA = bodyA->body;
 	def.bodyB = bodyB->body;
-
+	                                                     // we need to destroy joints FIRST, and bodies AFTER
 	def.localAnchorA.Set(0.0f, 0.0f);
 	def.localAnchorB.Set(0.0f, 0.0f);
 	def.referenceAngle = 0.0f;
 	def.frequencyHz = 0.0f;
 	def.dampingRatio = 0.0f;
-
+	
 
 	// weld_joint = (b2WeldJoint*)world->CreateJoint(&def);
 
