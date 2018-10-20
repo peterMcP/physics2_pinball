@@ -30,21 +30,36 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 
+	// board textures ---
 	board_tex = App->textures->Load("pinball/board.png");
 	background_tex = App->textures->Load("pinball/backgroundWallpaper.png");
 	scoreboard_tex = App->textures->Load("pinball/scoreboard.png");
+
+	// assets textures
+	ball_tex = App->textures->Load("pinball/ball.png");
 	
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
-	// create background chains
-	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots, 166, false, false);
+	// create background chains ---
+	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots2, 134, false, false);
 	// board main body perimeter parts chain
-	mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
-	// black hole gravity zone circle collider
+	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
+	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
 	blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
+	// exit loop tap (prevents the pinball ball to return to the exit loop)
+	//exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
 	// ------------------------------------------------------------------------------------
 
+	// TRIGGERS/SENSORS
+	// 364,129,8,8
+	exitLoopTrigger = App->physics->CreateRectangleSensor(364, 132, 8, 8);
+	exitLoopTrigger->listener = this;
+
+	// TEST BALL
+	balls.add(App->physics->CreateCircle(400, 420, 11));
+	balls.getLast()->data->listener = this;
+	
 
 	return ret;
 }
@@ -69,6 +84,8 @@ bool ModuleSceneIntro::CleanUp()
 	scoreboard_tex = nullptr;
 	App->textures->Unload(board_tex);
 	board_tex = nullptr;
+	App->textures->Unload(ball_tex);
+	ball_tex = nullptr;
 	
 
 	return true;
@@ -79,8 +96,8 @@ update_status ModuleSceneIntro::Update()
 {
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
-		circles.getLast()->data->listener = this;
+		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
+		balls.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
@@ -139,11 +156,64 @@ update_status ModuleSceneIntro::Update()
 	// draw scoreboard
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
+	// draw animations// balls etc
+
+	c = balls.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(ball_tex, x, y-1, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
+	if (bodyB == exitLoopTrigger)
+	{
+		LOG("exit loop trigger");
+
+		// destroy first loop part chain
+		startLoopChain->to_delete = true;
+
+		
+
+	}
+
+}
+
+update_status ModuleSceneIntro::PostUpdate()
+{
+
+	// START PHASE
+	// check if we have to delete any body
+	switch (scene_phase)
+	{
+	case START:
+		if (startLoopChain->to_delete == true)
+		{
+			App->physics->DestroyObject(startLoopChain);
+			// Adds the main board chain
+			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
+			scene_phase = game_loop::INGAME;
+		}
+		break;
+	case INGAME:
+		break;
+	case BLACK_HOLE:
+		break;
+	case FAILURE:
+		break;
+	default:
+		break;
+	}
+
+	
+	return UPDATE_CONTINUE;
 }

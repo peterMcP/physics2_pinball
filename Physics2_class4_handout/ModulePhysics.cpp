@@ -342,6 +342,7 @@ update_status ModulePhysics::PostUpdate()
 			world->DestroyJoint(mouse_joint);
 			mouse_joint = nullptr;
 			clickedBody = nullptr;
+			
 		}
 	}
 	// TODO 4: If the player releases the mouse button, destroy the joint
@@ -433,4 +434,16 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+bool ModulePhysics::DestroyObject(PhysBody* body)
+{
+	bool ret = true;
+
+	world->DestroyBody(body->body);
+	body->body = nullptr;
+	delete body;
+	body = nullptr;
+
+	return ret;
 }
