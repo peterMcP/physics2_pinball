@@ -209,8 +209,12 @@ update_status ModuleSceneIntro::Update()
 	while (c != NULL)
 	{
 		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball_tex, x, y-1, NULL, 1.0f, c->data->GetRotation());
+		if (c->data->body != nullptr)
+		{
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+			
+		}
 		c = c->next;
 	}
 
@@ -258,10 +262,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				bodyA->to_delete = true;
 			}
 
-			Ball_Safety_Chain->to_delete = true;
+			//Ball_Safety_Chain->to_delete = true;
 
 			App->player->Lives -= 1;
-			scene_phase = game_loop::FAILURE;
+			//scene_phase = game_loop::FAILURE;
 		}
 		break;
 
@@ -275,6 +279,10 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	// START PHASE
 	// check if we have to delete any body
+
+	p2List_item<PhysBody*>* itemBalls = balls.getFirst();
+
+
 	switch (scene_phase)
 	{
 	case START:
@@ -322,27 +330,23 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 		}
 
-		/*if (Ball_Safety_Chain != nullptr) {
-
-			if (Ball_Safety_Chain->to_delete) {
-
-				App->physics->DestroyObject(Ball_Safety_Chain);
-				delete Ball_Safety_Chain;
-				Ball_Safety_Chain = nullptr;
-				
-			}
-
-		}*/
-		
-		if (balls.getFirst()->data->to_delete) {
-			App->physics->DestroyObject(balls.getFirst()->data);
-			delete balls.getFirst()->data;
-			balls.getFirst()->data = nullptr;
-		}
-
 		break;
 
 	case INGAME:
+		// create a list of items to the balls for check if anyone wants to be destroyed
+		while (itemBalls != NULL)
+		{
+
+			if (itemBalls->data->to_delete)
+			{
+				App->physics->DestroyObject(itemBalls->data);
+				//balls.del(itemBalls); // todo, delete item from list crashes?
+				//itemBalls = nullptr;
+
+			}
+			itemBalls = itemBalls->next;
+		}
+		
 		break;
 
 	case BLACK_HOLE:
