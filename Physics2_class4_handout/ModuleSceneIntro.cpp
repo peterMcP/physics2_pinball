@@ -200,16 +200,6 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	/*c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}*/
-
 	// draw background
 	App->renderer->Blit(background_tex, 0, 0, NULL, 1.0f); //, c->data->GetRotation());
 	// draw board
@@ -325,6 +315,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				// add top dividers
 				// create top dividers
 				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
+				topDividerRight = App->physics->CreateChain(0, 18, topRightWayPoints, 30, false, true);
 
 			}
 
@@ -375,6 +366,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			App->physics->DestroyObject(exitLoopTapChain);
 			// deletes top dividers
 			App->physics->DestroyObject(topDividerLeft);
+			App->physics->DestroyObject(topDividerRight);
+
 			newBall();
 			scene_phase = game_loop::START;
 		}
