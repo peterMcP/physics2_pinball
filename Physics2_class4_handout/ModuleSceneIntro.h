@@ -27,6 +27,9 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+	bool restartBoard(); // player loose all balls, restart round
+	bool newBall(); // sets the chains ready to next ball
+
 
 public:
 	p2List<PhysBody*> circles;

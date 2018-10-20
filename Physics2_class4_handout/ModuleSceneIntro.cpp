@@ -350,6 +350,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
+				scene_phase = game_loop::FAILURE;
 				break;
 			}
 			itemBalls = itemBalls->next;
@@ -362,6 +363,11 @@ update_status ModuleSceneIntro::PostUpdate()
 	case FAILURE:
 
 		if (App->player->Lives != 0) {
+			// deletes main board chain
+			App->physics->DestroyObject(mainBoardChain);
+			// deletes corner tap exit loop
+			App->physics->DestroyObject(exitLoopTapChain);
+			newBall();
 			scene_phase = game_loop::START;
 		}
 		else {
@@ -386,4 +392,30 @@ update_status ModuleSceneIntro::PostUpdate()
 	}
 		return UPDATE_CONTINUE;
 	
+}
+
+bool ModuleSceneIntro::restartBoard()
+{
+	bool ret = true;
+
+
+
+	return ret;
+}
+
+bool ModuleSceneIntro::newBall()
+{
+	bool ret = true;
+
+	// only creation for all needed parts here ----------------
+	
+	// create needed triggers
+	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
+	exitLoopTrigger->listener = this;
+	// create the loop chain part
+	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+
+
+
+	return ret;
 }
