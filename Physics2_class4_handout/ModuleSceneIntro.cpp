@@ -316,6 +316,10 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
 
+				// add top dividers
+				// create top dividers
+				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
+
 			}
 
 		}
@@ -329,8 +333,6 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
-				// create top dividers
-				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
 				//switch game state
 				scene_phase = game_loop::INGAME;
 			}
