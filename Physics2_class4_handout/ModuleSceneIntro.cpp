@@ -34,6 +34,7 @@ bool ModuleSceneIntro::Start()
 	board_tex = App->textures->Load("pinball/board.png");
 	background_tex = App->textures->Load("pinball/backgroundWallpaper.png");
 	scoreboard_tex = App->textures->Load("pinball/scoreboard.png");
+	second_layer_tex = App->textures->Load("pinball/secondLayer.png");
 
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
@@ -90,6 +91,8 @@ bool ModuleSceneIntro::CleanUp()
 	board_tex = nullptr;
 	App->textures->Unload(ball_tex);
 	ball_tex = nullptr;
+	App->textures->Unload(second_layer_tex);
+	second_layer_tex = nullptr;
 	
 
 	return true;
@@ -177,6 +180,16 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(ball_tex, x, y-1, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
+	}
+
+	// check if we are on in game phase to draw the second layer on top of the ball
+
+	if (scene_phase == game_loop::INGAME)
+	{
+		SDL_Rect r = { 0,0,55,120 };
+		App->renderer->Blit(second_layer_tex, 304, 99, &r, 1.0f); 
+		r = { 68,10,50,102 };
+		App->renderer->Blit(second_layer_tex, 75, 117, &r, 1.0f);
 	}
 
 

@@ -41,6 +41,7 @@ public:
 	SDL_Texture* background_tex = nullptr;
 	SDL_Texture* scoreboard_tex = nullptr;
 	SDL_Texture* ball_tex = nullptr;
+	SDL_Texture* second_layer_tex = nullptr;
 
 	uint bonus_fx;
 
