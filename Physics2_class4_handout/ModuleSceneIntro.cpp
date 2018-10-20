@@ -410,12 +410,14 @@ bool ModuleSceneIntro::newBall()
 	// only creation for all needed parts here ----------------
 	
 	// add listener to next ball
-	balls.getFirst()->data->listener = this;
-	// create needed triggers
-	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
-	exitLoopTrigger->listener = this;
-	// create the loop chain part
-	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+
+		balls.getFirst()->data->listener = this;
+		// create needed triggers
+		exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
+		exitLoopTrigger->listener = this;
+		// create the loop chain part
+		onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+	
 
 	return ret;
 }
