@@ -65,7 +65,7 @@ bool ModuleSceneIntro::Start()
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
-	Lose_Life_Trigger = App->physics->CreateRectangleSensor(218, 492, 30, 19);
+	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 530, 60, 20);
 	Lose_Life_Trigger->listener = this;
 
 	// TEST BALL -------
