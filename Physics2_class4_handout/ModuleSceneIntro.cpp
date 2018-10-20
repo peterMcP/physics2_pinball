@@ -58,20 +58,22 @@ bool ModuleSceneIntro::Start()
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
 
-	// TEST BALL
+	// TEST BALL -------
 	balls.add(App->physics->CreateCircle(400, 420, 11));
 	balls.getLast()->data->listener = this;
-	
+	b2Fixture* f = balls.getLast()->data->body->GetFixtureList();
+	f->SetFriction(0.7f);
+	// ------------------
 
 	return ret;
 }
 
-void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
-
-
-	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
-
-}
+//void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
+//
+//
+//	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
+//
+//}
 
 
 
@@ -117,7 +119,7 @@ update_status ModuleSceneIntro::Update()
 	// test addimpulse to ball
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-400), balls.getLast()->data->body->GetWorldCenter(), true);
+		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
 	}
 
