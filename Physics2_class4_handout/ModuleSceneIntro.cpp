@@ -41,8 +41,8 @@ bool ModuleSceneIntro::Start()
 	ball_tex = App->textures->Load("pinball/ball.png");
 	
 	// audio
-	music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
-	App->audio->PlayFx(1, -1); 
+	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
+	//App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
@@ -216,8 +216,12 @@ update_status ModuleSceneIntro::Update()
 	while (c != NULL)
 	{
 		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball_tex, x, y-1, NULL, 1.0f, c->data->GetRotation());
+		if (c->data->body != nullptr)
+		{
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+			
+		}
 		c = c->next;
 	}
 
@@ -266,10 +270,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				bodyA->to_delete = true;
 			}
 
-			Ball_Safety_Chain->to_delete = true;
+			//Ball_Safety_Chain->to_delete = true;
 
 			App->player->Lives -= 1;
-			scene_phase = game_loop::FAILURE;
+			//scene_phase = game_loop::FAILURE;
 		}
 		break;
 
@@ -283,6 +287,10 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	// START PHASE
 	// check if we have to delete any body
+
+	p2List_item<PhysBody*>* itemBalls = balls.getFirst();
+
+
 	switch (scene_phase)
 	{
 	case START:
@@ -313,7 +321,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				//Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
 
 			}
-			
+
 		}
 
 		if (enterBoardTrigger != nullptr)
@@ -330,28 +338,21 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 		}
 
-		/*if (Ball_Safety_Chain != nullptr) {
-
-			if (Ball_Safety_Chain->to_delete) {
-
-				App->physics->DestroyObject(Ball_Safety_Chain);
-				delete Ball_Safety_Chain;
-				Ball_Safety_Chain = nullptr;
-				
-			}
-
-		}*/
-		
-		if (balls.getFirst()->data->to_delete) {
-		/*	App->physics->DestroyObject(balls.getFirst()->data);
-			delete balls.getFirst()->data;
-			balls.getFirst()->data = nullptr;*/
-		}
-
 		break;
 
 	case INGAME:
-		break;
+		// create a list of items to the balls for check if anyone wants to be destroyed
+		while (itemBalls != NULL)
+		{
+
+			if (itemBalls->data->to_delete)
+			{
+				App->physics->DestroyObject(itemBalls->data);
+				//balls.del(itemBalls); // todo, delete item from list crashes?
+				//itemBalls = nullptr;
+			}
+
+			break;
 
 	case BLACK_HOLE:
 		break;
@@ -363,23 +364,24 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 		else {
 			if (Lose_Life_Trigger != nullptr) {
-				Lose_Life_Trigger->to_delete = true; 
-				App->physics->DestroyObject(Lose_Life_Trigger); 
+				Lose_Life_Trigger->to_delete = true;
+				App->physics->DestroyObject(Lose_Life_Trigger);
 
 				delete Lose_Life_Trigger;       // change this later in the destroy method       
-				Lose_Life_Trigger = nullptr; 
+				Lose_Life_Trigger = nullptr;
 			}
-			scene_phase = game_loop::ENDGAME; 
+			scene_phase = game_loop::ENDGAME;
 		}
 		break;
 
 	case ENDGAME:
-		break; 
+		break;
 
 	default:
 		break;
-	}
+		}
 
-	
-	return UPDATE_CONTINUE;
+
+		return UPDATE_CONTINUE;
+	}
 }
