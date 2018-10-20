@@ -56,7 +56,8 @@ public:
 	PhysBody* mainBoardChain = nullptr;
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
-	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
+	PhysBody* Next_To_Flipper_Chain_R = nullptr;
+	PhysBody* Next_To_Flipper_Chain_L = nullptr;
 	PhysBody* Ball_Safety_Chain = nullptr;
 	PhysBody* onlyLoopChain = nullptr;
 	PhysBody* topDividerLeft = nullptr;

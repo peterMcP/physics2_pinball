@@ -91,14 +91,20 @@ bool ModuleSceneIntro::Start()
 	f->SetFriction(0.7f);
 
 	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
-	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
-	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(37, 18, topSeparatorPoints, 12, false, true));
+
+	Next_To_Flipper_Chain_R = App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true);
+	Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
+
 
 	// ADD SPECIAL COMPONENTS
 	Flipper_Chain_R = App->physics->CreateChain(0, 18, Flipper_R, 20, false);
 	Flipper_Chain_L = App->physics->CreateChain(0, 18, Flipper_L, 20, false);
+
+	// ADD Joints between components
+	App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
+
 
 	// ------------------
 
