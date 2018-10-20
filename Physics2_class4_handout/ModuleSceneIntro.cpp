@@ -99,8 +99,8 @@ bool ModuleSceneIntro::Start()
 
 
 	// ADD SPECIAL COMPONENTS
-	Flipper_Chain_R = App->physics->CreateChain(0, 18, Flipper_R, 20, false);
-	Flipper_Chain_L = App->physics->CreateChain(0, 18, Flipper_L, 20, false);
+	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
+	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, false);
 
 	// ADD Joints between components
 	App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
