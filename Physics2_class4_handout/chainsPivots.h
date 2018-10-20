@@ -16,9 +16,10 @@ int topRightWayPoints[30] = {
 	323, 163,
 	318, 146,
 	307, 138,
-	278, 125,
-	274, 118
+	278, 128,
+	273, 121
 };
+
 
 // Pivot 0, 0
 int topLeftWayPoints[32] = {
