@@ -33,6 +33,7 @@ public:
 	p2List<PhysBody*> boxes;
 	//p2List<PhysBody*> startChain;
 	p2List<PhysBody*> balls;
+	p2List<PhysBody*> mainBoardComponents;
 
 	SDL_Texture* circle = nullptr;
 	SDL_Texture* box = nullptr;
