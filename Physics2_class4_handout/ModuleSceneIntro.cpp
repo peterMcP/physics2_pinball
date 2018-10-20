@@ -39,6 +39,7 @@ bool ModuleSceneIntro::Start()
 
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
+	leftFlipper_tex = App->textures->Load("pinball/L_Flipper.png");
 	
 	// audio
 	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -91,24 +92,24 @@ bool ModuleSceneIntro::Start()
 
 
 	// ADD SPECIAL COMPONENTS
-	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
-	Flipper_Chain_L = App->physics->CreateConvexPoly(0, 0, newFlipperLPoints, 14);//App->physics->CreateChain(0, 0 , Flipper_L, 20, true);
+	Flipper_Chain_R = App->physics->CreateConvexPoly(0, 0, Flipper_R, 16);
+	Flipper_Chain_L = App->physics->CreateConvexPoly(150, 474, newFlipperLPoints, 16);
 
 	// add anchor circles to stick the flippers center point of rotation
 	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
+	anchorFlipperR = App->physics->CreateCircle(240, 484, 3, false);
 
 	// adding revolution joint and motor to flipper - TEST, implement on setjoints function
 	b2RevoluteJointDef jointDef;
 	jointDef.bodyB = Flipper_Chain_L->body; //testCircle->body;
 	jointDef.bodyA = anchorFlipperL->body;
 	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
-	//jointDef.lowerAngle = -0.5f * b2_pi; // -90 degrees
-	//jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
-	//jointDef.enableLimit = true;
-	jointDef.maxMotorTorque = 10.0f;
-	jointDef.motorSpeed = 5.0f;
+	jointDef.lowerAngle = -0.22f * b2_pi; //
+	jointDef.upperAngle = 0.02f * b2_pi; //
+	jointDef.enableLimit = true;
+	jointDef.maxMotorTorque = 1000.0f;
+	jointDef.motorSpeed = -20.0f;
 	//jointDef.enableMotor = true;
-
 	flipper_joint_left = App->physics->SetJoint(&jointDef);
 	
 	return ret;
@@ -167,6 +168,17 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
+	// INPUT CONTROL FOR FLIPPERS ----------------------------------------------
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	{
+		flipper_joint_left->EnableMotor(true);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
+	{
+		flipper_joint_left->EnableMotor(false);
+	}
+
+
 	// Prepare for raycast ------------------------------------------------------
 	
 	iPoint mouse;
@@ -214,6 +226,11 @@ update_status ModuleSceneIntro::Update()
 			
 		c = c->next;
 	}
+
+	// draw flippers -------------------------------------------------
+	int x, y;
+	Flipper_Chain_L->GetPosition(x, y);
+	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation());
 
 	// check if we are on in game phase to draw the second layer on top of the ball
 

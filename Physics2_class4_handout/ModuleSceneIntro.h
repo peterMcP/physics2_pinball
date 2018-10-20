@@ -48,6 +48,8 @@ public:
 	SDL_Texture* scoreboard_tex = nullptr;
 	SDL_Texture* ball_tex = nullptr;
 	SDL_Texture* second_layer_tex = nullptr;
+	SDL_Texture* leftFlipper_tex = nullptr;
+	SDL_Texture* rightFlipper_tex = nullptr;
 
 	uint bonus_fx;
 	uint music;     

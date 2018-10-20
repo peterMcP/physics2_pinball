@@ -491,7 +491,7 @@ PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
 
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
 
@@ -509,7 +509,7 @@ PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &polyShape;
-	fixture.density = 1.0f;
+	fixture.density = 30.0f;
 
 	b->CreateFixture(&fixture);
 

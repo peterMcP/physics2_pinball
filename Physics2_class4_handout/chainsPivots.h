@@ -2,14 +2,15 @@
 #define __H_CHAINSPIVOTS__
 
 // Pivot 0, 0
-int newFlipperLPoints[14] = {
-	161, 479,
-	196, 499,
-	197, 501,
-	196, 503,
-	194, 503,
-	153, 487,
-	154, 480
+int newFlipperLPoints[16] = {
+	8, 15,
+	49, 13,
+	52, 12,
+	52, 9,
+	49, 7,
+	8, 4,
+	4, 6,
+	4, 13
 };
 
 // Pivot 0, 0
