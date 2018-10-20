@@ -49,6 +49,8 @@ bool ModuleSceneIntro::Start()
 	// create background chains ---
 	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
 	Ball_Safety_Chain = App->physics->CreateChain(0, 18, safetyZonePoints, 30, false, false);
+	
+
 	// board main body perimeter parts chain
 	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
 	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
@@ -90,6 +92,10 @@ bool ModuleSceneIntro::Start()
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(37, 18, topSeparatorPoints, 12, false, true));
+
+	// ADD SPECIAL COMPONENTS
+	Flipper_Chain_R = App->physics->CreateChain(0, 18, Flipper_R, 20, false);
+	Flipper_Chain_L = App->physics->CreateChain(0, 18, Flipper_L, 20, false);
 
 	// ------------------
 
