@@ -42,12 +42,13 @@ bool ModuleSceneIntro::Start()
 	
 	// audio
 	music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
-	App->audio->PlayFx(1, -1); 
+	//App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
-	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots2, 134, false, false);
+	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+	Ball_Safety_Chain = App->physics->CreateChain(0, 18, safetyZonePoints, 30, false, false);
 	// board main body perimeter parts chain
 	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
 	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
@@ -232,7 +233,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			LOG("exit loop trigger");
 
 			// destroy first loop part chain
-			startLoopChain->to_delete = true;
+			onlyLoopChain->to_delete = true;
 			bodyB->to_delete = true;
 		}
 
@@ -268,15 +269,15 @@ update_status ModuleSceneIntro::PostUpdate()
 	switch (scene_phase)
 	{
 	case START:
-		if (startLoopChain != nullptr)
+		if (onlyLoopChain != nullptr)
 		{
-			if (startLoopChain->to_delete)
+			if (onlyLoopChain->to_delete)
 			{
 				App->physics->DestroyObject(exitLoopTrigger);
 
-				App->physics->DestroyObject(startLoopChain);
-				delete startLoopChain;
-				startLoopChain = nullptr;
+				App->physics->DestroyObject(onlyLoopChain);
+				delete onlyLoopChain;
+				onlyLoopChain = nullptr;
 				//b2Body* body = startLoopChain->body;
 				// Adds the main board chain
 				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
@@ -291,7 +292,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger->listener = this;
 
 
-				Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
+				//Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
 
 			}
 			
@@ -301,8 +302,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			if (enterBoardTrigger->to_delete)
 			{
 				App->physics->DestroyObject(enterBoardTrigger);
-				delete startLoopChain;
-				startLoopChain = nullptr;
+				//delete onlyLoopChain;
+				//startLoopChain = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
 				//switch game state

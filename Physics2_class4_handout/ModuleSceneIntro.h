@@ -48,12 +48,13 @@ public:
 	uint music;     
 
 	// background chain physbodys
-	PhysBody* startLoopChain = nullptr;
+	//PhysBody* startLoopChain = nullptr;
 	PhysBody* mainBoardChain = nullptr;
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
 	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
 	PhysBody* Ball_Safety_Chain = nullptr;
+	PhysBody* onlyLoopChain = nullptr;
 
 	// p2List<PhysBody*> Round_Objects; 
 
