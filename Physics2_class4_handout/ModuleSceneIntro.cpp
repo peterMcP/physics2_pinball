@@ -36,21 +36,14 @@ bool ModuleSceneIntro::Start()
 	
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
+	// -----------------------------------------------------------------------------------
 	// create background chains
-	//boardChain = App->physics->CreateChain(0, 18, boardChainPivots, 116, false);
 	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots, 166, false, false);
-
 	// board main body perimeter parts chain
-	//boardPart1Chain = App->physics->CreateChain(0, 18, boardPart1, 142 , false, false);
-	mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
-
-	//// Pivot 0, 0
-	int blabla[6] = {
-		123, 239,
-		314, 250,
-		400, 100
-	};
-	boardPart1Chain = App->physics->CreateChain(0, 18, blabla, 6, false, false);
+	mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
+	// black hole gravity zone circle collider
+	blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
+	// ------------------------------------------------------------------------------------
 
 
 	return ret;
