@@ -55,7 +55,7 @@ bool ModuleSceneIntro::Start()
 
 	// TRIGGERS/SENSORS
 	// 364,129,8,8
-	exitLoopTrigger = App->physics->CreateRectangleSensor(364, 132, 8, 8);
+	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
 
 	// TEST BALL
@@ -117,7 +117,7 @@ update_status ModuleSceneIntro::Update()
 	// test addimpulse to ball
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-200), balls.getLast()->data->body->GetWorldCenter(), true);
+		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-400), balls.getLast()->data->body->GetWorldCenter(), true);
 
 	}
 
