@@ -289,6 +289,10 @@ update_status ModuleSceneIntro::PostUpdate()
 
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
+
+
+				Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
+
 			}
 			
 		}

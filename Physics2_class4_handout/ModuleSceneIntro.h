@@ -53,6 +53,8 @@ public:
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
 	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
+	PhysBody* Ball_Safety_Chain = nullptr;
+
 	// p2List<PhysBody*> Round_Objects; 
 
 	// TRIGGERS
