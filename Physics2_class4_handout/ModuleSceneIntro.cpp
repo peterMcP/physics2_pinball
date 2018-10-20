@@ -317,10 +317,6 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
 
-
-
-				//Ball_Safety_Chain = App->physics->CreateChain(0, 18, Safety_Ball, 26, false, false);
-
 			}
 
 		}
@@ -334,6 +330,8 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
+				// create top dividers
+				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
 				//switch game state
 				scene_phase = game_loop::INGAME;
 			}
@@ -368,6 +366,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			App->physics->DestroyObject(mainBoardChain);
 			// deletes corner tap exit loop
 			App->physics->DestroyObject(exitLoopTapChain);
+			// deletes top dividers
+			App->physics->DestroyObject(topDividerLeft);
 			newBall();
 			scene_phase = game_loop::START;
 		}
@@ -417,8 +417,6 @@ bool ModuleSceneIntro::newBall()
 	exitLoopTrigger->listener = this;
 	// create the loop chain part
 	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
-
-
 
 	return ret;
 }
