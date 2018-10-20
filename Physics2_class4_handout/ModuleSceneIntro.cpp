@@ -187,9 +187,9 @@ update_status ModuleSceneIntro::Update()
 	if (scene_phase == game_loop::INGAME)
 	{
 		SDL_Rect r = { 0,0,55,120 };
-		App->renderer->Blit(second_layer_tex, 304, 99, &r, 1.0f); 
-		r = { 68,10,50,102 };
-		App->renderer->Blit(second_layer_tex, 75, 117, &r, 1.0f);
+		App->renderer->Blit(second_layer_tex, 303, 99, &r, 1.0f); 
+		r = { 56,3,74,110 };
+		App->renderer->Blit(second_layer_tex, 48, 109, &r, 1.0f);
 	}
 
 
