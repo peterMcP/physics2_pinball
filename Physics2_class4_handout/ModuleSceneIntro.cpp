@@ -100,6 +100,7 @@ bool ModuleSceneIntro::Start()
 
 	// ADD SPECIAL COMPONENTS
 	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
+//<<<<<<< HEAD
 	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, true);
 	// add anchor circles to stick the flippers center point of rotation
 	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
@@ -118,6 +119,13 @@ bool ModuleSceneIntro::Start()
 
 	flipper_joint_left = App->physics->SetJoint(&jointDef);
 	
+/*=======
+	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, false);
+
+    Flipper_Anchor_R = App->physics->CreateCircle(278, 480, 11, false);
+	Flipper_Anchor_L = App->physics->CreateCircle(155, 480, 11, false);
+
+>>>>>>> 9cf322827ae71c5a2324da767527f854f474969b*/
 	// ADD Joints between components
 	//App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
 
