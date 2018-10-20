@@ -40,6 +40,9 @@ bool ModuleSceneIntro::Start()
 	boardChain = App->physics->CreateChain(0, 18, boardChainPivots, 116, false);
 	startLoopChain = App->physics->CreateChain(0, 18, startChainPivots, 166, false);
 
+	// board main body perimeter parts chain
+	boardPart1Chain = App->physics->CreateChain(0, 18, boardPart1, 142 , false, false);
+
 	return ret;
 }
 

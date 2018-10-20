@@ -26,8 +26,8 @@ public:
 
 public:
 	int width, height;
-	b2Body* body;
-	Module* listener;
+	b2Body* body = nullptr;
+	Module* listener = nullptr;
 };
 
 // Module --------------------------------------
@@ -45,7 +45,7 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true);
+	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true, bool loop = true);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

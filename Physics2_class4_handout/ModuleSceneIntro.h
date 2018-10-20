@@ -36,4 +36,5 @@ public:
 	// background physbodys
 	PhysBody* startLoopChain = nullptr;
 	PhysBody* boardChain = nullptr;
+	PhysBody* boardPart1Chain = nullptr;
 };
