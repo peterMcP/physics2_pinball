@@ -42,7 +42,7 @@ bool ModuleSceneIntro::Start()
 	
 	// audio
 	music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
-	//App->audio->PlayFx(1, -1); 
+	App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 330, 11));
 	balls.add(App->physics->CreateCircle(422, 341, 11));
 	balls.add(App->physics->CreateCircle(422, 352, 11));
-	// balls.add(App->physics->CreateCircle(422, 463, 11));
+	balls.add(App->physics->CreateCircle(422, 363, 11));
 
 	/*balls.getLast()->data->listener = this;
 	Current_Ball = balls.getLast()->data; 
@@ -201,8 +201,9 @@ update_status ModuleSceneIntro::Update()
 
 	// draw animations// balls etc
 
-	c = balls.getFirst();
 
+		c = balls.getFirst();
+	
 	while (c != NULL)
 	{
 		int x, y;
@@ -247,6 +248,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		break; 
+
 	case INGAME:
 		if(bodyB == Lose_Life_Trigger)
 		{
@@ -332,9 +334,9 @@ update_status ModuleSceneIntro::PostUpdate()
 		}*/
 		
 		if (balls.getFirst()->data->to_delete) {
-			App->physics->DestroyObject(balls.getFirst()->data);
+		/*	App->physics->DestroyObject(balls.getFirst()->data);
 			delete balls.getFirst()->data;
-			balls.getFirst()->data = nullptr;
+			balls.getFirst()->data = nullptr;*/
 		}
 
 		break;
