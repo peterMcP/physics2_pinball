@@ -51,7 +51,7 @@ public:
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
 	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
-	p2List<PhysBody*> Round_Objects; 
+	// p2List<PhysBody*> Round_Objects; 
 
 	// TRIGGERS
 	PhysBody* exitLoopTrigger = nullptr;

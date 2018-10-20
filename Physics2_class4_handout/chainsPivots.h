@@ -300,7 +300,7 @@ int Next_To_Flipper_1[54] = {
 
 }*/
 
-int Round_Elements[24] = {
+/*int Round_Elements[24] = {
 	212, 156,
 	220, 156,
 	224, 158,
@@ -313,7 +313,7 @@ int Round_Elements[24] = {
 	204, 172,
 	204, 163,
 	206, 160
-}; 
+}; */
 
 #endif // __H_CHAINSPIVOTS__
 
