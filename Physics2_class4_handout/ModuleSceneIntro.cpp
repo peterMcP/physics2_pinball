@@ -74,7 +74,6 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 352, 11));
 	balls.add(App->physics->CreateCircle(422, 341, 11));
 	balls.add(App->physics->CreateCircle(422, 330, 11));
-	
 
 	
 	
@@ -337,8 +336,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			if (enterBoardTrigger->to_delete)
 			{
 				App->physics->DestroyObject(enterBoardTrigger);
-				delete enterBoardTrigger;
-				enterBoardTrigger = nullptr;
+				//delete onlyLoopChain;
+				//startLoopChain = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
 				//switch game state
@@ -358,12 +357,10 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
-				scene_phase = game_loop::FAILURE;
 				break;
 			}
-			itemBalls = itemBalls->next;
-		}
-		break;
+
+			break;
 
 	case BLACK_HOLE:
 		break;
@@ -371,11 +368,6 @@ update_status ModuleSceneIntro::PostUpdate()
 	case FAILURE:
 
 		if (App->player->Lives != 0) {
-			// deletes main board chain
-			App->physics->DestroyObject(mainBoardChain);
-			// deletes corner tap exit loop
-			App->physics->DestroyObject(exitLoopTapChain);
-			newBall();
 			scene_phase = game_loop::START;
 		}
 		else {
@@ -395,37 +387,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	default:
 		break;
+		}
 
 
-	}
 		return UPDATE_CONTINUE;
-	
-}
-
-bool ModuleSceneIntro::restartBoard()
-{
-	bool ret = true;
-
-
-
-	return ret;
-}
-
-bool ModuleSceneIntro::newBall()
-{
-	bool ret = true;
-
-	// only creation for all needed parts here ----------------
-	
-	// add listener to next ball
-	balls.getFirst()->data->listener = this;
-	// create needed triggers
-	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
-	exitLoopTrigger->listener = this;
-	// create the loop chain part
-	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
-
-
-
-	return ret;
+	}
 }
