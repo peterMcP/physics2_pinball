@@ -85,6 +85,9 @@ bool ModuleSceneIntro::Start()
 	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
 	f->SetFriction(0.7f);
 
+	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
+
 	// ------------------
 
 	return ret;
@@ -284,7 +287,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				//b2Body* body = startLoopChain->body;
 				// Adds the main board chain
 				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
-				Next_To_Flipper_Chain_1 = App->physics->CreateChain(0, 18, Next_To_Flipper_1, 54, false, true);
+				//Next_To_Flipper_Chain_1 = App->physics->CreateChain(0, 18, Next_To_Flipper_1, 54, false, true);
 
 				circles.add(App->physics->CreateCircle(217, 186, 12, false));
 				circles.add(App->physics->CreateCircle(258, 221, 12, false));
@@ -316,7 +319,7 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 		}
 
-		if (Ball_Safety_Chain != nullptr) {
+		/*if (Ball_Safety_Chain != nullptr) {
 
 			if (Ball_Safety_Chain->to_delete) {
 
@@ -326,7 +329,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				
 			}
 
-		}
+		}*/
 		
 		if (balls.getFirst()->data->to_delete) {
 			App->physics->DestroyObject(balls.getFirst()->data);
