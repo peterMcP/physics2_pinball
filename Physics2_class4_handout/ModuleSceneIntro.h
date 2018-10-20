@@ -44,6 +44,7 @@ public:
 	SDL_Texture* second_layer_tex = nullptr;
 
 	uint bonus_fx;
+	uint music;     
 
 	// background chain physbodys
 	PhysBody* startLoopChain = nullptr;

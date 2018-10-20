@@ -39,6 +39,9 @@ bool ModuleSceneIntro::Start()
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
 	
+	// audio
+	music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
+	App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
