@@ -204,18 +204,15 @@ update_status ModuleSceneIntro::Update()
 
 	// draw animations// balls etc
 
-
-		c = balls.getFirst();
+	c = balls.getFirst();
 	
 	while (c != NULL)
 	{
 		int x, y;
-		if (c->data->body != nullptr)
-		{
-			c->data->GetPosition(x, y);
-			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
 			
-		}
 		c = c->next;
 	}
 
@@ -342,8 +339,9 @@ update_status ModuleSceneIntro::PostUpdate()
 			if (itemBalls->data->to_delete)
 			{
 				App->physics->DestroyObject(itemBalls->data);
-				//balls.del(itemBalls); // todo, delete item from list crashes?
+				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
+				break;
 			}
 
 			break;
