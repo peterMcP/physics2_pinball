@@ -25,7 +25,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
-	void DrawBg(SDL_Texture* Background_Tex); 
+	 
 
 public:
 	p2List<PhysBody*> circles;
@@ -50,6 +50,8 @@ public:
 	PhysBody* mainBoardChain = nullptr;
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
+	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
+
 	// TRIGGERS
 	PhysBody* exitLoopTrigger = nullptr;
 	PhysBody* enterBoardTrigger = nullptr;
