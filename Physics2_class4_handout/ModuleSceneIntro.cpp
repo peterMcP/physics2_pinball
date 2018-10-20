@@ -102,6 +102,9 @@ bool ModuleSceneIntro::Start()
 	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
 	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, false);
 
+    Flipper_Anchor_R = App->physics->CreateCircle(278, 480, 11, false);
+	Flipper_Anchor_L = App->physics->CreateCircle(155, 480, 11, false);
+
 	// ADD Joints between components
 	App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
 

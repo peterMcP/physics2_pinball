@@ -63,7 +63,10 @@ public:
 	PhysBody* topDividerLeft = nullptr;
 	PhysBody* topDividerRight = nullptr;
 	PhysBody* Flipper_Chain_R = nullptr;
-	PhysBody* Flipper_Chain_L= nullptr;
+	PhysBody* Flipper_Chain_L = nullptr;
+	PhysBody* Flipper_Anchor_R = nullptr; 
+	PhysBody* Flipper_Anchor_L = nullptr;
+
 
 	// p2List<PhysBody*> Round_Objects; 
 
