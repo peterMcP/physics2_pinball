@@ -26,7 +26,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
-	 
+
 
 public:
 	p2List<PhysBody*> circles;
@@ -71,5 +71,5 @@ public:
 	game_loop scene_phase = game_loop::START;
 
 	// Balls
-	PhysBody* Current_Ball = nullptr; 
+
 };
