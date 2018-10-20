@@ -63,4 +63,7 @@ public:
 
 	// SCENE LOOP
 	game_loop scene_phase = game_loop::START;
+
+	// Balls
+	PhysBody* Current_Ball = nullptr; 
 };

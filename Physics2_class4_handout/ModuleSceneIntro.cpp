@@ -62,14 +62,28 @@ bool ModuleSceneIntro::Start()
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
-	Lose_Life_Trigger = App->physics->CreateRectangleSensor(200, 492, 30, 19);
+	Lose_Life_Trigger = App->physics->CreateRectangleSensor(218, 492, 30, 19);
 	Lose_Life_Trigger->listener = this;
 
 	// TEST BALL -------
-	balls.add(App->physics->CreateCircle(400, 420, 11));
-	balls.getLast()->data->listener = this;
+	balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
+	balls.add(App->physics->CreateCircle(422, 330, 11));
+	balls.add(App->physics->CreateCircle(422, 341, 11));
+	balls.add(App->physics->CreateCircle(422, 352, 11));
+	// balls.add(App->physics->CreateCircle(422, 463, 11));
+
+	/*balls.getLast()->data->listener = this;
+	Current_Ball = balls.getLast()->data; 
+
 	b2Fixture* f = balls.getLast()->data->body->GetFixtureList();
+	f->SetFriction(0.7f);*/
+
+	balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
+	Current_Ball = balls.getFirst()->data;
+
+	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
 	f->SetFriction(0.7f);
+
 	// ------------------
 
 	return ret;
@@ -111,6 +125,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
 		balls.getLast()->data->listener = this;
+		Current_Ball = balls.getLast()->data;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
@@ -128,7 +143,11 @@ update_status ModuleSceneIntro::Update()
 	// test addimpulse to ball
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
+		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
+
+		if (Current_Ball != nullptr) {
+			Current_Ball->body->ApplyForce(b2Vec2(0, -420), balls.getLast()->data->body->GetWorldCenter(), true);
+		}
 
 	}
 
@@ -216,13 +235,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			startLoopChain->to_delete = true;
 			bodyB->to_delete = true;
 		}
+
 		if (bodyB == enterBoardTrigger)
 		{
 			LOG("ball entered to game board");
 			enterBoardTrigger->to_delete = true;
 		}
+
 		if (bodyB == Lose_Life_Trigger)
 		{
+			LOG("ball is ready to be destroyed !!!!");
+			if (bodyA != nullptr) {
+				bodyA->to_delete = true;
+				App->physics->DestroyObject(bodyA);
+				delete bodyA;
+				bodyA = nullptr;
+			}
+
 			App->player->Lives -= 1; 
 			scene_phase = game_loop::FAILURE; 
 		}
