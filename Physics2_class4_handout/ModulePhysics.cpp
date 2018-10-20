@@ -75,26 +75,6 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-void ModulePhysics::SetJoints(PhysBody* bodyA, PhysBody* bodyB) {
-
-	// we should add joint type cases if needed
-
-	b2WeldJointDef def;
-	def.bodyA = bodyA->body;
-	def.bodyB = bodyB->body;
-
-	def.localAnchorA.Set(0.0f, 0.0f);
-	def.localAnchorB.Set(0.0f, 0.0f);
-	def.referenceAngle = 0.0f;
-	def.frequencyHz = 0.0f;
-	def.dampingRatio = 0.0f;
-
-
-	// weld_joint = (b2WeldJoint*)world->CreateJoint(&def);
-
-}
-
-
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 {
 	b2BodyDef body;

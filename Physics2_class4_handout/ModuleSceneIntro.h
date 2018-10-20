@@ -4,8 +4,6 @@
 #include "p2Point.h"
 #include "Globals.h"
 
-
-
 class PhysBody;
 
 enum game_loop
@@ -28,7 +26,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
-	
+
 
 public:
 	p2List<PhysBody*> circles;
@@ -55,8 +53,7 @@ public:
 	PhysBody* mainBoardChain = nullptr;
 	PhysBody* exitLoopTapChain = nullptr;
 	PhysBody* blackHoleCircle = nullptr;
-	PhysBody* Next_To_Flipper_Chain_R = nullptr;
-	PhysBody* Next_To_Flipper_Chain_L = nullptr;
+	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
 	PhysBody* Ball_Safety_Chain = nullptr;
 	PhysBody* onlyLoopChain = nullptr;
 	PhysBody* topDividerLeft = nullptr;
@@ -75,8 +72,6 @@ public:
 	// SCENE LOOP
 	game_loop scene_phase = game_loop::START;
 
-	// Joints
-
-
+	// Balls
 
 };

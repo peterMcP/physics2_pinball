@@ -56,15 +56,12 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-	void SetJoints(PhysBody* bodyA, PhysBody* bodyB);
-
 	b2World* world;
 private:
 
 	bool debug;
 	//b2World* world;
 	b2MouseJoint* mouse_joint = nullptr;
-	b2WeldJoint* weld_joint = nullptr;
 	b2Body* ground;
 	b2Body* clickedBody = nullptr;
 
