@@ -11,7 +11,8 @@ enum game_loop
 	START,
 	INGAME,
 	BLACK_HOLE,
-	FAILURE
+	FAILURE,
+	ENDGAME
 };
 
 class ModuleSceneIntro : public Module
@@ -57,6 +58,7 @@ public:
 	// TRIGGERS
 	PhysBody* exitLoopTrigger = nullptr;
 	PhysBody* enterBoardTrigger = nullptr;
+	PhysBody* Lose_Life_Trigger = nullptr;
 	//bool to_delete = false;
 
 	// SCENE LOOP

@@ -2,6 +2,9 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include <cstdint>
+
+#define MAX_ROUND_LIVES 5
 
 class ModulePlayer : public Module
 {
@@ -14,5 +17,5 @@ public:
 	bool CleanUp();
 
 public:
-
+	uint8_t Lives = MAX_ROUND_LIVES; 
 };

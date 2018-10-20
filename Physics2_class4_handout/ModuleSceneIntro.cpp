@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 
 // chains pivots header
 #include "chainsPivots.h"
@@ -61,6 +62,8 @@ bool ModuleSceneIntro::Start()
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
+	Lose_Life_Trigger = App->physics->CreateRectangleSensor(200, 492, 30, 19);
+	Lose_Life_Trigger->listener = this;
 
 	// TEST BALL -------
 	balls.add(App->physics->CreateCircle(400, 420, 11));
@@ -187,7 +190,7 @@ update_status ModuleSceneIntro::Update()
 
 	// check if we are on in game phase to draw the second layer on top of the ball
 
-	if (scene_phase == game_loop::INGAME)
+	if (scene_phase == game_loop::INGAME || scene_phase == game_loop::FAILURE)
 	{
 		SDL_Rect r = { 0,0,55,120 };
 		App->renderer->Blit(second_layer_tex, 303, 99, &r, 1.0f); 
@@ -217,6 +220,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			LOG("ball entered to game board");
 			enterBoardTrigger->to_delete = true;
+		}
+		if (bodyB == Lose_Life_Trigger)
+		{
+			App->player->Lives -= 1; 
+			scene_phase = game_loop::FAILURE; 
 		}
 		break;
 	}
@@ -270,12 +278,33 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 		
 		break;
+
 	case INGAME:
 		break;
+
 	case BLACK_HOLE:
 		break;
+
 	case FAILURE:
+
+		if (App->player->Lives != 0) {
+			scene_phase = game_loop::INGAME;
+		}
+		else {
+			if (Lose_Life_Trigger != nullptr) {
+				Lose_Life_Trigger->to_delete = true; 
+				App->physics->DestroyObject(Lose_Life_Trigger); 
+
+				delete Lose_Life_Trigger;       // change this later in the destroy method       
+				Lose_Life_Trigger = nullptr; 
+			}
+			scene_phase = game_loop::ENDGAME; 
+		}
 		break;
+
+	case ENDGAME:
+		break; 
+
 	default:
 		break;
 	}
