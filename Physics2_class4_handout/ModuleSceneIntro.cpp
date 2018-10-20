@@ -74,7 +74,6 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 352, 11));
 	balls.add(App->physics->CreateCircle(422, 341, 11));
 	balls.add(App->physics->CreateCircle(422, 330, 11));
-	
 
 	
 	
@@ -391,10 +390,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 
 	}
-		return UPDATE_CONTINUE;
-	
-}
+	return UPDATE_CONTINUE;
 
+}
 bool ModuleSceneIntro::restartBoard()
 {
 	bool ret = true;
