@@ -2,6 +2,31 @@
 #define __H_CHAINSPIVOTS__
 
 // Pivot 0, 0
+int leftBottomWayPoints[22] = {
+	109, 382,
+	114, 407,
+	122, 423,
+	133, 439,
+	148, 452,
+	149, 458,
+	145, 463,
+	139, 461,
+	127, 450,
+	115, 430,
+	110, 409
+};
+
+// Pivot 0, 0
+int topSeparatorPoints[12] = {
+	198, 94,
+	195, 97,
+	195, 118,
+	197, 120,
+	200, 118,
+	200, 97
+};
+
+// Pivot 0, 0
 int rightBottomWayPoints[28] = {
 	321, 382,
 	316, 405,

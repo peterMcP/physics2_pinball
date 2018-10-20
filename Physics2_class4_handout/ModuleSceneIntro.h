@@ -56,6 +56,8 @@ public:
 	PhysBody* Next_To_Flipper_Chain_1 = nullptr;
 	PhysBody* Ball_Safety_Chain = nullptr;
 	PhysBody* onlyLoopChain = nullptr;
+	PhysBody* topDividerLeft = nullptr;
+	PhysBody* topDividerRight = nullptr;
 
 	// p2List<PhysBody*> Round_Objects; 
 
