@@ -57,6 +57,7 @@ public:
 	void BeginContact(b2Contact* contact);
 
 	void SetJoints(PhysBody* bodyA, PhysBody* bodyB);
+	b2RevoluteJoint* SetJoint(b2RevoluteJointDef* joint);
 
 
 

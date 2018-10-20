@@ -473,3 +473,8 @@ bool ModulePhysics::DestroyObject(PhysBody* body)
 
 	return ret;
 }
+
+b2RevoluteJoint* ModulePhysics::SetJoint(b2RevoluteJointDef* joint)
+{
+	return (b2RevoluteJoint*)world->CreateJoint(joint);
+}

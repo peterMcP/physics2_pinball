@@ -100,10 +100,26 @@ bool ModuleSceneIntro::Start()
 
 	// ADD SPECIAL COMPONENTS
 	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
-	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, false);
+	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, true);
+	// add anchor circles to stick the flippers center point of rotation
+	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
 
+	// adding revolution joint and motor to flipper - TEST, implement on setjoints function
+	b2RevoluteJointDef jointDef;
+	jointDef.bodyA = Flipper_Chain_L->body;
+	jointDef.bodyB = anchorFlipperL->body;
+	//jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
+	//jointDef.lowerAngle = -0.5f * b2_pi; // -90 degrees
+	//jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
+	//jointDef.enableLimit = true;
+	jointDef.maxMotorTorque = 10.0f;
+	jointDef.motorSpeed = 5.0f;
+	jointDef.enableMotor = true;
+
+	flipper_joint_left = App->physics->SetJoint(&jointDef);
+	
 	// ADD Joints between components
-	App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
+	//App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
 
 
 	// ------------------

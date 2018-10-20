@@ -5,6 +5,7 @@
 #include "Globals.h"
 
 class PhysBody;
+class b2RevoluteJoint;
 
 enum game_loop
 {
@@ -64,6 +65,8 @@ public:
 	PhysBody* topDividerRight = nullptr;
 	PhysBody* Flipper_Chain_R = nullptr;
 	PhysBody* Flipper_Chain_L= nullptr;
+	PhysBody* anchorFlipperL = nullptr;
+	PhysBody* anchorFlipperR = nullptr;
 
 	// p2List<PhysBody*> Round_Objects; 
 
@@ -75,6 +78,7 @@ public:
 
 	// SCENE LOOP
 	game_loop scene_phase = game_loop::START;
+	b2RevoluteJoint* flipper_joint_left = nullptr;
 
 	// Balls
 
