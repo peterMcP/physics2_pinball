@@ -51,6 +51,7 @@ public:
 	PhysBody* blackHoleCircle = nullptr;
 	// TRIGGERS
 	PhysBody* exitLoopTrigger = nullptr;
+	PhysBody* enterBoardTrigger = nullptr;
 	//bool to_delete = false;
 
 	// SCENE LOOP

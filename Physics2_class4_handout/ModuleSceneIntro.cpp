@@ -46,9 +46,11 @@ bool ModuleSceneIntro::Start()
 	// board main body perimeter parts chain
 	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
 	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
-	blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
+	//blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
 	// exit loop tap (prevents the pinball ball to return to the exit loop)
 	//exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
+	//b2Fixture* f = exitLoopTapChain->body->GetFixtureList();
+	//f->SetSensor(true);
 	// ------------------------------------------------------------------------------------
 
 	// TRIGGERS/SENSORS
@@ -110,6 +112,13 @@ update_status ModuleSceneIntro::Update()
 		
 		
 		//startChainBg = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
+	}
+
+	// test addimpulse to ball
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		balls.getLast()->data->body->ApplyForce(b2Vec2(0,-200), balls.getLast()->data->body->GetWorldCenter(), true);
+
 	}
 
 	// Prepare for raycast ------------------------------------------------------
@@ -174,16 +183,24 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	//App->audio->PlayFx(bonus_fx);
-	if (bodyB == exitLoopTrigger)
+	switch (scene_phase)
 	{
-		LOG("exit loop trigger");
+	case START:
+		//App->audio->PlayFx(bonus_fx);
+		if (bodyB == exitLoopTrigger)
+		{
+			LOG("exit loop trigger");
 
-		// destroy first loop part chain
-		startLoopChain->to_delete = true;
-
-		
-
+			// destroy first loop part chain
+			startLoopChain->to_delete = true;
+			bodyB->to_delete = true;
+		}
+		if (bodyB == enterBoardTrigger)
+		{
+			LOG("ball entered to game board");
+			enterBoardTrigger->to_delete = true;
+		}
+		break;
 	}
 
 }
@@ -196,13 +213,38 @@ update_status ModuleSceneIntro::PostUpdate()
 	switch (scene_phase)
 	{
 	case START:
-		if (startLoopChain->to_delete == true)
+		if (startLoopChain != nullptr)
 		{
-			App->physics->DestroyObject(startLoopChain);
-			// Adds the main board chain
-			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
-			scene_phase = game_loop::INGAME;
+			if (startLoopChain->to_delete)
+			{
+				App->physics->DestroyObject(exitLoopTrigger);
+
+				App->physics->DestroyObject(startLoopChain);
+				delete startLoopChain;
+				startLoopChain = nullptr;
+				//b2Body* body = startLoopChain->body;
+				// Adds the main board chain
+				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
+
+				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
+				enterBoardTrigger->listener = this;
+			}
+			
 		}
+		if (enterBoardTrigger != nullptr)
+		{
+			if (enterBoardTrigger->to_delete)
+			{
+				App->physics->DestroyObject(enterBoardTrigger);
+				delete startLoopChain;
+				startLoopChain = nullptr;
+				// create tap
+				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
+				//switch game state
+				scene_phase = game_loop::INGAME;
+			}
+		}
+		
 		break;
 	case INGAME:
 		break;

@@ -440,10 +440,13 @@ bool ModulePhysics::DestroyObject(PhysBody* body)
 {
 	bool ret = true;
 
-	world->DestroyBody(body->body);
-	body->body = nullptr;
-	delete body;
-	body = nullptr;
+	if (body->body != nullptr)
+	{
+		world->DestroyBody(body->body);
+		body->body = nullptr;
+		//delete body; // TODO, check this, its seems is not deleting the physbody
+		//body = nullptr;
+	}
 
 	return ret;
 }
