@@ -50,6 +50,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true, bool loop = true);
+	PhysBody* CreateConvexPoly(int x, int y, int* points, int size);
 
 	bool DestroyObject(PhysBody* body);
 
@@ -58,6 +59,8 @@ public:
 
 	void SetJoints(PhysBody* bodyA, PhysBody* bodyB);
 	b2RevoluteJoint* SetJoint(b2RevoluteJointDef* joint);
+
+	
 
 
 

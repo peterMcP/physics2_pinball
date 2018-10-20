@@ -81,5 +81,6 @@ public:
 	b2RevoluteJoint* flipper_joint_left = nullptr;
 
 	// Balls
+	PhysBody* testCircle = nullptr;
 
 };

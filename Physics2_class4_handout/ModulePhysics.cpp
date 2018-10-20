@@ -212,6 +212,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, bool d
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	//fixture.density = 1.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -477,4 +478,46 @@ bool ModulePhysics::DestroyObject(PhysBody* body)
 b2RevoluteJoint* ModulePhysics::SetJoint(b2RevoluteJointDef* joint)
 {
 	return (b2RevoluteJoint*)world->CreateJoint(joint);
+}
+
+PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
+{
+	// MAX 8 vertex
+	if (size > 16)
+	{
+		LOG("Max vertex for a polyshape reached, polyshape not created");
+		return nullptr;
+	}
+
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape polyShape;
+
+	b2Vec2* p = new b2Vec2[(int)(size / 2)];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+	polyShape.Set(p, size / 2);
+	delete p;
+
+	b2FixtureDef fixture;
+	fixture.shape = &polyShape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+
 }

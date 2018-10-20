@@ -75,14 +75,6 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 341, 11));
 	balls.add(App->physics->CreateCircle(422, 330, 11));
 
-	
-	
-
-	/*balls.getLast()->data->listener = this;
-	Current_Ball = balls.getLast()->data; 
-
-	b2Fixture* f = balls.getLast()->data->body->GetFixtureList();
-	f->SetFriction(0.7f);*/
 
 	balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
 	
@@ -100,49 +92,27 @@ bool ModuleSceneIntro::Start()
 
 	// ADD SPECIAL COMPONENTS
 	Flipper_Chain_R = App->physics->CreateChain(0, 0, Flipper_R, 20, false);
-//<<<<<<< HEAD
-	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, true);
+	Flipper_Chain_L = App->physics->CreateConvexPoly(0, 0, newFlipperLPoints, 14);//App->physics->CreateChain(0, 0 , Flipper_L, 20, true);
+
 	// add anchor circles to stick the flippers center point of rotation
 	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
 
 	// adding revolution joint and motor to flipper - TEST, implement on setjoints function
 	b2RevoluteJointDef jointDef;
-	jointDef.bodyA = Flipper_Chain_L->body;
-	jointDef.bodyB = anchorFlipperL->body;
-	//jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
+	jointDef.bodyB = Flipper_Chain_L->body; //testCircle->body;
+	jointDef.bodyA = anchorFlipperL->body;
+	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
 	//jointDef.lowerAngle = -0.5f * b2_pi; // -90 degrees
 	//jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
 	//jointDef.enableLimit = true;
 	jointDef.maxMotorTorque = 10.0f;
 	jointDef.motorSpeed = 5.0f;
-	jointDef.enableMotor = true;
+	//jointDef.enableMotor = true;
 
 	flipper_joint_left = App->physics->SetJoint(&jointDef);
 	
-/*=======
-	Flipper_Chain_L = App->physics->CreateChain(0, 0 , Flipper_L, 20, false);
-
-    Flipper_Anchor_R = App->physics->CreateCircle(278, 480, 11, false);
-	Flipper_Anchor_L = App->physics->CreateCircle(155, 480, 11, false);
-
->>>>>>> 9cf322827ae71c5a2324da767527f854f474969b*/
-	// ADD Joints between components
-	//App->physics->SetJoints(Flipper_Chain_R, Next_To_Flipper_Chain_R);
-
-
-	// ------------------
-
 	return ret;
 }
-
-//void ModuleSceneIntro::DrawBg(SDL_Texture* Background_Tex) {
-//
-//
-//	App->renderer->Blit(Background_Tex, 0, 0, NULL, 0.0f);
-//
-//}
-
-
 
 // Load assets
 bool ModuleSceneIntro::CleanUp()

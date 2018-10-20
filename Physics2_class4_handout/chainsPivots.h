@@ -2,6 +2,17 @@
 #define __H_CHAINSPIVOTS__
 
 // Pivot 0, 0
+int newFlipperLPoints[14] = {
+	161, 479,
+	196, 499,
+	197, 501,
+	196, 503,
+	194, 503,
+	153, 487,
+	154, 480
+};
+
+// Pivot 0, 0
 int topRightWayPoints[30] = {
 	279, 107,
 	287, 105,
