@@ -47,8 +47,8 @@ bool ModuleSceneIntro::Start()
 	sprites_tex = App->textures->Load("pinball/sprites.png");
 	
 	// audio
-	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
-	//App->audio->PlayFx(1, -1); 
+	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
+	// App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// -----------------------------------------------------------------------------------
@@ -373,11 +373,34 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
+	uint Now = SDL_GetTicks();
+
 	if (Inside_Vacuum) {
 
-		b2Vec2 Vel(0.0f, -GRAVITY_Y);
-		balls.getFirst()->data->body->SetGravityScale(0.0f);
-		balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0)); 
+		
+		if (!Inside_Vacuum_Flag) {
+			Vacuum_Time = Now;
+			Inside_Vacuum_Flag = true;
+		}
+	
+                                    
+		if (Now < Vacuum_Time + 3000) {
+			LOG("Ball is trapped in vacuum"); 
+			balls.getFirst()->data->body->SetGravityScale(0.0f);
+			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it
+			balls.getFirst()->data->body->SetAngularVelocity(0);
+		}
+
+		else if(Now > Vacuum_Time + 3000) {
+			LOG("Ball ejected from vacuum!"); 
+			balls.getFirst()->data->body->SetGravityScale(1.0f);
+
+			balls.getFirst()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
+
+			Inside_Vacuum = false; 
+			Inside_Vacuum_Flag = false; 
+		}
+		LOG("NOW %i LAST %i", Now, Vacuum_Time);
 	}
 
 	return UPDATE_CONTINUE;
@@ -454,11 +477,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 
 		if (bodyB == Vacuum_Cleaner_Trigger) {
-
-			Inside_Vacuum = true; 
-			/*b2Vec2 Vel(0.0f, -GRAVITY_Y); 
-			bodyA->body->SetGravityScale(0.0f);*/
-			
+			Inside_Vacuum = true; 	
 		}
 
 		break;

@@ -123,4 +123,7 @@ public:
 
 	// variables
 	bool Inside_Vacuum = false;
+	bool Inside_Vacuum_Flag = false;
+	uint Vacuum_Time = 0; 
+
 };
