@@ -60,7 +60,7 @@ bool ModuleSceneIntro::Start()
 	// board main body perimeter parts chain
 	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
 	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
-	//blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
+	// blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
 	// exit loop tap (prevents the pinball ball to return to the exit loop)
 	//exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
 	//b2Fixture* f = exitLoopTapChain->body->GetFixtureList();
@@ -195,6 +195,7 @@ bool ModuleSceneIntro::Start()
 	// othrer special sensors
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
 	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(361, 250, 4, 4);
+	Gravity_Zone_Trigger = App->physics->CreateRectangleSensor(45, 200, 26, 12);
     
 
 	// ANIMATIONS
@@ -483,7 +484,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB == Extra_Ball_Trigger) {
 			LOG("New ball incoming..."); 
-			// newBall(); 
+			
+		}
+
+		if (bodyB == Gravity_Zone_Trigger) {
+			mainBoardChain->to_delete = true; 
+			scene_phase = game_loop::BLACK_HOLE; 
 		}
 
 		break;
@@ -560,11 +566,26 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case BLACK_HOLE:
+
+		if (mainBoardChain != nullptr) {
+			if (mainBoardChain->to_delete) {
+				App->physics->DestroyObject(mainBoardChain);
+				delete mainBoardChain;
+				mainBoardChain = nullptr;
+
+				Gravity_Zone_Chain = App->physics->CreateChain(0, 18, Gravity_Zone, 68, false, true);
+				balls.getFirst()->data->body->SetGravityScale(0); 
+
+			}
+		}
+
+		
+
 		break;
 
 	case FAILURE:
 
-		if (App->player->Lives != 0) {
+		if (App->player->Lives != 0) {                            
 			// deletes main board chain
 			App->physics->DestroyObject(mainBoardChain);
 			// deletes corner tap exit loop
@@ -623,8 +644,7 @@ bool ModuleSceneIntro::newBall()
 		exitLoopTrigger->listener = this;
 		// create the loop chain part
 		onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
-	
-		
 
+		
 	return ret;
 }

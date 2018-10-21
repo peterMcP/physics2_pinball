@@ -91,6 +91,7 @@ public:
 	PhysBody* Flipper_Chain_L= nullptr;
 	PhysBody* anchorFlipperL = nullptr;
 	PhysBody* anchorFlipperR = nullptr;
+	PhysBody* Gravity_Zone_Chain = nullptr; 
 
 	// p2List<PhysBody*> Round_Objects; 
 
