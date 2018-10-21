@@ -16,6 +16,14 @@ enum sensorState
 	error
 };
 
+struct activableNoSensor // for instantiate swapping frames multiple times
+{
+	SDL_Rect rect[2];
+	iPoint positions[10]; // enables repetition print on different positions
+	int instances = 0; // relationed with positions, if more than 10, increase positions index, fast workaround
+
+};
+
 struct activableSensors
 {
 	
@@ -142,12 +150,16 @@ public:
 	// activable sensors
 	activableSensors sensor[19];
 	p2List<activableSensors> sensor_list;
+	
+	// activables without sensor ie: called from anywhere
+	activableNoSensor stars;
 
 
 	// variables
 	bool Inside_Vacuum = false;
 	bool Inside_Vacuum_Flag = false;
 	uint Vacuum_Time = 0; 
+	uint starsCounter = 0;
 	
 
 	bool Switch_From_Hole_To_Ingame = false; 
