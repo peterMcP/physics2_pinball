@@ -208,7 +208,7 @@ bool ModuleSceneIntro::Start()
 
 	for (int i = 0; i<=39; ++i)
 	TopHole.PushBack({ i*28, 1, 28, 28 });
-	TopHole.speed = 0.04f;
+	TopHole.speed = 0.4f;
 	return ret;
 }
 
@@ -616,6 +616,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 			}
 		}
+		
+		 
+
 
 		if (Switch_From_Hole_To_Ingame) {
 			Switch_From_Hole_To_Ingame = false;   
