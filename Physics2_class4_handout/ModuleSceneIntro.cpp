@@ -47,6 +47,7 @@ bool ModuleSceneIntro::Start()
 	leftFlipper_tex = App->textures->Load("pinball/L_Flipper.png");
 	rightFlipper_tex = App->textures->Load("pinball/R_Flipper.png");
 	sprites_tex = App->textures->Load("pinball/sprites.png");
+	score_tex = App->textures->Load("pinball/font.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -421,6 +422,9 @@ update_status ModuleSceneIntro::Update()
 		
 	}
 
+	// DRAW SCORE
+	DrawScore();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -697,4 +701,36 @@ bool ModuleSceneIntro::newBall()
 
 		
 	return ret;
+}
+
+void ModuleSceneIntro::DrawScore()
+{
+
+	int x, y;
+	x = 77;
+	y = 29;// first draw position
+
+	int playerScore = App->player->score; // test
+
+	int w, h = 0;
+	int tex_lenght = SDL_QueryTexture(score_tex, NULL, NULL, &w, &h);
+
+	// get the width rect proportion
+	w = w / 10; // we have 10 numbers in texture
+	// the height in this particular case we dont needed it, texture only has 1 row of numbers
+
+	for (int i = 0; i < 10; ++i) // rect pushbacks
+	{
+		scoreCutRect[i] = { i * w, 0, w, h };
+	}
+
+	int separation = 8;
+	for (int i = 11; i >= 0; --i) // draw all numbers on scoreboard panel
+	{
+		int tempScore = playerScore % 10;
+		playerScore = playerScore / 10;
+
+		App->renderer->Blit(score_tex, x + ((w + separation) * i), y, &scoreCutRect[tempScore]);
+	}
+
 }
