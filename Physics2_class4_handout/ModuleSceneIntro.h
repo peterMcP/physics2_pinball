@@ -40,6 +40,8 @@ enum ballState
 	DISAPPEAR
 };
 
+
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -149,8 +151,11 @@ public:
 	bool Inside_Vacuum_Flag = false;
 	uint Vacuum_Time = 0; 
 	uint Reset_Vacuum_Time = 0; 
-	bool Reset_Vacuum_Flag = false;
-
+	bool Reset_Vacuum_Flag = false; 
 	bool Switch_From_Hole_To_Ingame = false; 
 	
+
+
+	uint Active_Balls = 1; 
+	bool Ball_Reset = false; 
 };
