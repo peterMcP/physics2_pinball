@@ -194,6 +194,16 @@ bool ModuleSceneIntro::Start()
 	sensor_list.add(sensor[i++]);
 	// bottom
 
+	// up stars, only 3
+	stars.instances = 3;
+	stars.positions[0] = { 172, 104 };
+	stars.positions[1] = { 208, 98 };
+	stars.positions[2] = { 246, 104 };
+	
+	stars.rect[active] = { 0,0,16,16 };
+	stars.rect[inactive] = { 43,48,16,16 };
+	
+
 	// -----------------------------------------------------------------------------------------------
 
 	// bottom security kickers
@@ -354,6 +364,17 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(sprites_tex, posx, posy, &sensors->data.rect[sensors->data.state]);
 
 		sensors = sensors->next;
+	}
+
+	// draw activable stars
+	for (int i = 0; i < stars.instances; ++i)
+	{
+		// blit all inactive ones
+		App->renderer->Blit(sprites_tex, stars.positions[i].x, stars.positions[i].y, &stars.rect[inactive]);
+		// and draw on top the active ones
+		if(starsCounter > (uint)i)
+			App->renderer->Blit(sprites_tex, stars.positions[i].x, stars.positions[i].y, &stars.rect[active]);
+
 	}
 
 	// DRAW ANIMATIONS ------------------------------------
@@ -694,6 +715,10 @@ update_status ModuleSceneIntro::PostUpdate()
 				TopHole.Reset();
 				TopHole.speed = 0;
 				TopHole.loop = false;
+
+				// adds counter stars
+				starsCounter += 1;
+				if (starsCounter >= 3) starsCounter = 3; // locks max stars
 				scene_phase = game_loop::INGAME;
 			}
 
