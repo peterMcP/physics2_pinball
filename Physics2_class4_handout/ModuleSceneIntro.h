@@ -180,6 +180,10 @@ public:
 	uint Active_Balls = 1; 
 	bool Ball_Reset = false; 
 
+
+	float Gravity_Force = 0; 
+	bool Reset_Gravity = false; 
+
 	// SCORES for different places
 	int vacuumScore = 10420;
 	int topHoleScore = 16545;

@@ -778,6 +778,7 @@ update_status ModuleSceneIntro::PostUpdate()
 
 
 		if (Switch_From_Hole_To_Ingame) {
+			Reset_Gravity = false; 
 			Switch_From_Hole_To_Ingame = false;   
 			ball_state = ballState::DISAPPEAR; 
 			balls.getFirst()->data->body->SetType(b2_staticBody); 
@@ -815,7 +816,28 @@ update_status ModuleSceneIntro::PostUpdate()
 				scene_phase = game_loop::INGAME;
 			}
 
-	
+			else {
+				b2Vec2 Ball_Pos = balls.getFirst()->data->body->GetWorldCenter(); 
+				b2Vec2 Hole_Pos = Inside_Hole_Trigger->body->GetWorldCenter(); 
+
+				b2Vec2 Distance = Hole_Pos - Ball_Pos; 
+				float Radius = Distance.Length(); 
+
+				uint Constant = 1; 
+
+				if (!Reset_Gravity) {
+					Gravity_Force = 0.1f *(Constant / Radius * Radius);
+					Reset_Gravity = true; 
+				}
+
+				else {
+					Gravity_Force += 0.12f;
+				}
+
+
+				balls.getFirst()->data->body->ApplyForceToCenter(Gravity_Force*Distance, true); 
+				
+			}
 		
 
 		break;
