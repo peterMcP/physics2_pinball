@@ -481,7 +481,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 			// destroy first loop part chain
 			onlyLoopChain->to_delete = true;
-			bodyB->to_delete = true;
+			// bodyB->to_delete = true;
 		}
 
 		if (bodyB == enterBoardTrigger)
@@ -559,7 +559,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB == Extra_Ball_Trigger) {
 			LOG("New ball incoming..."); 
-			
+			Active_Balls++; 
+			if(!Ball_Reset)
+			newBall();
+			Ball_Reset = true; 
+			scene_phase = game_loop::ADD_BALL;
+
 		}
 
 		if (bodyB == Gravity_Zone_Trigger) {
@@ -591,6 +596,7 @@ update_status ModuleSceneIntro::PostUpdate()
 		{
 			if (onlyLoopChain->to_delete)
 			{
+				LOG("CREATING GAME");
 				App->physics->DestroyObject(exitLoopTrigger);
 
 				App->physics->DestroyObject(onlyLoopChain);
@@ -746,7 +752,7 @@ update_status ModuleSceneIntro::PostUpdate()
 			App->physics->DestroyObject(topDividerRight);
 
 			newBall();
-			scene_phase = game_loop::START;
+			// scene_phase = game_loop::START;
 		}
 		else {
 			if (Lose_Life_Trigger != nullptr) {
@@ -760,6 +766,36 @@ update_status ModuleSceneIntro::PostUpdate()
 			scene_phase = game_loop::ENDGAME;
 		}
 		break;
+
+	case ADD_BALL:
+			// deletes main board chain
+			App->physics->DestroyObject(mainBoardChain);                       // destroy main board
+			// deletes corner tap exit loop
+			App->physics->DestroyObject(exitLoopTapChain);
+			// deletes top dividers
+			App->physics->DestroyObject(topDividerLeft);
+			App->physics->DestroyObject(topDividerRight);
+
+			if (enterBoardTrigger == nullptr) {
+				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);                     // triggers again
+				enterBoardTrigger->listener = this;
+			}
+
+			if (exitLoopTrigger == nullptr) {
+				exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
+				exitLoopTrigger->listener = this;
+			}
+
+			if (onlyLoopChain == nullptr) {                                                                   // looping again
+				onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+			}
+			
+
+			newBall();   // resets loop chain
+			scene_phase = game_loop::START;
+
+
+			break; 
 
 	case ENDGAME:
 		break;
@@ -788,13 +824,25 @@ bool ModuleSceneIntro::newBall()
 	// only creation for all needed parts here ----------------
 	
 	// add listener to next ball
-
+	if (Active_Balls == 1) {
 		balls.getFirst()->data->listener = this;
 		// create needed triggers
 		exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 		exitLoopTrigger->listener = this;
 		// create the loop chain part
 		onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+	}
+	else { 
+		balls.getFirst()->next->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
+		balls.getFirst()->next->data->listener = this;
+
+
+		// balls.getFirst()->data->body->SetType(b2_staticBody); 
+		Ball_Reset = false;
+	}
+
+	
+	
 
 		
 	return ret;
