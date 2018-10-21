@@ -26,11 +26,12 @@ struct activableNoSensor // for instantiate swapping frames multiple times
 
 struct activableSensors
 {
-	
 	PhysBody* b = nullptr;
 	SDL_Rect rect[2]; // active and inactive sprite
 	sensorState state = sensorState::inactive;
 	uint scoreToGain = 0;
+	uint eventTime;
+	uint totalTime;
 };
 
 enum game_loop
@@ -153,6 +154,8 @@ public:
 	// activable sensors
 	activableSensors sensor[19];
 	p2List<activableSensors> sensor_list;
+	activableSensors topBallsSensors[3];
+	p2List<activableSensors> topBallslist;
 	
 	// activables without sensor ie: called from anywhere
 	activableNoSensor stars;
@@ -176,6 +179,12 @@ public:
 
 	uint Active_Balls = 1; 
 	bool Ball_Reset = false; 
+
+	// SCORES for different places
+	int vacuumScore = 10420;
+	int topHoleScore = 16545;
+	int topBallsScore = 6504;
+	int bumperScore = 14320;
 
 	// Rects
 	//SDL_Rect turboLogoRect;
