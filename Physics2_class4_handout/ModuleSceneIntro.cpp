@@ -139,9 +139,13 @@ bool ModuleSceneIntro::Start()
 	flipper_joint_right = App->physics->SetJoint(&jointDef);
 
 	// --------------------------------------------------------------------------------------------
-	// TRIGGERS
+	// TRIGGERS / etc
 	leftBottomBouncerTrigger = App->physics->CreateRectangleSensor(154, 423, 30, 5, 1.1f);
 	rightBottomBouncerTrigger = App->physics->CreateRectangleSensor(278, 423, 30, 5, -1.1f);
+
+	circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 3.0f));
+	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 3.0f));
+	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 3.0f));
 
 
 	
@@ -341,11 +345,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			LOG("TOUCH");
 			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
-			bodyA->body->ApplyForceToCenter(b2Vec2(75, -75), true);
+			bodyA->body->ApplyForceToCenter(b2Vec2(60, -60), true);
 		}
 		if (bodyB == rightBottomBouncerTrigger)
 		{
-			bodyA->body->ApplyForceToCenter(b2Vec2(-75, -75), true);
+			bodyA->body->ApplyForceToCenter(b2Vec2(-60, -60), true);
 		}
 
 
@@ -377,20 +381,11 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->physics->DestroyObject(onlyLoopChain);
 				delete onlyLoopChain;
 				onlyLoopChain = nullptr;
-				//b2Body* body = startLoopChain->body;
 				// Adds the main board chain
 				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
-				//Next_To_Flipper_Chain_1 = App->physics->CreateChain(0, 18, Next_To_Flipper_1, 54, false, true);
-
-				circles.add(App->physics->CreateCircle(217, 186, 12, false));
-				circles.add(App->physics->CreateCircle(258, 221, 12, false));
-				circles.add(App->physics->CreateCircle(174, 221, 12, false));
-
-
+			
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
-
-				// add top dividers
 				// create top dividers
 				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
 				topDividerRight = App->physics->CreateChain(0, 18, topRightWayPoints, 30, false, true);
