@@ -2,6 +2,13 @@
 #define __H_CHAINSPIVOTS__
 
 // Pivot 0, 0
+int bottomLeftBouncerPoints[8] = {
+	153, 391,
+	165, 416,
+	160, 419,
+	147, 394
+};
+// Pivot 0, 0
 int turboCompressorPoints[32] = {
 	181, 260,
 	184, 257,

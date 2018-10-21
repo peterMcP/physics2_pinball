@@ -105,9 +105,11 @@ bool ModuleSceneIntro::Start()
 	//Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
 
 
-	// ADD SPECIAL COMPONENTS
-	Flipper_Chain_R = App->physics->CreateConvexPoly(226, 474, new_R_Flipper, 16);
-	Flipper_Chain_L = App->physics->CreateConvexPoly(150, 474, new_L_Flipper, 16);
+	// ADD SPECIAL COMPONENTS ------------------------------------------------------------
+	// FLIPPERS ----------------------------------------------------
+
+	Flipper_Chain_R = App->physics->CreateConvexPoly(226, 474, new_R_Flipper, 16, true, false, 50.0f);
+	Flipper_Chain_L = App->physics->CreateConvexPoly(150, 474, new_L_Flipper, 16, true, false, 50.0f);
 
 	// add anchor circles to stick the flippers center point of rotation
 	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
@@ -135,6 +137,12 @@ bool ModuleSceneIntro::Start()
 	//jointDef.maxMotorTorque = 1000.0f;
 	jointDef.motorSpeed = 20.0f;
 	flipper_joint_right = App->physics->SetJoint(&jointDef);
+
+	// --------------------------------------------------------------------------------------------
+	// TRIGGERS
+	leftBottomBouncerTrigger = App->physics->CreateRectangleSensor(154, 423, 30, 5, 1.1f);
+	rightBottomBouncerTrigger = App->physics->CreateRectangleSensor(278, 423, 30, 5, -1.1f);
+
 
 	
 	return ret;
@@ -328,6 +336,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->player->Lives -= 1;
 			//scene_phase = game_loop::FAILURE;
 		}
+
+		if (bodyB == leftBottomBouncerTrigger)
+		{
+			LOG("TOUCH");
+			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
+			bodyA->body->ApplyForceToCenter(b2Vec2(75, -75), true);
+		}
+		if (bodyB == rightBottomBouncerTrigger)
+		{
+			bodyA->body->ApplyForceToCenter(b2Vec2(-75, -75), true);
+		}
+
+
 		break;
 
 

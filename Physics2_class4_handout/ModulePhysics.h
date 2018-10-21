@@ -46,11 +46,11 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true);
+	PhysBody* CreateCircle(int x, int y, int radius, bool dynamic = true, int density = 1.0f, float restitution = 0.0f);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, float angle = 0.0f);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bool dynamic = true, bool loop = true);
-	PhysBody* CreateConvexPoly(int x, int y, int* points, int size);
+	PhysBody* CreateConvexPoly(int x, int y, int* points, int size, bool dynamic = true, bool isSensor = false, float density = 1.0f, float restitution = 0.0f);
 
 	bool DestroyObject(PhysBody* body);
 

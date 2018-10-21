@@ -97,7 +97,7 @@ void ModulePhysics::SetJoints(PhysBody* bodyA, PhysBody* bodyB) {
 
 
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic, int density, float restitution)
 {
 	b2BodyDef body;
 	if (dynamic)
@@ -113,7 +113,9 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, bool dynamic)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+
+	fixture.density = density;
+	fixture.restitution = restitution;
 
 	b->CreateFixture(&fixture);
 
@@ -150,10 +152,11 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, float angle)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
+	body.angle = angle;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -480,7 +483,7 @@ b2RevoluteJoint* ModulePhysics::SetJoint(b2RevoluteJointDef* joint)
 	return (b2RevoluteJoint*)world->CreateJoint(joint);
 }
 
-PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size, bool dynamic, bool isSensor, float density, float restitution)
 {
 	// MAX 8 vertex
 	if (size > 16)
@@ -490,7 +493,10 @@ PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
 	}
 
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	if (dynamic)
+		body.type = b2_dynamicBody;
+	else
+		body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -509,7 +515,11 @@ PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &polyShape;
-	fixture.density = 30.0f;
+	fixture.density = density;
+	fixture.restitution = restitution;
+
+	if (isSensor)
+		fixture.isSensor = true;
 
 	b->CreateFixture(&fixture);
 
