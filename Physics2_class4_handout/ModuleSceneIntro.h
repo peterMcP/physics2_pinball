@@ -88,6 +88,7 @@ public:
 	SDL_Texture* second_layer_tex = nullptr;
 	SDL_Texture* leftFlipper_tex = nullptr;
 	SDL_Texture* rightFlipper_tex = nullptr;
+	SDL_Texture* turboLogo_tex = nullptr;
 
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
@@ -175,4 +176,7 @@ public:
 
 	uint Active_Balls = 1; 
 	bool Ball_Reset = false; 
+
+	// Rects
+	//SDL_Rect turboLogoRect;
 };

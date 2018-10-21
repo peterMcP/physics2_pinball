@@ -48,6 +48,7 @@ bool ModuleSceneIntro::Start()
 	rightFlipper_tex = App->textures->Load("pinball/R_Flipper.png");
 	sprites_tex = App->textures->Load("pinball/sprites.png");
 	score_tex = App->textures->Load("pinball/font.png");
+	turboLogo_tex = App->textures->Load("pinball/turboLogo.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -406,6 +407,9 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	
+	// DRAW TURBO SPRITE
+
+	App->renderer->Blit(turboLogo_tex, -24, 66, NULL);
 
 
 	// check if we are on in game phase to draw the second layer on top of the ball
