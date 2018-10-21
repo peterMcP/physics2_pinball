@@ -81,6 +81,7 @@ public:
 	// SCENE LOOP
 	game_loop scene_phase = game_loop::START;
 	b2RevoluteJoint* flipper_joint_left = nullptr;
+	b2RevoluteJoint* flipper_joint_right = nullptr;
 
 	// Balls
 	PhysBody* testCircle = nullptr;

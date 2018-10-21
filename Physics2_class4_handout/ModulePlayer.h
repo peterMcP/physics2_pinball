@@ -4,7 +4,7 @@
 #include "p2Point.h"
 #include <cstdint>
 
-#define MAX_ROUND_LIVES 5
+#define MAX_ROUND_LIVES 4
 
 class ModulePlayer : public Module
 {

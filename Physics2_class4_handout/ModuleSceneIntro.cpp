@@ -40,6 +40,7 @@ bool ModuleSceneIntro::Start()
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
 	leftFlipper_tex = App->textures->Load("pinball/L_Flipper.png");
+	rightFlipper_tex = App->textures->Load("pinball/R_Flipper.png");
 	
 	// audio
 	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -74,10 +75,18 @@ bool ModuleSceneIntro::Start()
 	balls.add(App->physics->CreateCircle(422, 363, 11));
 	balls.add(App->physics->CreateCircle(422, 352, 11));
 	balls.add(App->physics->CreateCircle(422, 341, 11));
-	balls.add(App->physics->CreateCircle(422, 330, 11));
+	//balls.add(App->physics->CreateCircle(422, 330, 11));
+	// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
+	p2List_item<PhysBody*>* item = balls.getFirst();
+	while (item)
+	{
+		balls.getFirst()->data->listener = this;
+		item->data->body->SetBullet(true);
+		item = item->next;
+	}
 
 
-	balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
+	//balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
 	
 
 	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
@@ -92,25 +101,36 @@ bool ModuleSceneIntro::Start()
 
 
 	// ADD SPECIAL COMPONENTS
-	Flipper_Chain_R = App->physics->CreateConvexPoly(0, 0, Flipper_R, 16);
-	Flipper_Chain_L = App->physics->CreateConvexPoly(150, 474, newFlipperLPoints, 16);
+	Flipper_Chain_R = App->physics->CreateConvexPoly(226, 474, new_R_Flipper, 16);
+	Flipper_Chain_L = App->physics->CreateConvexPoly(150, 474, new_L_Flipper, 16);
 
 	// add anchor circles to stick the flippers center point of rotation
 	anchorFlipperL = App->physics->CreateCircle(158, 484, 3, false);
-	anchorFlipperR = App->physics->CreateCircle(240, 484, 3, false);
+	anchorFlipperR = App->physics->CreateCircle(272, 484, 3, false);
 
 	// adding revolution joint and motor to flipper - TEST, implement on setjoints function
 	b2RevoluteJointDef jointDef;
 	jointDef.bodyB = Flipper_Chain_L->body; //testCircle->body;
 	jointDef.bodyA = anchorFlipperL->body;
 	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
-	jointDef.lowerAngle = -0.22f * b2_pi; //
-	jointDef.upperAngle = 0.02f * b2_pi; //
+	jointDef.lowerAngle = -0.1f * b2_pi; //
+	jointDef.upperAngle = 0.1f * b2_pi; //
 	jointDef.enableLimit = true;
 	jointDef.maxMotorTorque = 1000.0f;
 	jointDef.motorSpeed = -20.0f;
 	//jointDef.enableMotor = true;
 	flipper_joint_left = App->physics->SetJoint(&jointDef);
+	// right flipper joint test -------------
+	jointDef.bodyB = Flipper_Chain_R->body;
+	jointDef.bodyA = anchorFlipperR->body;
+	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
+	//jointDef.lowerAngle = -0.1f * b2_pi;//-0.1f * b2_pi; //
+	//jointDef.upperAngle = 0.1f * b2_pi; //
+	//jointDef.enableLimit = true;
+	//jointDef.maxMotorTorque = 1000.0f;
+	jointDef.motorSpeed = 20.0f;
+	flipper_joint_right = App->physics->SetJoint(&jointDef);
+
 	
 	return ret;
 }
@@ -130,7 +150,14 @@ bool ModuleSceneIntro::CleanUp()
 	ball_tex = nullptr;
 	App->textures->Unload(second_layer_tex);
 	second_layer_tex = nullptr;
-	
+	App->textures->Unload(leftFlipper_tex);
+	leftFlipper_tex = nullptr;
+	App->textures->Unload(rightFlipper_tex);
+	rightFlipper_tex = nullptr;
+
+	App->textures->Unload(circle);
+	App->textures->Unload(box);
+	App->textures->Unload(rick);
 
 	return true;
 }
@@ -176,6 +203,14 @@ update_status ModuleSceneIntro::Update()
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
 		flipper_joint_left->EnableMotor(false);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		flipper_joint_right->EnableMotor(true);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
+	{
+		flipper_joint_right->EnableMotor(false);
 	}
 
 
@@ -230,7 +265,10 @@ update_status ModuleSceneIntro::Update()
 	// draw flippers -------------------------------------------------
 	int x, y;
 	Flipper_Chain_L->GetPosition(x, y);
-	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation());
+	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(),0,0);
+	Flipper_Chain_R->GetPosition(x, y);
+	App->renderer->Blit(rightFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_R->GetRotation(), 0, 0);
+
 
 	// check if we are on in game phase to draw the second layer on top of the ball
 
