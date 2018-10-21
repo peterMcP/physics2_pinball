@@ -616,6 +616,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB == Gravity_Zone_Trigger) {
 			mainBoardChain->to_delete = true; 
+			topDividerLeft->to_delete = true; 
 			scene_phase = game_loop::BLACK_HOLE; 
 		}
 
@@ -722,7 +723,11 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 
 		if (mainBoardChain == nullptr) {
-			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
+			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);   // restart board after gravity zone
+		}
+
+		if (topDividerLeft == nullptr) {
+			topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);   // restart lest divider after gravity zone
 		}
 
 		if (Vacuum_Cleaner_Trigger != nullptr) {
@@ -763,6 +768,13 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 		
 		 
+		if (topDividerLeft != nullptr) {
+			if (topDividerLeft->to_delete) {
+				App->physics->DestroyObject(topDividerLeft);
+				delete topDividerLeft;
+				topDividerLeft = nullptr;
+			}
+		}
 
 
 		if (Switch_From_Hole_To_Ingame) {
