@@ -3,9 +3,11 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "p2Animation.h"
 
 class PhysBody;
 class b2RevoluteJoint;
+//class Animation;
 
 enum sensorState
 {
@@ -67,6 +69,9 @@ public:
 	SDL_Texture* second_layer_tex = nullptr;
 	SDL_Texture* leftFlipper_tex = nullptr;
 	SDL_Texture* rightFlipper_tex = nullptr;
+
+	SDL_Texture* centerArrowsAnim_tex = nullptr;
+	Animation centerArrowsAnim;
 
 	uint bonus_fx;
 	uint music;     

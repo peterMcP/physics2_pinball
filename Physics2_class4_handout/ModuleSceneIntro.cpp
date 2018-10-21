@@ -7,6 +7,7 @@
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
+#include "p2Animation.h"
 
 // chains pivots header
 #include "chainsPivots.h"
@@ -36,6 +37,8 @@ bool ModuleSceneIntro::Start()
 	background_tex = App->textures->Load("pinball/backgroundWallpaper.png");
 	scoreboard_tex = App->textures->Load("pinball/scoreboard.png");
 	second_layer_tex = App->textures->Load("pinball/secondLayer.png");
+	// animation textures
+	centerArrowsAnim_tex = App->textures->Load("pinball/centerArrowsAnim.png");
 
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
@@ -187,6 +190,11 @@ bool ModuleSceneIntro::Start()
 	leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
 	rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
 
+	// ANIMATIONS
+	for (int i = 9; i >= 0; --i)
+		centerArrowsAnim.PushBack({ i * 15, 0, 15, 135});
+	centerArrowsAnim.speed = 0.15f;
+
 	return ret;
 }
 
@@ -209,6 +217,8 @@ bool ModuleSceneIntro::CleanUp()
 	leftFlipper_tex = nullptr;
 	App->textures->Unload(rightFlipper_tex);
 	rightFlipper_tex = nullptr;
+	App->textures->Unload(centerArrowsAnim_tex);
+	centerArrowsAnim_tex = nullptr;
 
 	App->textures->Unload(circle);
 	App->textures->Unload(box);
@@ -316,7 +326,12 @@ update_status ModuleSceneIntro::Update()
 		sensors = sensors->next;
 	}
 
-	// draw flippers ---------
+	// DRAW ANIMATIONS ------------------------------------
+
+	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
+
+
+	// draw flippers --------------------------------------
 	int x, y;
 	Flipper_Chain_L->GetPosition(x, y);
 	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(), 0, 0);
