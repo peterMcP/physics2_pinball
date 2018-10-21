@@ -184,6 +184,7 @@ public:
 	int vacuumScore = 10420;
 	int topHoleScore = 16545;
 	int topBallsScore = 6504;
+	int bumperScore = 14320;
 
 	// Rects
 	//SDL_Rect turboLogoRect;

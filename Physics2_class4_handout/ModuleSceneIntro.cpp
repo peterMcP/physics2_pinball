@@ -570,11 +570,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
 			bodyA->body->ApplyForceToCenter(b2Vec2(60, -60), true);
 			App->audio->PlayFx(bumper_sfx);
+			App->player->score += bumperScore;
 		}
 		if (bodyB == rightBottomBouncerTrigger)
 		{
 			bodyA->body->ApplyForceToCenter(b2Vec2(-60, -60), true);
 			App->audio->PlayFx(bumper_sfx);
+			App->player->score += bumperScore;
 		}
 
 		// iterate sensor list for if anyone are oncollision
