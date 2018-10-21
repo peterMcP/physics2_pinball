@@ -48,6 +48,7 @@ public:
 
 	bool restartBoard(); // player loose all balls, restart round
 	bool newBall(); // sets the chains ready to next ball
+	void DrawScore();
 
 
 public:
@@ -61,6 +62,8 @@ public:
 	SDL_Texture* box = nullptr;
 	SDL_Texture* rick = nullptr;
 
+	SDL_Texture* score_tex = nullptr;
+	SDL_Rect scoreCutRect[10]; // we have 10 numbers on score texture
 	SDL_Texture* sprites_tex = nullptr;
 	SDL_Texture* board_tex = nullptr;
 	SDL_Texture* background_tex = nullptr;
