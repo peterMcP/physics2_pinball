@@ -121,4 +121,6 @@ public:
 	p2List<activableSensors> sensor_list;
 
 
+	// variables
+	bool Inside_Vacuum = false;
 };

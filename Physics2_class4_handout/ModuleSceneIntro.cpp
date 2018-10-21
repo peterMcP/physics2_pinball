@@ -373,6 +373,12 @@ update_status ModuleSceneIntro::Update()
 
 	}
 
+	if (Inside_Vacuum) {
+
+		b2Vec2 Vel(0.0f, -GRAVITY_Y);
+		balls.getFirst()->data->body->SetGravityScale(0.0f);
+		balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0)); 
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -449,9 +455,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB == Vacuum_Cleaner_Trigger) {
 
-			b2Vec2 Vel(0.0f, 100.0f); 
-			// bodyA->body->ApplyForce(Vel, bodyA->body->GetWorldCenter(), true); 
-
+			Inside_Vacuum = true; 
+			/*b2Vec2 Vel(0.0f, -GRAVITY_Y); 
+			bodyA->body->SetGravityScale(0.0f);*/
+			
 		}
 
 		break;
