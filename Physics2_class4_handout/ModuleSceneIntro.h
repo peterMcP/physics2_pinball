@@ -106,6 +106,7 @@ public:
 	PhysBody* Vacuum_Cleaner_Trigger = nullptr;
 	PhysBody* Gravity_Zone_Trigger = nullptr;
 	PhysBody* Extra_Ball_Trigger = nullptr;
+	PhysBody* Inside_Hole_Trigger = nullptr;
 
 	//bool to_delete = false;
 
@@ -126,5 +127,6 @@ public:
 	bool Inside_Vacuum = false;
 	bool Inside_Vacuum_Flag = false;
 	uint Vacuum_Time = 0; 
+	bool Switch_From_Hole_To_Ingame = false; 
 
 };

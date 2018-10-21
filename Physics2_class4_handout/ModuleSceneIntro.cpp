@@ -196,7 +196,7 @@ bool ModuleSceneIntro::Start()
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
 	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(361, 250, 4, 4);
 	Gravity_Zone_Trigger = App->physics->CreateRectangleSensor(45, 200, 26, 12);
-    
+    Inside_Hole_Trigger = App->physics->CreateRectangleSensor(65, 161, 7, 7);
 
 	// ANIMATIONS
 	for (int i = 9; i >= 0; --i)
@@ -431,6 +431,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		break; 
 
+	case BLACK_HOLE:
+		if (bodyB == Inside_Hole_Trigger) {
+			Gravity_Zone_Chain->to_delete = true;
+			Switch_From_Hole_To_Ingame = true;
+		}
+		break;
+
+
 	case INGAME:
 		if(bodyB == Lose_Life_Trigger)
 		{
@@ -491,8 +499,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			mainBoardChain->to_delete = true; 
 			scene_phase = game_loop::BLACK_HOLE; 
 		}
-
+		
 		break;
+
+	
 
 	}
 
@@ -563,6 +573,19 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 			itemBalls = itemBalls->next;
 		}
+
+		if (Gravity_Zone_Chain != nullptr) {
+			if (Gravity_Zone_Chain->to_delete) {
+				App->physics->DestroyObject(Gravity_Zone_Chain);
+				delete Gravity_Zone_Chain;
+				Gravity_Zone_Chain = nullptr; 
+			}
+		}
+
+		if (mainBoardChain == nullptr) {
+			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
+		}
+
 		break;
 
 	case BLACK_HOLE:
@@ -579,6 +602,17 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 		}
 
+		if (Switch_From_Hole_To_Ingame) {
+			Switch_From_Hole_To_Ingame = false;   
+			
+			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
+			balls.getFirst()->data->body->SetAngularVelocity(0);
+
+			balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(218), PIXEL_TO_METERS(82)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
+
+			balls.getFirst()->data->body->GetTransform();   // after a time, teleport
+			scene_phase = game_loop::INGAME; 
+		}
 		
 
 		break;
