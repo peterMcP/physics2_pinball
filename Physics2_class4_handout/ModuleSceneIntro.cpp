@@ -350,6 +350,8 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(background_tex, 0, 0, NULL, 1.0f); //, c->data->GetRotation());
 	// draw board
 	App->renderer->Blit(board_tex, 0, 18, NULL, 1.0f);
+	// DRAW animation top hole
+	App->renderer->Blit(TopHole_tex, 202, 67, &TopHole.GetCurrentFrame());
 	// draw scoreboard
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
@@ -380,8 +382,6 @@ update_status ModuleSceneIntro::Update()
 	// DRAW ANIMATIONS ------------------------------------
 
 	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
-	App->renderer->Blit(TopHole_tex, 201, 67, &TopHole.GetCurrentFrame());
-
 
 	// draw flippers --------------------------------------
 	int x, y;
