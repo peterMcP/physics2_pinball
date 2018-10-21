@@ -207,10 +207,9 @@ bool ModuleSceneIntro::Start()
 	centerArrowsAnim.speed = 0.15f;
 
 
-/*	for (int i = 9; i >= 0; --i)
-		TopHole.PushBack({ i * 15, 0, 15, 135 });
-	TopHole.speed = 0.15f;*/
-
+	for (int i = 0; i<=39; ++i)
+	TopHole.PushBack({ i*28, 1, 28, 28 });
+	TopHole.speed = 0.04f;
 	return ret;
 }
 
