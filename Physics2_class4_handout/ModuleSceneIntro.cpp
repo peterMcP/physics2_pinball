@@ -158,9 +158,37 @@ bool ModuleSceneIntro::Start()
 	leftBottomBouncerTrigger = App->physics->CreateRectangleSensor(154, 423, 30, 5, 1.1f);
 	rightBottomBouncerTrigger = App->physics->CreateRectangleSensor(278, 423, 30, 5, -1.1f);
 
-	circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f));
+	// top bouncing balls -----
+	// sensors
+	/*circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f));
 	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 1.0f));
-	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 1.0f));
+	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 1.0f));*/
+	int t = 100;
+	topBallsSensors[0].b = App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f);
+	topBallsSensors[0].totalTime = t;
+	topBallslist.add(topBallsSensors[0]);
+	topBallsSensors[1].b = App->physics->CreateCircle(258, 221, 12, false, 1.0f, 1.0f);
+	topBallsSensors[1].totalTime = t;
+	topBallslist.add(topBallsSensors[1]);
+	topBallsSensors[2].b = App->physics->CreateCircle(174, 221, 12, false, 1.0f, 1.0f);
+	topBallsSensors[2].totalTime = t;
+	topBallslist.add(topBallsSensors[2]);
+
+	// make it sensors and push rects
+	p2List_item<activableSensors>* topBallItem = topBallslist.getFirst();
+	while (topBallItem != NULL)
+	{
+		// "push" rects
+		topBallItem->data.rect[inactive] = { 0,0,0,0 };
+		topBallItem->data.rect[active] = { 28,108,28,28 };
+		b2Fixture* f = topBallItem->data.b->body->GetFixtureList(); // only first fixture
+		f->SetSensor(true);
+		topBallItem = topBallItem->next;
+	}
+	// normal body
+	circles.add(App->physics->CreateCircle(217, 186, 10, false, 1.0f, 1.0f));
+	circles.add(App->physics->CreateCircle(258, 221, 10, false, 1.0f, 1.0f));
+	circles.add(App->physics->CreateCircle(174, 221, 10, false, 1.0f, 1.0f));
 
 	// activable sensors --------------------------------------------------------------------------
 	// CIRCULAR grey SPRITES
@@ -213,7 +241,7 @@ bool ModuleSceneIntro::Start()
 
 
 
-	// othrer special sensors
+	// other special sensors
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
 	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(361, 250, 4, 4);
 	Gravity_Zone_Trigger = App->physics->CreateRectangleSensor(45, 200, 26, 12);
@@ -353,6 +381,26 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(board_tex, 0, 18, NULL, 1.0f);
 	// DRAW animation top hole
 	App->renderer->Blit(TopHole_tex, 202, 67, &TopHole.GetCurrentFrame());
+	// draw top balls bouncer flash sprite
+	p2List_item<activableSensors>* topBall = topBallslist.getFirst();
+	while (topBall != NULL)
+	{
+		if (topBall->data.state == sensorState::active)
+		{
+			// blit sprite
+			int x, y;
+			topBall->data.b->GetPosition(x, y);
+			App->renderer->Blit(sprites_tex, x - 2, y - 2, &topBall->data.rect[active]);
+
+			// check time
+			if (SDL_GetTicks() > topBall->data.eventTime + topBall->data.totalTime)
+			{
+				topBall->data.state = sensorState::inactive;
+			}
+		}
+		topBall = topBall->next;
+	}
+
 	// draw scoreboard
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
@@ -458,6 +506,8 @@ update_status ModuleSceneIntro::Update()
 
 				// play sfx
 				App->audio->PlayFx(canon_sfx);
+				// add score
+				App->player->score += vacuumScore;
 			}
 
 		
@@ -534,7 +584,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			if (bodyB == item->data.b && item->data.state == sensorState::inactive)
 			{
-				LOG("first collision");
+				LOG("Ding Collision");
 				item->data.state = sensorState::active;
 				App->player->score += (uint)item->data.scoreToGain;
 				// play sfx
@@ -565,6 +615,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == Gravity_Zone_Trigger) {
 			mainBoardChain->to_delete = true; 
 			scene_phase = game_loop::BLACK_HOLE; 
+		}
+
+		// check top ball sensors collisions
+		p2List_item<activableSensors>* ballsItem = topBallslist.getFirst();
+		while (ballsItem != NULL)
+		{
+			if (bodyB == ballsItem->data.b)
+			{
+				LOG("BALL BOUNCER TOUCHED");
+				// play sfx
+				App->audio->PlayFx(ding_sfx);
+				ballsItem->data.state = active;
+				// add score
+				App->player->score += topBallsScore;
+				// register event time
+				ballsItem->data.eventTime = SDL_GetTicks();
+			}
+			ballsItem = ballsItem->next;
 		}
 		
 		break;
@@ -726,6 +794,10 @@ update_status ModuleSceneIntro::PostUpdate()
 				// adds counter stars
 				starsCounter += 1;
 				if (starsCounter >= 3) starsCounter = 3; // locks max stars
+				// add score
+				App->player->score += topHoleScore;
+				// play sfx ?
+
 				scene_phase = game_loop::INGAME;
 			}
 
