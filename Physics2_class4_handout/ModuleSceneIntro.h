@@ -7,6 +7,22 @@
 class PhysBody;
 class b2RevoluteJoint;
 
+enum sensorState
+{
+	active,
+	inactive,
+	error
+};
+
+struct activableSensors
+{
+	
+	PhysBody* b = nullptr;
+	SDL_Rect rect[2]; // active and inactive sprite
+	sensorState state = sensorState::inactive;
+	uint scoreToGain = 0;
+};
+
 enum game_loop
 {
 	START,
@@ -43,6 +59,7 @@ public:
 	SDL_Texture* box = nullptr;
 	SDL_Texture* rick = nullptr;
 
+	SDL_Texture* sprites_tex = nullptr;
 	SDL_Texture* board_tex = nullptr;
 	SDL_Texture* background_tex = nullptr;
 	SDL_Texture* scoreboard_tex = nullptr;
@@ -87,5 +104,9 @@ public:
 
 	// Balls
 	PhysBody* testCircle = nullptr;
+
+	// activable sensors
+	activableSensors sensor1;
+	p2List<activableSensors> sensor_list;
 
 };

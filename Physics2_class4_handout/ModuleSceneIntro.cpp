@@ -41,6 +41,7 @@ bool ModuleSceneIntro::Start()
 	ball_tex = App->textures->Load("pinball/ball.png");
 	leftFlipper_tex = App->textures->Load("pinball/L_Flipper.png");
 	rightFlipper_tex = App->textures->Load("pinball/R_Flipper.png");
+	sprites_tex = App->textures->Load("pinball/spritesheet.png");
 	
 	// audio
 	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -146,6 +147,13 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 3.0f));
 	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 3.0f));
 	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 3.0f));
+
+	// activable sensors
+	sensor1.b = App->physics->CreateRectangleSensor(124, 167, 10, 5, -0.4f);
+	sensor1.rect[active] = {69,56,15,15};
+	sensor1.rect[inactive] = { 69,56,15,15 };
+	sensor1.scoreToGain = 100;
+	sensor_list.add(sensor1);
 
 
 	
@@ -352,9 +360,22 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			bodyA->body->ApplyForceToCenter(b2Vec2(-60, -60), true);
 		}
 
+		// iterate sensor list for if anyone are oncollision
+
+		p2List_item<activableSensors>* item = sensor_list.getFirst();
+		while (item)
+		{
+			if (bodyB == item->data.b && item->data.state == sensorState::inactive)
+			{
+				LOG("first collision");
+				item->data.state = sensorState::active;
+				App->player->score += (uint)item->data.scoreToGain;
+				
+			}
+			item = item->next;
+		}
 
 		break;
-
 
 	}
 
