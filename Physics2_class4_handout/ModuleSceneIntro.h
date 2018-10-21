@@ -156,11 +156,14 @@ public:
 
 
 	// variables
-	bool Inside_Vacuum = false;
+	//
 	bool Inside_Vacuum_Flag = false;
-	uint Vacuum_Time = 0; 
+	uint Vacuum_Time = 0;
+	//
+	bool Inside_Vacuum = false;
+	uint Reset_Vacuum_Time = 0;
+	bool Reset_Vacuum_Flag = false;
 	uint starsCounter = 0;
-	
 
 	bool Switch_From_Hole_To_Ingame = false; 
 	

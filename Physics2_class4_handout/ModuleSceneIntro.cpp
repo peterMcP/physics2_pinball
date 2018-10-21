@@ -546,6 +546,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 
 		if (bodyB == Vacuum_Cleaner_Trigger) {
+			Vacuum_Cleaner_Trigger->to_delete = true; 
 			Inside_Vacuum = true; 	
 		}
 
@@ -647,6 +648,27 @@ update_status ModuleSceneIntro::PostUpdate()
 			mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
 		}
 
+		if (Vacuum_Cleaner_Trigger != nullptr) {
+			if (Vacuum_Cleaner_Trigger->to_delete) {
+				App->physics->DestroyObject(Vacuum_Cleaner_Trigger);
+				delete Vacuum_Cleaner_Trigger;
+				Vacuum_Cleaner_Trigger = nullptr;
+			}
+		}
+		else {
+			uint Now = SDL_GetTicks(); 
+			if (!Reset_Vacuum_Flag) {
+				Reset_Vacuum_Time = Now;
+				Reset_Vacuum_Flag = true; 
+			}
+
+			if (Now > Reset_Vacuum_Time + 3500) {
+				Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16);
+				Reset_Vacuum_Flag = false; 
+			}
+		}
+
+			
 		break;
 
 	case BLACK_HOLE:
@@ -685,6 +707,7 @@ update_status ModuleSceneIntro::PostUpdate()
 
 				balls.getFirst()->data->body->SetType(b2_dynamicBody);
 				balls.getFirst()->data->body->SetGravityScale(1.0f);
+				balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
 				ball_state = ballState::BLIT; 
 
 				LOG("Ball is dynamic again");
