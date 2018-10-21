@@ -209,6 +209,9 @@ bool ModuleSceneIntro::Start()
 	for (int i = 0; i<=39; ++i)
 	TopHole.PushBack({ i*28, 1, 28, 28 });
 	TopHole.speed = 0.4f;
+
+	
+
 	return ret;
 }
 
@@ -575,6 +578,8 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	case INGAME:
 		// create a list of items to the balls for check if anyone wants to be destroyed
+		
+
 		while (itemBalls != NULL)
 		{
 
@@ -622,6 +627,8 @@ update_status ModuleSceneIntro::PostUpdate()
 
 		if (Switch_From_Hole_To_Ingame) {
 			Switch_From_Hole_To_Ingame = false;   
+
+			
 			
 			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
 			balls.getFirst()->data->body->SetAngularVelocity(0);
