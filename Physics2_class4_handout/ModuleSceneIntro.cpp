@@ -240,7 +240,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// test addimpulse to ball
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
@@ -520,6 +520,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				delete Lose_Life_Trigger;       // change this later in the destroy method       
 				Lose_Life_Trigger = nullptr;
 			}
+			restartBoard(); // restart entire board
 			scene_phase = game_loop::ENDGAME;
 		}
 		break;
