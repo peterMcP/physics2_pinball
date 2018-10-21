@@ -39,6 +39,8 @@ bool ModuleSceneIntro::Start()
 	second_layer_tex = App->textures->Load("pinball/secondLayer.png");
 	// animation textures
 	centerArrowsAnim_tex = App->textures->Load("pinball/centerArrowsAnim.png");
+	TopHole_tex = App->textures->Load("Theblackhole.png"); 
+
 
 	// assets textures
 	ball_tex = App->textures->Load("pinball/ball.png");
@@ -203,6 +205,11 @@ bool ModuleSceneIntro::Start()
 		centerArrowsAnim.PushBack({ i * 15, 0, 15, 135});
 	centerArrowsAnim.speed = 0.15f;
 
+
+/*	for (int i = 9; i >= 0; --i)
+		TopHole.PushBack({ i * 15, 0, 15, 135 });
+	TopHole.speed = 0.15f;*/
+
 	return ret;
 }
 
@@ -227,6 +234,9 @@ bool ModuleSceneIntro::CleanUp()
 	rightFlipper_tex = nullptr;
 	App->textures->Unload(centerArrowsAnim_tex);
 	centerArrowsAnim_tex = nullptr;
+	App->textures->Unload(TopHole_tex);
+	TopHole_tex = nullptr;
+
 
 	App->textures->Unload(circle);
 	App->textures->Unload(box);
@@ -337,6 +347,7 @@ update_status ModuleSceneIntro::Update()
 	// DRAW ANIMATIONS ------------------------------------
 
 	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
+	App->renderer->Blit(TopHole_tex, 201, 67, &TopHole.GetCurrentFrame());
 
 
 	// draw flippers --------------------------------------
@@ -379,30 +390,35 @@ update_status ModuleSceneIntro::Update()
 
 	if (Inside_Vacuum) {
 
+	                                              // do it only when entering
+			if (!Inside_Vacuum_Flag) {
+				Vacuum_Time = Now;
+				balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(215), PIXEL_TO_METERS(301)), 0.0f);
+				balls.getFirst()->data->body->GetTransform();
+				balls.getFirst()->data->body->SetType(b2_staticBody);
+				Inside_Vacuum_Flag = true;
+			}
+
+
+			/*if (Now < Vacuum_Time + 3000) {
+				LOG("Ball is trapped in vacuum");
+
+
+			}*/
+
+			else if (Now > Vacuum_Time + 3000) {
+				LOG("Ball ejected from vacuum!");
+
+				balls.getFirst()->data->body->SetType(b2_dynamicBody);
+				balls.getFirst()->data->body->SetGravityScale(1.0f);
+
+				balls.getFirst()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
+
+				Inside_Vacuum = false;
+				Inside_Vacuum_Flag = false;
+			}
+
 		
-		if (!Inside_Vacuum_Flag) {
-			Vacuum_Time = Now;
-			Inside_Vacuum_Flag = true;
-		}
-	
-                                    
-		if (Now < Vacuum_Time + 3000) {
-			LOG("Ball is trapped in vacuum"); 
-			balls.getFirst()->data->body->SetGravityScale(0.0f);
-			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
-			balls.getFirst()->data->body->SetAngularVelocity(0);
-		}
-
-		else if(Now > Vacuum_Time + 3000) {
-			LOG("Ball ejected from vacuum!"); 
-			balls.getFirst()->data->body->SetGravityScale(1.0f);
-
-			balls.getFirst()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
-
-			Inside_Vacuum = false; 
-			Inside_Vacuum_Flag = false; 
-		}
-	
 	}
 
 	return UPDATE_CONTINUE;
@@ -608,7 +624,7 @@ update_status ModuleSceneIntro::PostUpdate()
 			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
 			balls.getFirst()->data->body->SetAngularVelocity(0);
 
-			balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(218), PIXEL_TO_METERS(82)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
+			balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(217), PIXEL_TO_METERS(81)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
 
 			balls.getFirst()->data->body->GetTransform();   // after a time, teleport
 			scene_phase = game_loop::INGAME; 

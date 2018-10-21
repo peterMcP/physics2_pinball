@@ -73,6 +73,9 @@ public:
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
 
+	SDL_Texture* TopHole_tex = nullptr;
+	Animation TopHole; 
+
 	uint bonus_fx;
 	uint music;     
 
@@ -127,6 +130,9 @@ public:
 	bool Inside_Vacuum = false;
 	bool Inside_Vacuum_Flag = false;
 	uint Vacuum_Time = 0; 
-	bool Switch_From_Hole_To_Ingame = false; 
+	
 
+	bool Switch_From_Hole_To_Ingame = false; 
+	/*bool Inside_Hole_Flag = false;
+	uint Hole_Time = 0;*/
 };
