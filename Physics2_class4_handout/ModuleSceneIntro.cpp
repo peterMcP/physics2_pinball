@@ -41,7 +41,7 @@ bool ModuleSceneIntro::Start()
 	ball_tex = App->textures->Load("pinball/ball.png");
 	leftFlipper_tex = App->textures->Load("pinball/L_Flipper.png");
 	rightFlipper_tex = App->textures->Load("pinball/R_Flipper.png");
-	sprites_tex = App->textures->Load("pinball/spritesheet.png");
+	sprites_tex = App->textures->Load("pinball/sprites.png");
 	
 	// audio
 	//music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -148,15 +148,39 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 3.0f));
 	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 3.0f));
 
-	// activable sensors
-	sensor1.b = App->physics->CreateRectangleSensor(124, 167, 10, 5, -0.4f);
-	sensor1.rect[active] = {69,56,15,15};
-	sensor1.rect[inactive] = { 69,56,15,15 };
-	sensor1.scoreToGain = 100;
-	sensor_list.add(sensor1);
+	// activable sensors --------------------------------------------------------------------------
+	// CIRCULAR grey SPRITES
+	for (int i = 0; i < 14; ++i) // "circular grey sprites" 14 in total, same rects,score etc
+	{
+		sensor[i].rect[active] = { 23,55,19,19 };
+		sensor[i].rect[inactive] = { 67,54,19,19 };
+		sensor[i].scoreToGain = 100;
+	}
 
+	int i = 0;
+	// top left
+	sensor[i].b = App->physics->CreateRectangleSensor(124, 167, 10, 5, -0.4f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(140, 160, 10, 5, -0.4f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(157, 153, 10, 5, -0.4f);
+	sensor_list.add(sensor[i++]);
+	// top right
+	sensor[i].b = App->physics->CreateRectangleSensor(270, 153, 10, 5, 0.4f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(287, 160, 10, 5, 0.4f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(304, 167, 10, 5, 0.4f);
+	sensor_list.add(sensor[i++]);
+	// mid
+	sensor[i].b = App->physics->CreateRectangleSensor(193, 247, 10, 5, 0.0f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(212, 244, 10, 5, 0.0f);
+	sensor_list.add(sensor[i++]);
+	sensor[i].b = App->physics->CreateRectangleSensor(231, 247, 10, 5, 0.0f);
+	sensor_list.add(sensor[i++]);
+	// -----------------------------------------------------------------------------------------------
 
-	
 	return ret;
 }
 
@@ -273,9 +297,20 @@ update_status ModuleSceneIntro::Update()
 	// draw scoreboard
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
-	// draw animations// balls etc
+	// draw animations// balls etc ---------------------------------------------------------------------------
 
-	// draw flippers -------------------------------------------------
+	// draw all sensors
+	p2List_item<activableSensors>* sensors = sensor_list.getFirst();
+	while (sensors != NULL)
+	{
+		int posx, posy = 0;
+		sensors->data.b->GetPosition(posx, posy);
+		App->renderer->Blit(sprites_tex, posx, posy, &sensors->data.rect[sensors->data.state]);
+
+		sensors = sensors->next;
+	}
+
+	// draw flippers ---------
 	int x, y;
 	Flipper_Chain_L->GetPosition(x, y);
 	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(), 0, 0);

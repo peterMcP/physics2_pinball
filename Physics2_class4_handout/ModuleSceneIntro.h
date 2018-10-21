@@ -106,7 +106,7 @@ public:
 	PhysBody* testCircle = nullptr;
 
 	// activable sensors
-	activableSensors sensor1;
+	activableSensors sensor[19];
 	p2List<activableSensors> sensor_list;
 
 };
