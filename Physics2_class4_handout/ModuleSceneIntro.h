@@ -39,7 +39,6 @@ enum game_loop
 	INGAME,
 	BLACK_HOLE,
 	FAILURE,
-	ADD_BALL,
 	ENDGAME
 };
 
