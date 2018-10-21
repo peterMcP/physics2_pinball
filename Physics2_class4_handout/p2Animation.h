@@ -43,6 +43,16 @@ public:
 		return frames[(int)current_frame];
 	}
 
+	int GetCurrentFrameNum()
+	{
+		return current_frame;
+	}
+
+	int GetLastFrameNum()
+	{
+		return last_frame;
+	}
+
 	SDL_Rect& ReturnCurrentFrame()
 	{
 		return frames[(int)current_frame];

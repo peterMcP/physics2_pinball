@@ -213,12 +213,12 @@ bool ModuleSceneIntro::Start()
 		centerArrowsAnim.PushBack({ i * 15, 0, 15, 135});
 	centerArrowsAnim.speed = 0.15f;
 
-
+	
 	for (int i = 0; i<=39; ++i)
 	TopHole.PushBack({ i*28, 1, 28, 28 });
-	TopHole.speed = 0.4f;
-
+	TopHole.speed = 0.0f;
 	
+	TopHole.loop = false; 
 
 	return ret;
 }
@@ -377,7 +377,9 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+		if (ball_state == ballState::BLIT) {
+			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+		}
 			
 		c = c->next;
 	}
@@ -645,17 +647,34 @@ update_status ModuleSceneIntro::PostUpdate()
 
 		if (Switch_From_Hole_To_Ingame) {
 			Switch_From_Hole_To_Ingame = false;   
+			ball_state = ballState::DISAPPEAR; 
+			balls.getFirst()->data->body->SetType(b2_staticBody); 
 
+			LOG("Ball is static");
+
+			 balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(217), PIXEL_TO_METERS(81)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
+
+			TopHole.speed = 0.4f; 
 			
-			
-			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
-			balls.getFirst()->data->body->SetAngularVelocity(0);
 
-			balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(217), PIXEL_TO_METERS(81)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
-
-			balls.getFirst()->data->body->GetTransform();   // after a time, teleport
-			scene_phase = game_loop::INGAME; 
 		}
+		
+			else if (TopHole.Finished()) {
+				// 	balls.getFirst()->data->body->GetTransform();   // teleport
+
+				balls.getFirst()->data->body->SetType(b2_dynamicBody);
+				balls.getFirst()->data->body->SetGravityScale(1.0f);
+				ball_state = ballState::BLIT; 
+
+				LOG("Ball is dynamic again");
+
+				TopHole.Reset();
+				TopHole.speed = 0;
+				TopHole.loop = false;
+				scene_phase = game_loop::INGAME;
+			}
+
+	
 		
 
 		break;

@@ -34,6 +34,12 @@ enum game_loop
 	ENDGAME
 };
 
+enum ballState
+{
+	BLIT,
+	DISAPPEAR
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -131,6 +137,7 @@ public:
 
 	// Balls
 	PhysBody* testCircle = nullptr;
+	ballState ball_state = ballState::BLIT; 
 
 	// activable sensors
 	activableSensors sensor[19];
@@ -144,6 +151,5 @@ public:
 	
 
 	bool Switch_From_Hole_To_Ingame = false; 
-	/*bool Inside_Hole_Flag = false;
-	uint Hole_Time = 0;*/
+	
 };
