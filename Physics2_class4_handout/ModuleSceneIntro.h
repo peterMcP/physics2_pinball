@@ -102,6 +102,10 @@ public:
 	PhysBody* rightBottomBouncerTrigger = nullptr;
 	PhysBody* leftSecurityKicker = nullptr;
 	PhysBody* rightSecurityKicker = nullptr;
+	PhysBody* Vacuum_Cleaner_Trigger = nullptr;
+	PhysBody* Gravity_Zone_Trigger = nullptr;
+	PhysBody* Extra_Ball_Trigger = nullptr;
+
 	//bool to_delete = false;
 
 	// SCENE LOOP

@@ -103,7 +103,7 @@ bool ModuleSceneIntro::Start()
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, bottomUpWallR, 16, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
-	mainBoardComponents.add(App->physics->CreateChain(0, 18, turboCompressorPoints, 32, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, turboCompressorPoints, 32, false, false));
 
 	//Next_To_Flipper_Chain_R = App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true);
 	//Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
@@ -189,6 +189,12 @@ bool ModuleSceneIntro::Start()
 	// bottom security kickers
 	leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
 	rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
+
+
+
+	// othrer special sensors
+	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
+    
 
 	// ANIMATIONS
 	for (int i = 9; i >= 0; --i)

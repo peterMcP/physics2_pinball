@@ -10,7 +10,13 @@ int bottomLeftBouncerPoints[8] = {
 };
 // Pivot 0, 0
 int turboCompressorPoints[32] = {
-	181, 260,
+	
+	200, 294,
+	200, 291,
+	190, 283,
+	183, 275,
+	181, 268,
+    181, 260,
 	184, 257,
 	206, 254,
 	226, 254,
@@ -21,11 +27,7 @@ int turboCompressorPoints[32] = {
 	241, 284,
 	230, 291,
 	230, 294,
-	200, 294,
-	200, 291,
-	190, 283,
-	183, 275,
-	181, 268
+	
 };
 // Pivot 0, 0
 int bottomUpWallR[16] = {
