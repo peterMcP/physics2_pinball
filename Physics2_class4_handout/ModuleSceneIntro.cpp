@@ -95,9 +95,14 @@ bool ModuleSceneIntro::Start()
 	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(37, 18, topSeparatorPoints, 12, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, bottomUpWallL, 16, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, bottomUpWallR, 16, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
+	mainBoardComponents.add(App->physics->CreateChain(0, 18, turboCompressorPoints, 32, false, true));
 
-	Next_To_Flipper_Chain_R = App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true);
-	Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
+	//Next_To_Flipper_Chain_R = App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true);
+	//Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
 
 
 	// ADD SPECIAL COMPONENTS
@@ -250,6 +255,14 @@ update_status ModuleSceneIntro::Update()
 
 	// draw animations// balls etc
 
+	// draw flippers -------------------------------------------------
+	int x, y;
+	Flipper_Chain_L->GetPosition(x, y);
+	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(), 0, 0);
+	Flipper_Chain_R->GetPosition(x, y);
+	App->renderer->Blit(rightFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_R->GetRotation(), 0, 0);
+
+	// draw balls
 	c = balls.getFirst();
 	
 	while (c != NULL)
@@ -262,12 +275,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	// draw flippers -------------------------------------------------
-	int x, y;
-	Flipper_Chain_L->GetPosition(x, y);
-	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(),0,0);
-	Flipper_Chain_R->GetPosition(x, y);
-	App->renderer->Blit(rightFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_R->GetRotation(), 0, 0);
+	
 
 
 	// check if we are on in game phase to draw the second layer on top of the ball
