@@ -451,6 +451,9 @@ update_status ModuleSceneIntro::Update()
 
 				Inside_Vacuum = false;
 				Inside_Vacuum_Flag = false;
+
+				// play sfx
+				App->audio->PlayFx(canon_sfx);
 			}
 
 		
