@@ -668,8 +668,6 @@ update_status ModuleSceneIntro::PostUpdate()
 			{
 				LOG("CREATING GAME");
 				App->physics->DestroyObject(exitLoopTrigger);
-				delete exitLoopTrigger;
-				exitLoopTrigger = nullptr;
 
 				App->physics->DestroyObject(onlyLoopChain);
 				delete onlyLoopChain;
@@ -858,7 +856,6 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 
 			if (exitLoopTrigger == nullptr) {
-				LOG("Exit loop trigger created"); 
 				exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 				exitLoopTrigger->listener = this;
 			}
