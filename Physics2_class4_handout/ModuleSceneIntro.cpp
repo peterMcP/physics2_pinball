@@ -368,6 +368,9 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(second_layer_tex, 303, 99, &r, 1.0f); 
 		r = { 56,3,74,110 };
 		App->renderer->Blit(second_layer_tex, 48, 109, &r, 1.0f);
+		r = { 132,31,80,52 };
+		App->renderer->Blit(second_layer_tex, 176, 264, &r, 1.0f);
+
 	}
 
 
@@ -441,6 +444,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			LOG("security kicker");
 			bodyA->body->ApplyForce(b2Vec2(0, -100), bodyA->body->GetWorldCenter(), true);
+		}
+
+
+		if (bodyB == Vacuum_Cleaner_Trigger) {
+
+			b2Vec2 Vel(0.0f, 100.0f); 
+			// bodyA->body->ApplyForce(Vel, bodyA->body->GetWorldCenter(), true); 
+
 		}
 
 		break;
