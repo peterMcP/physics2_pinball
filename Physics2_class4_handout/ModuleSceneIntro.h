@@ -80,8 +80,15 @@ public:
 	Animation TopHole; 
 
 	uint ding_sfx = 0;
+	uint bumper_sfx = 0;
+	uint rampBallKicked_sfx = 0;
+	uint extraBall_sfx = 0;
+	uint canon_sfx = 0;
+	uint flipper_sfx = 0;
+
+
 	uint bonus_fx;
-	uint music;     
+	uint music; // convert music to ogg
 
 	// background chain physbodys
 	//PhysBody* startLoopChain = nullptr;

@@ -53,7 +53,13 @@ bool ModuleSceneIntro::Start()
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
 	// App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
 	ding_sfx = App->audio->LoadFx("pinball/audio/SFX/6_ding.wav");
+	bumper_sfx = App->audio->LoadFx("pinball/audio/SFX/10_bumper.wav");
+	rampBallKicked_sfx = App->audio->LoadFx("pinball/audio/SFX/9_rampBallKicked.wav");
+	extraBall_sfx = App->audio->LoadFx("pinball/audio/SFX/2_extraBall.wav");
+	canon_sfx = App->audio->LoadFx("pinball/audio/SFX/7_canon.wav");
+	flipper_sfx = App->audio->LoadFx("pinball/audio/SFX/8_flipper.wav");
 
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
@@ -286,6 +292,7 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		flipper_joint_left->EnableMotor(true);
+		App->audio->PlayFx(flipper_sfx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
@@ -294,6 +301,7 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		flipper_joint_right->EnableMotor(true);
+		App->audio->PlayFx(flipper_sfx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
@@ -481,10 +489,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			LOG("TOUCH");
 			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
 			bodyA->body->ApplyForceToCenter(b2Vec2(60, -60), true);
+			App->audio->PlayFx(bumper_sfx);
 		}
 		if (bodyB == rightBottomBouncerTrigger)
 		{
 			bodyA->body->ApplyForceToCenter(b2Vec2(-60, -60), true);
+			App->audio->PlayFx(bumper_sfx);
 		}
 
 		// iterate sensor list for if anyone are oncollision
@@ -508,6 +518,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			LOG("security kicker");
 			bodyA->body->ApplyForce(b2Vec2(0, -100), bodyA->body->GetWorldCenter(), true);
+			App->audio->PlayFx(rampBallKicked_sfx);
 		}
 
 

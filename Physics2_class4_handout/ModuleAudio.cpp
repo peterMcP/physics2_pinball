@@ -44,6 +44,8 @@ bool ModuleAudio::Init()
 		ret = true;
 	}
 
+	Mix_Volume(-1, MIX_MAX_VOLUME / 2); // TODO: mix volume set to half
+
 	return ret;
 }
 
