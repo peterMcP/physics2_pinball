@@ -179,7 +179,13 @@ bool ModuleSceneIntro::Start()
 	sensor_list.add(sensor[i++]);
 	sensor[i].b = App->physics->CreateRectangleSensor(231, 247, 10, 5, 0.0f);
 	sensor_list.add(sensor[i++]);
+	// bottom
+
 	// -----------------------------------------------------------------------------------------------
+
+	// bottom security kickers
+	leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
+	rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
 
 	return ret;
 }
@@ -408,6 +414,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				
 			}
 			item = item->next;
+		}
+
+		if (bodyB == leftSecurityKicker || bodyB == rightSecurityKicker)
+		{
+			LOG("security kicker");
+			bodyA->body->ApplyForce(b2Vec2(0, -100), bodyA->body->GetWorldCenter(), true);
 		}
 
 		break;
