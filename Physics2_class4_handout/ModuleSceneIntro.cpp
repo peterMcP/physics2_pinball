@@ -53,6 +53,7 @@ bool ModuleSceneIntro::Start()
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
 	// App->audio->PlayFx(1, -1); 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	ding_sfx = App->audio->LoadFx("pinball/audio/SFX/6_ding.wav");
 
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
@@ -160,7 +161,7 @@ bool ModuleSceneIntro::Start()
 	{
 		sensor[i].rect[active] = { 23,55,19,19 };
 		sensor[i].rect[inactive] = { 67,54,19,19 };
-		sensor[i].scoreToGain = 100;
+		sensor[i].scoreToGain = 10000;
 	}
 
 	int i = 0;
@@ -498,6 +499,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				LOG("first collision");
 				item->data.state = sensorState::active;
 				App->player->score += (uint)item->data.scoreToGain;
+				// play sfx
+				App->audio->PlayFx(ding_sfx);
 				
 			}
 			item = item->next;

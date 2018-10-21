@@ -85,6 +85,7 @@ public:
 	SDL_Texture* TopHole_tex = nullptr;
 	Animation TopHole; 
 
+	uint ding_sfx = 0;
 	uint bonus_fx;
 	uint music;     
 
