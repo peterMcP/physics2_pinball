@@ -39,7 +39,7 @@ bool ModuleSceneIntro::Start()
 	second_layer_tex = App->textures->Load("pinball/secondLayer.png");
 	// animation textures
 	centerArrowsAnim_tex = App->textures->Load("pinball/centerArrowsAnim.png");
-	TopHole_tex = App->textures->Load("Theblackhole.png"); 
+	TopHole_tex = App->textures->Load("pinball/Theblackhole.png"); 
 
 
 	// assets textures
