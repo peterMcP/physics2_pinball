@@ -194,6 +194,7 @@ bool ModuleSceneIntro::Start()
 
 	// othrer special sensors
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
+	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(361, 250, 4, 4);
     
 
 	// ANIMATIONS
@@ -387,7 +388,7 @@ update_status ModuleSceneIntro::Update()
 		if (Now < Vacuum_Time + 3000) {
 			LOG("Ball is trapped in vacuum"); 
 			balls.getFirst()->data->body->SetGravityScale(0.0f);
-			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it
+			balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(0, 0));      // first paralyze it, can we set it to a fixed position? 
 			balls.getFirst()->data->body->SetAngularVelocity(0);
 		}
 
@@ -400,7 +401,7 @@ update_status ModuleSceneIntro::Update()
 			Inside_Vacuum = false; 
 			Inside_Vacuum_Flag = false; 
 		}
-		LOG("NOW %i LAST %i", Now, Vacuum_Time);
+	
 	}
 
 	return UPDATE_CONTINUE;
@@ -478,6 +479,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB == Vacuum_Cleaner_Trigger) {
 			Inside_Vacuum = true; 	
+		}
+
+		if (bodyB == Extra_Ball_Trigger) {
+			LOG("New ball incoming..."); 
+			// newBall(); 
 		}
 
 		break;
@@ -618,6 +624,7 @@ bool ModuleSceneIntro::newBall()
 		// create the loop chain part
 		onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
 	
+		
 
 	return ret;
 }
