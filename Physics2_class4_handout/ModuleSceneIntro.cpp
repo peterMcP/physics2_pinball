@@ -157,9 +157,9 @@ bool ModuleSceneIntro::Start()
 	leftBottomBouncerTrigger = App->physics->CreateRectangleSensor(154, 423, 30, 5, 1.1f);
 	rightBottomBouncerTrigger = App->physics->CreateRectangleSensor(278, 423, 30, 5, -1.1f);
 
-	circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 3.0f));
-	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 3.0f));
-	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 3.0f));
+	circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f));
+	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 1.0f));
+	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 1.0f));
 
 	// activable sensors --------------------------------------------------------------------------
 	// CIRCULAR grey SPRITES
