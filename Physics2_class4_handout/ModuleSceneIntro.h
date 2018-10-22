@@ -120,6 +120,7 @@ public:
 	PhysBody* Next_To_Flipper_Chain_R = nullptr;
 	PhysBody* Next_To_Flipper_Chain_L = nullptr;
 	PhysBody* Ball_Safety_Chain = nullptr;
+	PhysBody* ball_launcher_leftWall = nullptr;
 	PhysBody* onlyLoopChain = nullptr;
 	PhysBody* topDividerLeft = nullptr;
 	PhysBody* topDividerRight = nullptr;

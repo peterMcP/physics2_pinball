@@ -65,7 +65,8 @@ bool ModuleSceneIntro::Start()
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
 	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
-	Ball_Safety_Chain = App->physics->CreateChain(0, 18, safetyZonePoints, 30, false, false);
+	Ball_Safety_Chain = App->physics->CreateChain(0, 18, safetyZonePoints, 28, false, false);
+	ball_launcher_leftWall = App->physics->CreateChain(0, 18, safetyZoneP2, 4, false, false);
 	
 
 	// board main body perimeter parts chain
@@ -252,18 +253,18 @@ bool ModuleSceneIntro::Start()
 	mainKickerRect = { 0,59,20,76 };
 	mainKicker_body = App->physics->CreateRectangle(400, 440, 20, 20);
 	//mainKicker_body->body->SetType(b2_staticBody);
-	mainKickerAnchorBody = App->physics->CreateRectangle(400, 490, 20, 20);
+	mainKickerAnchorBody = App->physics->CreateRectangle(400, 462, 20, 20);
 	mainKickerAnchorBody->body->SetType(b2_staticBody);
 	// create prismatic joint
 	b2PrismaticJointDef prismJointDef;
-	b2Vec2 worldAxis(1.0f, 0.0f);
+	b2Vec2 worldAxis(0.0f, 1.0f);
 	prismJointDef.Initialize(mainKickerAnchorBody->body,mainKicker_body->body, mainKicker_body->body->GetWorldCenter(), worldAxis);
-	prismJointDef.lowerTranslation = -50.0f;
-	prismJointDef.upperTranslation = 2.5f;
+	prismJointDef.lowerTranslation = PIXEL_TO_METERS(0.0f);
+	prismJointDef.upperTranslation = PIXEL_TO_METERS(22.0f);
 	prismJointDef.enableLimit = true;
-	prismJointDef.maxMotorForce = 1.0f;
-	prismJointDef.motorSpeed = 6.0f;
-	prismJointDef.enableMotor = true;
+	prismJointDef.maxMotorForce = 500.0f;
+	prismJointDef.motorSpeed = -60.0f;
+	//prismJointDef.enableMotor = true;
 	kickerJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&prismJointDef);
 
 
@@ -1159,7 +1160,7 @@ bool ModuleSceneIntro::shootBall()
 	// check if we still have remaining balls
 	if (safetyPlateBalls > 0)
 	{
-		mainKicker_body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(20), PIXEL_TO_METERS(20)), 0);
+		kickerJoint->EnableMotor(true);
 	}
 
 
