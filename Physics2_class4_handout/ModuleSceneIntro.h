@@ -202,8 +202,5 @@ public:
 	PhysBody* linkedBody = nullptr;
 	bool claimNewBall = false;
 	bool checkInactiveBalls = false;
-	p2List<PhysBody*> markedToDeath; // if we have more than 1 ball in game, when hits the death trigger
-									 // the board still needed, add ball to list and when the last ball die, remove all
-	
 
 };

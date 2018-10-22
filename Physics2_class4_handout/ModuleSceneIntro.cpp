@@ -561,22 +561,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case INGAME:
 		if(bodyB == Lose_Life_Trigger)
 		{
-			// check if we have more than 1 ball ingame
-			if (inGameBalls > 1)
-			{ 
-				// adds the ball to death list
-				markedToDeath.add(bodyA);
+		
+			LOG("ball is ready to be destroyed !!!!");
+			if (bodyA != nullptr) {
+				bodyA->to_delete = true;
 			}
-			else
-			{
-				LOG("ball is ready to be destroyed !!!!");
-				if (bodyA != nullptr) {
-					bodyA->to_delete = true;
-				}
 
-				App->player->Lives -= 1;
-				//inGameBalls--;
-			}
+			App->player->Lives -= 1;
 			inGameBalls--;
 			
 			//scene_phase = game_loop::FAILURE;
@@ -752,23 +743,15 @@ update_status ModuleSceneIntro::PostUpdate()
 		{
 			if (itemBalls->data->to_delete)
 			{
+	
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
 
-				// check death list
-				if (markedToDeath.count() > 0)
+				if (inGameBalls < 1)
 				{
-					p2List_item<PhysBody*>* b = markedToDeath.getFirst();
-					while (b != NULL)
-					{
-						App->physics->DestroyObject(b->data);
-						b = b->next;
-						balls.del(b);
-					}
-					markedToDeath.clear();
+					scene_phase = game_loop::FAILURE;
 				}
-				scene_phase = game_loop::FAILURE;
 				break;
 			}
 			itemBalls = itemBalls->next;
