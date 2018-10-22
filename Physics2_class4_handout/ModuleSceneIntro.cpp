@@ -95,7 +95,7 @@ bool ModuleSceneIntro::Start()
 	p2List_item<PhysBody*>* item = balls.getFirst();
 	while (item)
 	{
-		balls.getFirst()->data->listener = this;
+		item->data->listener = this;
 		item->data->body->SetBullet(true);
 		item = item->next;
 	}
@@ -243,7 +243,7 @@ bool ModuleSceneIntro::Start()
 
 	// other special sensors
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
-	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(361, 250, 4, 4);
+	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(370, 242, 6, 12, -0.8f);
 	Gravity_Zone_Trigger = App->physics->CreateRectangleSensor(45, 200, 26, 12);
     Inside_Hole_Trigger = App->physics->CreateRectangleSensor(65, 161, 7, 7);
 
@@ -254,7 +254,7 @@ bool ModuleSceneIntro::Start()
 
 	
 	for (int i = 0; i<=39; ++i)
-	TopHole.PushBack({ i*28, 1, 28, 28 });
+		TopHole.PushBack({ i*28, 1, 28, 28 });
 	TopHole.speed = 0.0f;
 	
 	TopHole.loop = false; 
@@ -297,6 +297,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	LOG("NUM OF BALLS: %i", balls.count());
+	LOG("NUM OF INGAME BALLS: %i", inGameBalls);
+
 	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
@@ -532,6 +536,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			// destroy first loop part chain
 			onlyLoopChain->to_delete = true;
 			bodyB->to_delete = true;
+			// add to in game ball counter
+			inGameBalls++;
+			// active the search for inactive balls
+			checkInactiveBalls = true;
 		}
 
 		if (bodyB == enterBoardTrigger)
@@ -553,20 +561,30 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	case INGAME:
 		if(bodyB == Lose_Life_Trigger)
 		{
-			LOG("ball is ready to be destroyed !!!!");
-			if (bodyA != nullptr) {
-				bodyA->to_delete = true;
+			// check if we have more than 1 ball ingame
+			if (inGameBalls > 1)
+			{ 
+				// adds the ball to death list
+				markedToDeath.add(bodyA);
 			}
+			else
+			{
+				LOG("ball is ready to be destroyed !!!!");
+				if (bodyA != nullptr) {
+					bodyA->to_delete = true;
+				}
 
-			//Ball_Safety_Chain->to_delete = true;
-
-			App->player->Lives -= 1;
+				App->player->Lives -= 1;
+				//inGameBalls--;
+			}
+			inGameBalls--;
+			
 			//scene_phase = game_loop::FAILURE;
 		}
 
 		if (bodyB == leftBottomBouncerTrigger)
 		{
-			LOG("TOUCH");
+			LOG("LEFT BOUNCER");
 			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
 			bodyA->body->ApplyForceToCenter(b2Vec2(60, -60), true);
 			App->audio->PlayFx(bumper_sfx);
@@ -574,6 +592,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		if (bodyB == rightBottomBouncerTrigger)
 		{
+			LOG("RIGHT BOUNCER");
 			bodyA->body->ApplyForceToCenter(b2Vec2(-60, -60), true);
 			App->audio->PlayFx(bumper_sfx);
 			App->player->score += bumperScore;
@@ -610,8 +629,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		if (bodyB == Extra_Ball_Trigger) {
-			LOG("New ball incoming..."); 
-			
+			// check if we still have more balls
+			 // test, count() returns the total of all balls in the list
+			// we assume here we have 1 ball in game, and limits the functionality for lock
+			// only if in game we have only 1 ball
+			if (balls.count() > 1 && inGameBalls < 2)
+			{
+				LOG("New ball incoming...");
+				linkedBody = bodyA;
+				claimNewBall = true;
+			}
 		}
 
 		if (bodyB == Gravity_Zone_Trigger) {
@@ -637,13 +664,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 			ballsItem = ballsItem->next;
 		}
-		
 		break;
-
-	
-
 	}
-
 }
 
 update_status ModuleSceneIntro::PostUpdate()
@@ -689,6 +711,21 @@ update_status ModuleSceneIntro::PostUpdate()
 				enterBoardTrigger = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
+				// search inactive balls
+				if (checkInactiveBalls)
+				{
+					p2List_item<PhysBody*>* b = balls.getFirst();
+					while (b)
+					{
+						if (!b->data->body->IsActive())
+						{
+							b->data->body->SetActive(true);
+						}
+						b = b->next;
+					}
+					checkInactiveBalls = false;
+				}
+				
 				//switch game state
 				scene_phase = game_loop::INGAME;
 			}
@@ -697,17 +734,40 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case INGAME:
-		// create a list of items to the balls for check if anyone wants to be destroyed
-		
 
+		// check if the player puts the ball on lock function
+		if (claimNewBall)
+		{
+			linkedBody->body->SetActive(false);
+			claimNewBall = false;
+			// "free" the pointer
+			linkedBody = nullptr;
+			// prepare the board for the new incoming ball
+			newBall();
+			scene_phase = game_loop::START;
+		}
+
+		// create a list of items to the balls for check if anyone wants to be destroyed
 		while (itemBalls != NULL)
 		{
-
 			if (itemBalls->data->to_delete)
 			{
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
+
+				// check death list
+				if (markedToDeath.count() > 0)
+				{
+					p2List_item<PhysBody*>* b = markedToDeath.getFirst();
+					while (b != NULL)
+					{
+						App->physics->DestroyObject(b->data);
+						b = b->next;
+						balls.del(b);
+					}
+					markedToDeath.clear();
+				}
 				scene_phase = game_loop::FAILURE;
 				break;
 			}
@@ -893,16 +953,22 @@ bool ModuleSceneIntro::newBall()
 {
 	bool ret = true;
 
-	// only creation for all needed parts here ----------------
-	
 	// add listener to next ball
+	//balls.getFirst()->data->listener = this;
 
-		balls.getFirst()->data->listener = this;
-		// create needed triggers
-		exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
-		exitLoopTrigger->listener = this;
-		// create the loop chain part
-		onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
+	// deletes main board chain
+	App->physics->DestroyObject(mainBoardChain);
+	// deletes corner tap exit loop
+	App->physics->DestroyObject(exitLoopTapChain);
+	// deletes top dividers
+	App->physics->DestroyObject(topDividerLeft);
+	App->physics->DestroyObject(topDividerRight);
+
+	// create needed triggers
+	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
+	exitLoopTrigger->listener = this;
+	// create the loop chain part
+	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
 
 		
 	return ret;

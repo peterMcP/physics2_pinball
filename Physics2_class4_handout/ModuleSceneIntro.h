@@ -184,12 +184,26 @@ public:
 	float Gravity_Force = 0; 
 	bool Reset_Gravity = false; 
 
-	// SCORES for different places
+	// CORE DATA ---------------------------------------------
+	// SCORES for different places ----
 	int vacuumScore = 10420;
 	int topHoleScore = 16545;
 	int topBallsScore = 6504;
 	int bumperScore = 14320;
+	// vars
+	//int numBaseBalls = 4; // counts the number of round start balls
+	int inGameBalls = 0; // counts the actual balls on board
 
 	// Rects
 	//SDL_Rect turboLogoRect;
+
+	
+	// lock functionality variables
+	PhysBody* linkedBody = nullptr;
+	bool claimNewBall = false;
+	bool checkInactiveBalls = false;
+	p2List<PhysBody*> markedToDeath; // if we have more than 1 ball in game, when hits the death trigger
+									 // the board still needed, add ball to list and when the last ball die, remove all
+	
+
 };
