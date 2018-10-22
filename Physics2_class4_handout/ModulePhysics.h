@@ -59,20 +59,20 @@ public:
 
 	void SetJoints(PhysBody* bodyA, PhysBody* bodyB);
 	b2RevoluteJoint* SetJoint(b2RevoluteJointDef* joint);
+	void DestroyMouseJoint(b2MouseJoint** mouseJoint);
 
-	
-
-
-
-
+	// vars
 	b2World* world;
+	b2Body* clickedBody = nullptr;
+	b2MouseJoint* mouse_joint = nullptr;
+
 private:
 
 	bool debug;
 	//b2World* world;
-	b2MouseJoint* mouse_joint = nullptr;
+	
 	b2Body* ground;
-	b2Body* clickedBody = nullptr;
+	
 	b2WeldJoint* flipper_joint_r = nullptr;
 
 };

@@ -682,7 +682,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				claimNewBall = true;
 				// add score
 				App->player->score += lockScore;
-//play sfx
+				//play sfx
 
 			}
 		}
@@ -826,7 +826,9 @@ update_status ModuleSceneIntro::PostUpdate()
 		{
 			if (itemBalls->data->to_delete)
 			{
-	
+				// check for security if is a dragged mouse debug ball and set clicked to null
+				if (App->physics->clickedBody != nullptr)
+					App->physics->DestroyMouseJoint(&App->physics->mouse_joint);
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;

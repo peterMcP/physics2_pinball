@@ -531,3 +531,10 @@ PhysBody* ModulePhysics::CreateConvexPoly(int x, int y, int* points, int size, b
 	return pbody;
 
 }
+
+void ModulePhysics::DestroyMouseJoint(b2MouseJoint** joint)
+{
+	world->DestroyJoint(*joint);
+	*joint = nullptr;
+	clickedBody = nullptr;
+}
