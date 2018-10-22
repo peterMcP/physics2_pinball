@@ -247,6 +247,24 @@ bool ModuleSceneIntro::Start()
 	leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
 	rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
 
+	// MAIN kicker
+	// rect
+	mainKickerRect = { 0,59,20,76 };
+	mainKicker_body = App->physics->CreateRectangle(400, 440, 20, 20);
+	//mainKicker_body->body->SetType(b2_staticBody);
+	mainKickerAnchorBody = App->physics->CreateRectangle(400, 490, 20, 20);
+	mainKickerAnchorBody->body->SetType(b2_staticBody);
+	// create prismatic joint
+	b2PrismaticJointDef prismJointDef;
+	b2Vec2 worldAxis(1.0f, 0.0f);
+	prismJointDef.Initialize(mainKickerAnchorBody->body,mainKicker_body->body, mainKicker_body->body->GetWorldCenter(), worldAxis);
+	prismJointDef.lowerTranslation = -50.0f;
+	prismJointDef.upperTranslation = 2.5f;
+	prismJointDef.enableLimit = true;
+	prismJointDef.maxMotorForce = 1.0f;
+	prismJointDef.motorSpeed = 6.0f;
+	prismJointDef.enableMotor = true;
+	kickerJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&prismJointDef);
 
 
 	// other special sensors
@@ -339,17 +357,17 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
-
+		shootBall();
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
-		if (balls.getFirst()->data->body->IsActive()) {
+		/*if (balls.getFirst()->data->body->IsActive()) {
 			if (balls.getFirst()->data != nullptr) {
 				balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
 			}
 		}
 		else if (balls.getFirst()->next->data != nullptr) {
 			balls.getFirst()->next->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->next->data->body->GetWorldCenter(), true);
-		}
+		}*/
 
 	}
 
@@ -500,6 +518,10 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(leftFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_L->GetRotation(), 0, 0);
 	Flipper_Chain_R->GetPosition(x, y);
 	App->renderer->Blit(rightFlipper_tex, x, y, NULL, 1.0f, Flipper_Chain_R->GetRotation(), 0, 0);
+
+	// DRAW main kicker
+	mainKicker_body->GetPosition(x, y);
+	App->renderer->Blit(sprites_tex, x, y, &mainKickerRect);
 
 	// draw balls
 	c = balls.getFirst();
@@ -680,11 +702,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		if (bodyB == Extra_Ball_Trigger) {
-			// check if we still have more balls
-			 // test, count() returns the total of all balls in the list
-			// we assume here we have 1 ball in game, and limits the functionality for lock
-			// only if in game we have only 1 ball
-			if (balls.count() > 1 && inGameBalls < 2)
+			if (safetyPlateBalls > 0 && inGameBalls < 2)
 			{
 				LOG("New ball incoming...");
 				linkedBody = bodyA;
@@ -1114,17 +1132,18 @@ bool ModuleSceneIntro::generateStartBalls()
 	bool ret = true;
 
 	// Add the five balls
-	balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
-	balls.add(App->physics->CreateCircle(422, 363, 11));
-	balls.add(App->physics->CreateCircle(422, 352, 11));
-	balls.add(App->physics->CreateCircle(422, 341, 11));
-	//balls.add(App->physics->CreateCircle(422, 330, 11));
+	balls.add(App->physics->CreateCircle(432, 437, 11));           // There are 5 balls at the start
+	balls.add(App->physics->CreateCircle(432, 414, 11));
+	balls.add(App->physics->CreateCircle(432, 392, 11));
+	balls.add(App->physics->CreateCircle(432, 369, 11));
+	balls.add(App->physics->CreateCircle(432, 346, 11));
 	// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
 	p2List_item<PhysBody*>* item = balls.getFirst();
 	while (item)
 	{
 		item->data->listener = this;
 		item->data->body->SetBullet(true);
+		//item->data->body->SetActive(false);
 		item = item->next;
 	}
 	// count at start the baseballs we have
@@ -1136,6 +1155,13 @@ bool ModuleSceneIntro::generateStartBalls()
 bool ModuleSceneIntro::shootBall()
 {
 	bool ret = true;
+
+	// check if we still have remaining balls
+	if (safetyPlateBalls > 0)
+	{
+		mainKicker_body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(20), PIXEL_TO_METERS(20)), 0);
+	}
+
 
 	return ret;
 

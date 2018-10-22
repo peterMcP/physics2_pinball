@@ -7,6 +7,7 @@
 
 class PhysBody;
 class b2RevoluteJoint;
+class b2PrismaticJoint;
 //class Animation;
 
 enum sensorState
@@ -211,7 +212,11 @@ public:
 
 	// ball launcher/kicker full functions vars || CORE
 	int safetyPlateBalls = 0; // counts the remaining balls we have to launch
-
+	SDL_Rect mainKickerRect;
+	PhysBody* mainKicker_body = nullptr;
+	PhysBody* mainKickerAnchorBody = nullptr;
+	public:
+	b2PrismaticJoint* kickerJoint = nullptr;
 
 
 	PhysBody* testBall = nullptr;
