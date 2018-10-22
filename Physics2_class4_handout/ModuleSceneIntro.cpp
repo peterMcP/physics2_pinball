@@ -85,24 +85,25 @@ bool ModuleSceneIntro::Start()
 	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 530, 60, 20);
 	Lose_Life_Trigger->listener = this;
 
-	// TEST BALL -------
-	balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
-	balls.add(App->physics->CreateCircle(422, 363, 11));
-	balls.add(App->physics->CreateCircle(422, 352, 11));
-	balls.add(App->physics->CreateCircle(422, 341, 11));
-	//balls.add(App->physics->CreateCircle(422, 330, 11));
-	// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
-	p2List_item<PhysBody*>* item = balls.getFirst();
-	while (item)
-	{
-		item->data->listener = this;
-		item->data->body->SetBullet(true);
-		item = item->next;
-	}
+	//// TEST BALL -------
+	//balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
+	//balls.add(App->physics->CreateCircle(422, 363, 11));
+	//balls.add(App->physics->CreateCircle(422, 352, 11));
+	//balls.add(App->physics->CreateCircle(422, 341, 11));
+	////balls.add(App->physics->CreateCircle(422, 330, 11));
+	//// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
+	//p2List_item<PhysBody*>* item = balls.getFirst();
+	//while (item)
+	//{
+	//	item->data->listener = this;
+	//	item->data->body->SetBullet(true);
+	//	item = item->next;
+	//}
+	//// count at start the baseballs we have
+	//baseBalls = balls.count();
 
-
-	//balls.getFirst()->data->listener = this;              // FIFO (first ball in, first ball out)
-	
+	// generate start balls
+	generateStartBalls();
 
 	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
 	f->SetFriction(0.7f);
@@ -309,12 +310,17 @@ update_status ModuleSceneIntro::Update()
 	LOG("NUM OF INGAME BALLS: %i", inGameBalls);
 
 
-	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
 		balls.getLast()->data->listener = this;
-		Current_Ball = balls.getLast()->data;
-	}*/
+		balls.getLast()->data->body->SetActive(false);
+		//Current_Ball = balls.getLast()->data;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	{
+		balls.getLast()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(50), PIXEL_TO_METERS(50)), 0);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
@@ -725,6 +731,11 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	p2List_item<PhysBody*>* itemBalls = balls.getFirst();
 
+	/*if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	{
+		balls.getLast()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(50), PIXEL_TO_METERS(50)), 0);
+	}*/
+
 
 	switch (scene_phase)
 	{
@@ -1012,6 +1023,15 @@ bool ModuleSceneIntro::restartBoard()
 {
 	bool ret = true;
 
+	// adds balls to safe plate
+	// call function placeBalls();
+
+	// recount base balls
+	baseBalls = balls.count();
+
+	// change ingame state to start
+
+	// maybe delete something or create any physbody
 
 
 	return ret;
@@ -1071,5 +1091,49 @@ void ModuleSceneIntro::DrawScore()
 
 		App->renderer->Blit(score_tex, x + ((w + separation) * i), y, &scoreCutRect[tempScore]);
 	}
+
+}
+
+bool ModuleSceneIntro::prepareNextBall()
+{
+	// this functions is called when a ball dies, or user demands a new ball with "lock" functionality
+	// basically the same
+	bool ret = true;
+
+
+
+
+	return ret;
+}
+
+bool ModuleSceneIntro::generateStartBalls()
+{
+	bool ret = true;
+
+	// Add the five balls
+	balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
+	balls.add(App->physics->CreateCircle(422, 363, 11));
+	balls.add(App->physics->CreateCircle(422, 352, 11));
+	balls.add(App->physics->CreateCircle(422, 341, 11));
+	//balls.add(App->physics->CreateCircle(422, 330, 11));
+	// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
+	p2List_item<PhysBody*>* item = balls.getFirst();
+	while (item)
+	{
+		item->data->listener = this;
+		item->data->body->SetBullet(true);
+		item = item->next;
+	}
+	// count at start the baseballs we have
+	baseBalls = balls.count();
+
+	return ret;
+}
+
+bool ModuleSceneIntro::shootBall()
+{
+	bool ret = true;
+
+	return ret;
 
 }

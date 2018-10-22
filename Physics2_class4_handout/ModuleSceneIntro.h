@@ -66,6 +66,9 @@ public:
 	bool restartBoard(); // player loose all balls, restart round
 	bool newBall(); // sets the chains ready to next ball
 	void DrawScore();
+	bool prepareNextBall();
+	bool generateStartBalls();
+	bool shootBall();
 
 
 public:
@@ -206,4 +209,10 @@ public:
 	bool checkInactiveBalls = false;
 	activableNoSensor lockLogo;
 
+	// ball launcher/kicker full functions vars || CORE
+	int baseBalls = 0; // counts the remaining balls we have to launch
+
+
+
+	PhysBody* testBall = nullptr;
 };
