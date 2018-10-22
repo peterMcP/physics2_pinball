@@ -674,16 +674,17 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				claimNewBall = true;
 				// add score
 				App->player->score += lockScore;
-				//play sfx
+//play sfx
 
 			}
 		}
 
 		if (bodyB == Gravity_Zone_Trigger) {
-			mainBoardChain->to_delete = true; 
-			topDividerLeft->to_delete = true; 
-			scene_phase = game_loop::BLACK_HOLE; 
+			mainBoardChain->to_delete = true;
+			topDividerLeft->to_delete = true;
+			scene_phase = game_loop::BLACK_HOLE;
 		}
+
 
 		// check top ball sensors collisions
 		p2List_item<activableSensors>* ballsItem = topBallslist.getFirst();
@@ -729,7 +730,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				onlyLoopChain = nullptr;
 				// Adds the main board chain
 				mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 170, false, false);
-			
+
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
 				// create top dividers
@@ -763,7 +764,7 @@ update_status ModuleSceneIntro::PostUpdate()
 					}
 					checkInactiveBalls = false;
 				}
-				
+
 				//switch game state
 				scene_phase = game_loop::INGAME;
 			}
@@ -772,6 +773,26 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case INGAME:
+
+		/*if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN){               // useful for testing 
+			balls.getFirst()->data->body->SetType(b2_staticBody); 
+         }
+		if (App->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN) {               // useful for testing 
+			balls.getFirst()->data->body->SetType(b2_dynamicBody);
+		}*/
+
+
+		if (starsCounter >= 3) {           // extra ball if 3 stars collected
+			TopHole.speed = 0.4f;	
+			if (TopHole.Finished()) {
+				balls.add(App->physics->CreateCircle(217, 81, 11));
+				balls.getLast()->data->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
+				TopHole.Reset();
+				TopHole.speed = 0;
+				TopHole.loop = false;
+				starsCounter = 0;
+			}
+		}
 
 		// check if the player puts the ball on lock function
 		if (claimNewBall)
