@@ -329,15 +329,23 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// test addimpulse to ball
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
+
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
-		if (balls.getFirst()->data != nullptr) {
-			balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
+		if (balls.getFirst()->data->body->IsActive()) {
+			if (balls.getFirst()->data != nullptr) {
+				balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
+			}
+		}
+		else if (balls.getFirst()->next->data != nullptr) {
+			balls.getFirst()->next->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->next->data->body->GetWorldCenter(), true);
 		}
 
 	}
+
 
 	// INPUT CONTROL FOR FLIPPERS ----------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
@@ -774,18 +782,23 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	case INGAME:
 
-		/*if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN){               // useful for testing 
+		if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN){               // useful for testing 
 			balls.getFirst()->data->body->SetType(b2_staticBody); 
          }
 		if (App->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN) {               // useful for testing 
 			balls.getFirst()->data->body->SetType(b2_dynamicBody);
-		}*/
+		}
 
 
 		if (starsCounter >= 3) {           // extra ball if 3 stars collected
 			TopHole.speed = 0.4f;	
 			if (TopHole.Finished()) {
 				balls.add(App->physics->CreateCircle(217, 81, 11));
+				balls.getLast()->data->listener = this; 
+				inGameBalls++; 
+
+
+
 				balls.getLast()->data->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
 				TopHole.Reset();
 				TopHole.speed = 0;
