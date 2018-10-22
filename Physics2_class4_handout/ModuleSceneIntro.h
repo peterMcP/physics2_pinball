@@ -190,6 +190,8 @@ public:
 	int topHoleScore = 16545;
 	int topBallsScore = 6504;
 	int bumperScore = 14320;
+	int allSensorsActives = 152562;
+	int lockScore = 34737;
 	// vars
 	//int numBaseBalls = 4; // counts the number of round start balls
 	int inGameBalls = 0; // counts the actual balls on board

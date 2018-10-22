@@ -451,6 +451,8 @@ update_status ModuleSceneIntro::Update()
 			}
 			// play sfx
 
+			// add extra score
+			App->player->score += allSensorsActives;
 		}
 	}
 
@@ -670,6 +672,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				LOG("New ball incoming...");
 				linkedBody = bodyA;
 				claimNewBall = true;
+				// add score
+				App->player->score += lockScore;
+				//play sfx
+
 			}
 		}
 
