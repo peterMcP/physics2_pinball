@@ -306,8 +306,9 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 
-	LOG("NUM OF BALLS: %i", balls.count());
-	LOG("NUM OF INGAME BALLS: %i", inGameBalls);
+	//LOG("NUM OF BALLS: %i", balls.count());
+	//LOG("NUM OF INGAME BALLS: %i", inGameBalls);
+	LOG("SAFETY PLATE BALLS: %i", safetyPlateBalls);
 
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -482,7 +483,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// draw lock sprite graphic
-	if (balls.count() > 1 && inGameBalls < 2) // TODO, check all possibilities, maybe we must to track the balls on "start box"
+	if (safetyPlateBalls > 0 && inGameBalls < 2) // TODO, check all possibilities, maybe we must to track the balls on "start box"
 	{
 		App->renderer->Blit(sprites_tex, lockLogo.positions[0].x, lockLogo.positions[0].y, &lockLogo.rect[active]);
 	}
@@ -603,6 +604,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			LOG("ball entered to game board");
 			enterBoardTrigger->to_delete = true;
+			// count the remaining balls in safe plate
+			safetyPlateBalls--;
 		}
 
 		break; 
@@ -838,7 +841,7 @@ update_status ModuleSceneIntro::PostUpdate()
 			if (itemBalls->data->to_delete)
 			{
 				// check for security if is a dragged mouse debug ball and set clicked to null
-				if (App->physics->clickedBody != nullptr)
+				if (itemBalls->data->body == App->physics->clickedBody && App->physics->clickedBody != nullptr)
 					App->physics->DestroyMouseJoint(&App->physics->mouse_joint);
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
@@ -1027,7 +1030,7 @@ bool ModuleSceneIntro::restartBoard()
 	// call function placeBalls();
 
 	// recount base balls
-	baseBalls = balls.count();
+	safetyPlateBalls = balls.count();
 
 	// change ingame state to start
 
@@ -1125,7 +1128,7 @@ bool ModuleSceneIntro::generateStartBalls()
 		item = item->next;
 	}
 	// count at start the baseballs we have
-	baseBalls = balls.count();
+	safetyPlateBalls = balls.count();
 
 	return ret;
 }

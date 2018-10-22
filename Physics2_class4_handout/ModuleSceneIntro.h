@@ -210,7 +210,7 @@ public:
 	activableNoSensor lockLogo;
 
 	// ball launcher/kicker full functions vars || CORE
-	int baseBalls = 0; // counts the remaining balls we have to launch
+	int safetyPlateBalls = 0; // counts the remaining balls we have to launch
 
 
 
