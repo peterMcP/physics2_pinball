@@ -231,6 +231,13 @@ bool ModuleSceneIntro::Start()
 	
 	stars.rect[active] = { 0,0,16,16 };
 	stars.rect[inactive] = { 43,48,16,16 };
+
+	// Lock functionality "animated" sprite graphic
+	lockLogo.instances = 1;
+	lockLogo.positions[0] = { 309,260 };
+	lockLogo.rect[active] = { 22,0,44,44 };
+	lockLogo.rect[inactive] = { 73,103,44,44 };
+
 	
 
 	// -----------------------------------------------------------------------------------------------
@@ -300,6 +307,7 @@ update_status ModuleSceneIntro::Update()
 
 	LOG("NUM OF BALLS: %i", balls.count());
 	LOG("NUM OF INGAME BALLS: %i", inGameBalls);
+
 
 	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -420,6 +428,31 @@ update_status ModuleSceneIntro::Update()
 
 		sensors = sensors->next;
 	}
+	// and recheck if all of them are active, if yes, do something and restart state to all
+	sensors = sensor_list.getFirst();
+	int counter = 0;
+	while (sensors != NULL)
+	{
+		if (sensors->data.state == sensorState::inactive)
+		{
+			break;
+		}
+		counter++;
+		sensors = sensors->next;
+		if (counter >= sensor_list.count()) // all sensors active
+		{
+			LOG("all sensors active");
+			// do something: COMBO
+			sensors = sensor_list.getFirst();
+			while (sensors != NULL)
+			{
+				sensors->data.state = inactive;
+				sensors = sensors->next;
+			}
+			// play sfx
+
+		}
+	}
 
 	// draw activable stars
 	for (int i = 0; i < stars.instances; ++i)
@@ -431,6 +464,14 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(sprites_tex, stars.positions[i].x, stars.positions[i].y, &stars.rect[active]);
 
 	}
+
+	// draw lock sprite graphic
+	if (balls.count() > 1 && inGameBalls < 2) // TODO, check all possibilities, maybe we must to track the balls on "start box"
+	{
+		App->renderer->Blit(sprites_tex, lockLogo.positions[0].x, lockLogo.positions[0].y, &lockLogo.rect[active]);
+	}
+	else
+		App->renderer->Blit(sprites_tex, lockLogo.positions[0].x, lockLogo.positions[0].y, &lockLogo.rect[inactive]);
 
 	// DRAW ANIMATIONS ------------------------------------
 

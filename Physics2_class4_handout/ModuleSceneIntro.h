@@ -202,5 +202,6 @@ public:
 	PhysBody* linkedBody = nullptr;
 	bool claimNewBall = false;
 	bool checkInactiveBalls = false;
+	activableNoSensor lockLogo;
 
 };
