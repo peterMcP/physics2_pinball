@@ -690,7 +690,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB == Gravity_Zone_Trigger) {
 			mainBoardChain->to_delete = true;
 			topDividerLeft->to_delete = true;
-			scene_phase = game_loop::BLACK_HOLE;
+			if (inGameBalls == 1) {
+				scene_phase = game_loop::BLACK_HOLE;
+			}
 		}
 
 
