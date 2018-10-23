@@ -147,8 +147,8 @@ public:
 	PhysBody* Lose_Life_Trigger = nullptr;
 	PhysBody* leftBottomBouncerTrigger = nullptr;
 	PhysBody* rightBottomBouncerTrigger = nullptr;
-	PhysBody* leftSecurityKicker = nullptr;
-	PhysBody* rightSecurityKicker = nullptr;
+	//PhysBody* leftSecurityKicker = nullptr;
+	//PhysBody* rightSecurityKicker = nullptr;
 	PhysBody* Vacuum_Cleaner_Trigger = nullptr;
 	PhysBody* Gravity_Zone_Trigger = nullptr;
 	PhysBody* Extra_Ball_Trigger = nullptr;
@@ -226,7 +226,7 @@ public:
 	// Rects
 	SDL_Rect yourScoreRect;
 	SDL_Rect highScoreRect;
-
+	SDL_Rect lateralKickersRect;
 	
 	// lock functionality variables
 	PhysBody* linkedBody = nullptr;
@@ -254,5 +254,9 @@ public:
 	bool Play_Death = false; 
 	uint Death_Score_Time = 0; 
 	bool Finished_Death = false; 
+
+	// lateral kickers
+	activableSensors kickerLeft;
+	activableSensors kickerRight;
 
 };

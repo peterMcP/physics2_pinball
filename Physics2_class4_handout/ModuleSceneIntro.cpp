@@ -256,8 +256,8 @@ bool ModuleSceneIntro::Start()
 	// -----------------------------------------------------------------------------------------------
 
 	// bottom security kickers
-	leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
-	rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
+	//leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
+	//rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
 
 	// MAIN kicker
 	// rect
@@ -317,6 +317,17 @@ bool ModuleSceneIntro::Start()
 	// SCORETYPES RECTs
 	yourScoreRect = { 0,0,223,72 };
 	highScoreRect = { 0,77,223,78 };
+	// lateral kickers "sensors" rect
+	kickerLeft.b = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
+	kickerLeft.rect[inactive] = { 0,0,0,0 };
+	kickerLeft.rect[active] = { 128,100,37,54 };
+	kickerLeft.scoreToGain = 12001;
+	kickerLeft.totalTime = 150;
+	kickerRight.b = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
+	kickerRight.rect[inactive] = { 0,0,0,0 };
+	kickerRight.rect[active] = { 128,100,37,54 };
+	kickerRight.scoreToGain = 12001;
+	kickerRight.totalTime = 150;
 
 	return ret;
 }
@@ -624,7 +635,24 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(turboLogo_tex, -24, 66, NULL);
 
-
+	// draw lateral kickers if trigger lateral kickers on
+	if (kickerLeft.state == sensorState::active)
+	{
+		if (SDL_GetTicks() > kickerLeft.eventTime + kickerLeft.totalTime)
+			kickerLeft.state = sensorState::inactive;
+		int x, y;
+		kickerLeft.b->GetPosition(x, y);
+		App->renderer->Blit(sprites_tex, x - 13, y + 66, &kickerLeft.rect[kickerLeft.state]);
+	}
+	if (kickerRight.state == sensorState::active)
+	{
+		if (SDL_GetTicks() > kickerRight.eventTime + kickerRight.totalTime)
+			kickerRight.state = sensorState::inactive;
+		int x, y;
+		kickerRight.b->GetPosition(x, y);
+		App->renderer->Blit(sprites_tex, x - 13, y + 66, &kickerRight.rect[active]);
+	}
+	
 	// check if we are on in game phase to draw the second layer on top of the ball
 
 	if (scene_phase == game_loop::INGAME || scene_phase == game_loop::FAILURE)
@@ -862,9 +890,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			item = item->next;
 		}
 
-		if (bodyB == leftSecurityKicker || bodyB == rightSecurityKicker)
+		if (bodyB == kickerLeft.b || bodyB == kickerRight.b)
 		{
 			LOG("security kicker");
+			if (bodyB == kickerLeft.b)
+			{
+				kickerLeft.eventTime = SDL_GetTicks();
+				kickerLeft.state = sensorState::active;
+			}
+			else
+			{
+				kickerRight.eventTime = SDL_GetTicks();
+				kickerRight.state = sensorState::active;
+			}
 			bodyA->body->ApplyForce(b2Vec2(0, -100), bodyA->body->GetWorldCenter(), true);
 			App->audio->PlayFx(rampBallKicked_sfx);
 		}
