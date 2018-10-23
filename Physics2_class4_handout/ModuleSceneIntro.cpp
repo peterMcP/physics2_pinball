@@ -248,8 +248,8 @@ bool ModuleSceneIntro::Start()
 	// gravity burn logo
 	gravityLogo.instances = 1;
 	gravityLogo.positions[0] = { 81, 265 };
-	gravityLogo.rect[active] = { 110,5,35,39 };
-	gravityLogo.rect[inactive] = { 157,3,35,39 };
+	gravityLogo.rect[active] = { 104,0,45,60 };
+	gravityLogo.rect[inactive] = { 149,0,45,60 };
 
 	
 
