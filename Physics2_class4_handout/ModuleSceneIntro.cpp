@@ -8,13 +8,14 @@
 #include "ModulePhysics.h"
 #include "ModulePlayer.h"
 #include "p2Animation.h"
-
+#include "time.h"
 // chains pivots header
 #include "chainsPivots.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	circle = box = rick = NULL;
+	srand(time(NULL));          
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -625,7 +626,13 @@ update_status ModuleSceneIntro::Update()
 				Vacuum_Body->body->SetType(b2_dynamicBody);
 				Vacuum_Body->body->SetGravityScale(1.0f);
 
-				Vacuum_Body->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
+				uint dir = rand() % 2; 
+				if (dir == 0) {
+					Vacuum_Body->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
+				}
+				else {
+					Vacuum_Body->body->ApplyForceToCenter(b2Vec2(-10, 100), true);
+				}
 
 				Inside_Vacuum = false;
 				Inside_Vacuum_Flag = false;
@@ -657,7 +664,14 @@ update_status ModuleSceneIntro::Update()
 				balls.getLast()->data->listener = this; 
 				inGameBalls++;
 				Ejected_Balls++; 
-				balls.getLast()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);
+
+				uint dir = rand() % 2;
+				if (dir == 0) {
+					balls.getLast()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);
+				}
+				else {
+					balls.getLast()->data->body->ApplyForceToCenter(b2Vec2(-10, 100), true);
+				}
 
 				Vacuum_Combo_Time += 200;
 			}
