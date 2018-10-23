@@ -961,7 +961,7 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 
 
-		if (starsCounter >= 3) {           // extra ball if 3 stars collected
+		if (starsCounter >= 3) {  // extra ball if 3 stars collected
 			TopHole.speed = 0.4f;	
 			if (TopHole.Finished()) {
 				balls.add(App->physics->CreateCircle(217, 81, 11));
@@ -975,6 +975,8 @@ update_status ModuleSceneIntro::PostUpdate()
 				starsCounter = 0;
 				// play sfx
 				App->audio->PlayFx(extraBall_sfx);
+				// add score
+				App->player->score += allStarScore;
 			}
 		}
 

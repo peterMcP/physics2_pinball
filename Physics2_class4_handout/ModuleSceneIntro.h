@@ -214,6 +214,7 @@ public:
 	int bumperScore = 14320;
 	int allSensorsActives = 152562;
 	int lockScore = 34737;
+	int allStarScore = 50650;
 	// vars
 	//int numBaseBalls = 4; // counts the number of round start balls
 	int inGameBalls = 0; // counts the actual balls on board
