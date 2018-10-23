@@ -648,9 +648,9 @@ update_status ModuleSceneIntro::Update()
 				Vacuum_Combo_Time = Now2; 
 				Vacuum_Combo_Flag = true; 
 			}
-			else if (Now2 > Vacuum_Combo_Time && Ejected_Balls < 20) {        // eject balls
+			else if (Now2 > Vacuum_Combo_Time && Ejected_Balls < 20) {       
 			
-				balls.add(App->physics->CreateCircle(216, 299, 11));
+				balls.add(App->physics->CreateCircle(216, 299, 11));                    // eject balls
 				balls.getLast()->data->listener = this; 
 				inGameBalls++;
 				Ejected_Balls++; 
@@ -658,7 +658,7 @@ update_status ModuleSceneIntro::Update()
 
 				Vacuum_Combo_Time += 200;
 			}
-			else if (Ejected_Balls >= 20) {        // reactivate trigger
+			else if (Ejected_Balls >= 20 && Now2 > Vacuum_Combo_Time + 200) {        // reactivate trigger after last ball
 				Vacuum_Cleaner_Trigger->body->SetActive(true);
 				Vacuum_Cleaner_Trigger->listener = this; 
 				Vacuum_Combo_Flag = false; 
