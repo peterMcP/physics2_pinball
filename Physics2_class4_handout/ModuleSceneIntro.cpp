@@ -1331,6 +1331,8 @@ bool ModuleSceneIntro::generateStartBalls()
 	{
 		item->data->listener = this;
 		item->data->body->SetBullet(true);
+		// tweaks the ball restitution
+		setRestitution(item->data, 0.2f);
 		//item->data->body->SetActive(false);
 		item = item->next;
 	}
@@ -1357,5 +1359,13 @@ bool ModuleSceneIntro::shootBall()
 	}
 	
 	return ret;
+
+}
+
+void ModuleSceneIntro::setRestitution(PhysBody* body, float restitution)
+{
+	// sets restitution for the first fixture attached to a body
+	b2Fixture* f = body->body->GetFixtureList();
+	f->SetRestitution(restitution);
 
 }

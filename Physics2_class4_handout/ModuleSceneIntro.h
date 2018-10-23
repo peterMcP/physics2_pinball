@@ -72,6 +72,7 @@ public:
 	void DrawScore();
 	bool generateStartBalls();
 	bool shootBall();
+	void setRestitution(PhysBody* body,float restitution = 0.0f);
 
 
 public:
