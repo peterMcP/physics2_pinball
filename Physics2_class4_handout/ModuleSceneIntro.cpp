@@ -667,13 +667,12 @@ update_status ModuleSceneIntro::Update()
 
 	uint Now2 = SDL_GetTicks(); 
 
-	if (App->player->score > Vacuum_Combo_Score* Vacuum_Combo_Times) {
+	if (App->player->score > Vacuum_Combo_Score* Vacuum_Combo_Times && !Inside_Vacuum && Vacuum_Cleaner_Trigger != NULL) { // CHECK HERE
 		
 			if (!Vacuum_Combo_Flag) {
-				
-				Vacuum_Cleaner_Trigger->body->SetActive(false);       // first deactivate trigger
+				Vacuum_Cleaner_Trigger->body->SetActive(false);  // first deactivate trigger
 				Vacuum_Combo_Time = Now2; 
-				Vacuum_Combo_Flag = true; 
+				Vacuum_Combo_Flag = true;
 				Vacuum_Combo = true; 
 			}
 
@@ -694,6 +693,10 @@ update_status ModuleSceneIntro::Update()
 				}
 
 				Vacuum_Combo_Time += 200;
+				// play sfx
+				App->audio->PlayFx(canon_sfx);
+				// add shooted ball score
+				App->player->score += comboVaccumShootedBallScore;
 			}
 
 			else if (Ejected_Balls >= 20 && Now2 > Vacuum_Combo_Time + 200) {        // reactivate trigger after last ball
@@ -1348,6 +1351,8 @@ bool ModuleSceneIntro::generateStartBalls()
 	{
 		item->data->listener = this;
 		item->data->body->SetBullet(true);
+		// tweaks the ball restitution
+		setRestitution(item->data, 0.2f);
 		//item->data->body->SetActive(false);
 		item = item->next;
 	}
@@ -1374,5 +1379,13 @@ bool ModuleSceneIntro::shootBall()
 	}
 	
 	return ret;
+
+}
+
+void ModuleSceneIntro::setRestitution(PhysBody* body, float restitution)
+{
+	// sets restitution for the first fixture attached to a body
+	b2Fixture* f = body->body->GetFixtureList();
+	f->SetRestitution(restitution);
 
 }
