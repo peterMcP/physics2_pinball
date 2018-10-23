@@ -606,9 +606,9 @@ update_status ModuleSceneIntro::Update()
 	                                              // do it only when entering
 			if (!Inside_Vacuum_Flag) {
 				Vacuum_Time = Now;
-				balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(215), PIXEL_TO_METERS(301)), 0.0f);
-				balls.getFirst()->data->body->GetTransform();
-				balls.getFirst()->data->body->SetType(b2_staticBody);
+				Vacuum_Body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(215), PIXEL_TO_METERS(301)), 0.0f);
+				Vacuum_Body->body->GetTransform();
+				Vacuum_Body->body->SetType(b2_staticBody);
 				Inside_Vacuum_Flag = true;
 			}
 
@@ -622,10 +622,10 @@ update_status ModuleSceneIntro::Update()
 			else if (Now > Vacuum_Time + 3000) {
 				LOG("Ball ejected from vacuum!");
 
-				balls.getFirst()->data->body->SetType(b2_dynamicBody);
-				balls.getFirst()->data->body->SetGravityScale(1.0f);
+				Vacuum_Body->body->SetType(b2_dynamicBody);
+				Vacuum_Body->body->SetGravityScale(1.0f);
 
-				balls.getFirst()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
+				Vacuum_Body->body->ApplyForceToCenter(b2Vec2(10, 100), true);  // then eject it 
 
 				Inside_Vacuum = false;
 				Inside_Vacuum_Flag = false;
@@ -778,6 +778,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 
 		if (bodyB == Vacuum_Cleaner_Trigger) {
+			Vacuum_Body = bodyA; 
 			Vacuum_Cleaner_Trigger->to_delete = true; 
 			Inside_Vacuum = true; 	
 		}
@@ -1145,6 +1146,14 @@ bool ModuleSceneIntro::restartBoard()
 	{
 		sensors->data.state = sensorState::inactive;
 		sensors = sensors->next;
+	}
+
+
+	// delete aactive boides, if any
+
+	if (Vacuum_Body != nullptr) {
+		// Vacuum_Body->body->SetActive(false); 
+		Vacuum_Body = nullptr;
 	}
 
 	// change ingame state to start

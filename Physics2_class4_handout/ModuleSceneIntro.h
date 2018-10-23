@@ -180,6 +180,8 @@ public:
 	bool Inside_Vacuum = false;
 	uint Reset_Vacuum_Time = 0;
 	bool Reset_Vacuum_Flag = false;
+	PhysBody* Vacuum_Body = nullptr;
+
 	uint starsCounter = 0;
 
 
@@ -193,7 +195,6 @@ public:
 
 	float Gravity_Force = 0; 
 	bool Reset_Gravity = false; 
-
 	// CORE DATA ---------------------------------------------
 	// SCORES for different places ----
 	int vacuumScore = 10420;
