@@ -577,6 +577,10 @@ update_status ModuleSceneIntro::Update()
 		if (ball_state == ballState::BLIT) {
 			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
 		}
+		else if (ball_state == ballState::DISAPPEAR && c->data != Gravity_Body) {
+			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
+		}
+		
 			
 		c = c->next;
 	}
@@ -651,6 +655,7 @@ update_status ModuleSceneIntro::Update()
 	if (App->player->score > Vacuum_Combo_Score* Vacuum_Combo_Times) {
 		
 			if (!Vacuum_Combo_Flag) {
+				
 				Vacuum_Cleaner_Trigger->body->SetActive(false);       // first deactivate trigger
 				Vacuum_Combo_Time = Now2; 
 				Vacuum_Combo_Flag = true; 
@@ -685,7 +690,7 @@ update_status ModuleSceneIntro::Update()
 				Vacuum_Combo_Times++; 
 			}
 		}
-		LOG("Score: %i, needed vacuum score:%i", App->player->score, 200000 * Vacuum_Combo_Times); 
+		LOG("Score: %i, needed vacuum score:%i", App->player->score, Vacuum_Combo_Score * Vacuum_Combo_Times);
 	}
 
 	// auto shoot checker
@@ -846,6 +851,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 
 		if (bodyB == Gravity_Zone_Trigger) {
+			Gravity_Body = bodyA; 
 			mainBoardChain->to_delete = true;
 			topDividerLeft->to_delete = true;
 			if (inGameBalls == 1) {
@@ -1059,7 +1065,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				mainBoardChain = nullptr;
 
 				Gravity_Zone_Chain = App->physics->CreateChain(0, 18, Gravity_Zone, 68, false, true);
-				balls.getFirst()->data->body->SetGravityScale(0); 
+				Gravity_Body->body->SetGravityScale(0);
 
 			}
 		}
@@ -1078,11 +1084,11 @@ update_status ModuleSceneIntro::PostUpdate()
 			Reset_Gravity = false; 
 			Switch_From_Hole_To_Ingame = false;   
 			ball_state = ballState::DISAPPEAR; 
-			balls.getFirst()->data->body->SetType(b2_staticBody); 
+			Gravity_Body->body->SetType(b2_staticBody);
 
 			LOG("Ball is static");
 
-			 balls.getFirst()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(217), PIXEL_TO_METERS(81)), balls.getFirst()->data->body->GetAngle()); // set teleport and dissappear 
+			Gravity_Body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(217), PIXEL_TO_METERS(81)), Gravity_Body->body->GetAngle()); // set teleport and dissappear 
 
 			TopHole.speed = 0.4f; 
 			
@@ -1092,9 +1098,9 @@ update_status ModuleSceneIntro::PostUpdate()
 			else if (TopHole.Finished()) {
 				// 	balls.getFirst()->data->body->GetTransform();   // teleport
 
-				balls.getFirst()->data->body->SetType(b2_dynamicBody);
-				balls.getFirst()->data->body->SetGravityScale(1.0f);
-				balls.getFirst()->data->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
+				Gravity_Body->body->SetType(b2_dynamicBody);
+				Gravity_Body->body->SetGravityScale(1.0f);
+				Gravity_Body->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
 				ball_state = ballState::BLIT; 
 
 				LOG("Ball is dynamic again");
@@ -1114,7 +1120,7 @@ update_status ModuleSceneIntro::PostUpdate()
 			}
 
 			else {
-				b2Vec2 Ball_Pos = balls.getFirst()->data->body->GetWorldCenter(); 
+				b2Vec2 Ball_Pos = Gravity_Body->body->GetWorldCenter();
 				b2Vec2 Hole_Pos = Inside_Hole_Trigger->body->GetWorldCenter(); 
 
 				b2Vec2 Distance = Hole_Pos - Ball_Pos; 
@@ -1132,7 +1138,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				}
 
 
-				balls.getFirst()->data->body->ApplyForceToCenter(Gravity_Force*Distance, true); 
+				Gravity_Body->body->ApplyForceToCenter(Gravity_Force*Distance, true);
 				
 			}
 		
@@ -1163,6 +1169,15 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case ENDGAME:
+		Vacuum_Combo = true;
+		Inside_Vacuum_Flag = false;
+		Vacuum_Combo_Flag = false;
+
+
+		Vacuum_Time = 0;
+	    Vacuum_Combo_Time = 0;
+		Ejected_Balls = 0;
+		Vacuum_Combo_Times = 1;
 		//restartBoard();
 		break;
 
@@ -1203,6 +1218,11 @@ bool ModuleSceneIntro::restartBoard()
 	if (Vacuum_Body != nullptr) {
 		// Vacuum_Body->body->SetActive(false); 
 		Vacuum_Body = nullptr;
+	}
+
+
+	if (Gravity_Body != nullptr) {
+		Gravity_Body = nullptr;
 	}
 
 	// change ingame state to start
