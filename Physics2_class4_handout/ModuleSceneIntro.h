@@ -107,6 +107,7 @@ public:
 	Animation centerArrowsAnim;
 	Animation leftArrowsAnim;
 	Animation rightArrowsAnim;
+	SDL_Texture* BlackArrowsGravity_tex = nullptr;
 
 	SDL_Texture* TopHole_tex = nullptr;
 	Animation TopHole; 

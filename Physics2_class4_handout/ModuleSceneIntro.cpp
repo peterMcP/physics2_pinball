@@ -54,6 +54,7 @@ bool ModuleSceneIntro::Start()
 	scoreTypes_tex = App->textures->Load("pinball/scores2.png");
     Ball_Lost_tex_1 = App->textures->Load("pinball/Ball_Lost_1.png");
 	Ball_Lost_tex_2 = App->textures->Load("pinball/Ball_Lost_2.png");
+	BlackArrowsGravity_tex = App->textures->Load("pinball/BlackArrows.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -326,6 +327,9 @@ bool ModuleSceneIntro::CleanUp()
 	Ball_Lost_tex_1 = nullptr;
 	App->textures->Unload(Ball_Lost_tex_2);
 	Ball_Lost_tex_2 = nullptr;
+	App->textures->Unload(BlackArrowsGravity_tex);
+	BlackArrowsGravity_tex = nullptr;
+
 
 	App->textures->Unload(circle);
 	App->textures->Unload(box);
@@ -563,6 +567,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
 	App->renderer->Blit(centerArrowsAnim_tex, 80, 204, &rightArrowsAnim.GetCurrentFrame(), NULL, -34);
+
+	SDL_Rect r2 = { 0, 0, 50, 50 };
+	App->renderer->Blit(BlackArrowsGravity_tex, 43, 218, &r2, 1.0f, 3);
 	
 
 
