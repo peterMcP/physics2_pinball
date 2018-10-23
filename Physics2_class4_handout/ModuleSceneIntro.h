@@ -230,7 +230,7 @@ public:
 	// Rects
 	SDL_Rect yourScoreRect;
 	SDL_Rect highScoreRect;
-	SDL_Rect lateralKickersRect;
+	//SDL_Rect lateralKickersRect;
 	
 	// lock functionality variables
 	PhysBody* linkedBody = nullptr;
@@ -251,16 +251,11 @@ public:
 	bool preventyZone = false;
 	PhysBody* preventyTrigger = nullptr;
 
-
-	PhysBody* testBall = nullptr;
-
-	// anims
-	bool Play_Death = false; 
-	uint Death_Score_Time = 0; 
-	bool Finished_Death = false; 
-
 	// lateral kickers
 	activableSensors kickerLeft;
 	activableSensors kickerRight;
+
+	// ball lost indicator
+	activableSensors ballLostLogo;
 
 };

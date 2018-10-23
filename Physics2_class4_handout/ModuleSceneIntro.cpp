@@ -218,7 +218,10 @@ bool ModuleSceneIntro::Start()
 	gravityLogo.rect[active] = { 104,0,45,60 };
 	gravityLogo.rect[inactive] = { 149,0,45,60 };
 
-	
+	// ball lost indicator logo
+	ballLostLogo.totalTime = 350;
+	ballLostLogo.rect[inactive] = { 31,79,67,21 };
+	ballLostLogo.rect[active] = { 102,79,67,21 };
 
 	// -----------------------------------------------------------------------------------------------
 
@@ -485,16 +488,11 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
 	// draw animations// balls etc ---------------------------------------------------------------------------
-	SDL_Rect r = { 1, 1, 67, 21 }; 
-	uint now = SDL_GetTicks();
-	 if (!Play_Death) {
-	 	 Death_Score_Time = now; 
-	     App->renderer->Blit(Ball_Lost_tex_1, 181, 538, &r, 1.0f); 
-	 }
-	 else if (now < Death_Score_Time + 1000) {
-		 App->renderer->Blit(Ball_Lost_tex_2, 181, 538, &r, 1.0f);
-		 Finished_Death = true;
-	 }
+
+	 if (SDL_GetTicks() > ballLostLogo.eventTime + ballLostLogo.totalTime)
+		 ballLostLogo.state = sensorState::inactive;
+	 App->renderer->Blit(sprites_tex, 181, 538, &ballLostLogo.rect[ballLostLogo.state]);
+
 
 	// draw all sensors
 	p2List_item<activableSensors>* sensors = sensor_list.getFirst();
@@ -827,7 +825,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 			App->player->Lives -= 1;
 			inGameBalls--;
-			
+			// active lost ball logo
+			ballLostLogo.state = sensorState::active;
+			ballLostLogo.eventTime = SDL_GetTicks();
 			//scene_phase = game_loop::FAILURE;
 		}
 
@@ -1215,10 +1215,6 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case FAILURE:
-
-		if (!Finished_Death) {
-			Play_Death = true;
-		}
 
 		if (balls.count() > 0) {
 
