@@ -358,7 +358,10 @@ update_status ModuleSceneIntro::Update()
 		//startChainBg = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
 	}
 
-	// test addimpulse to ball
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && balls.count() < 1)
+	{
+		restartBoard();
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
@@ -1027,28 +1030,21 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	case FAILURE:
 
-		if (balls.count() > 0) {//App->player->Lives != 0) {                            
-			// deletes main board chain
-			App->physics->DestroyObject(mainBoardChain);
-			// deletes corner tap exit loop
-			App->physics->DestroyObject(exitLoopTapChain);
-			// deletes top dividers
-			App->physics->DestroyObject(topDividerLeft);
-			App->physics->DestroyObject(topDividerRight);
+		if (balls.count() > 0) {
 
 			newBall();
 			scene_phase = game_loop::START;
 		}
 		else {
-			if (Lose_Life_Trigger != nullptr) {
-				Lose_Life_Trigger->to_delete = true;
-				App->physics->DestroyObject(Lose_Life_Trigger);
+			//if (Lose_Life_Trigger != nullptr) {
+			//	Lose_Life_Trigger->to_delete = true;
+			//	App->physics->DestroyObject(Lose_Life_Trigger);
 
-				delete Lose_Life_Trigger;       // change this later in the destroy method       
-				Lose_Life_Trigger = nullptr;
-			}
+			//	delete Lose_Life_Trigger;       // change this later in the destroy method       
+			//	Lose_Life_Trigger = nullptr;
+			//}
 			restartBoard(); // restart entire board
-			scene_phase = game_loop::ENDGAME;
+			//scene_phase = game_loop::ENDGAME;
 		}
 		break;
 
@@ -1068,13 +1064,26 @@ bool ModuleSceneIntro::restartBoard()
 	bool ret = true;
 
 	// adds balls to safe plate
-	// call function placeBalls();
-
+	generateStartBalls();
 	// recount base balls
 	safetyPlateBalls = balls.count();
+	// prepare for first ball
+	newBall();
+	// resets kicker joint motor
+	kickerJoint->EnableMotor(false);
+	// resets vars
+	App->player->score = 0;
+	starsCounter = 0;
+	// reset all sensors
+	p2List_item<activableSensors>* sensors = sensor_list.getFirst();
+	while (sensors != NULL)
+	{
+		sensors->data.state = sensorState::inactive;
+		sensors = sensors->next;
+	}
 
 	// change ingame state to start
-
+	scene_phase = game_loop::START;
 	// maybe delete something or create any physbody
 
 
