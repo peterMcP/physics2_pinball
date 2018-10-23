@@ -1027,7 +1027,7 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	case FAILURE:
 
-		if (App->player->Lives != 0) {                            
+		if (balls.count() > 0) {//App->player->Lives != 0) {                            
 			// deletes main board chain
 			App->physics->DestroyObject(mainBoardChain);
 			// deletes corner tap exit loop
@@ -1178,7 +1178,7 @@ bool ModuleSceneIntro::generateStartBalls()
 bool ModuleSceneIntro::shootBall()
 {
 	bool ret = true;
-
+	 
 	// check if we still have remaining balls
 	if (safetyPlateBalls > 0 && !kickerJoint->IsMotorEnabled())
 	{
