@@ -373,19 +373,7 @@ update_status ModuleSceneIntro::Update()
 				preventyZone = false;
 			}
 		}
-		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
-
-		/*if (balls.getFirst()->data->body->IsActive()) {
-			if (balls.getFirst()->data != nullptr) {
-				balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->data->body->GetWorldCenter(), true);
-			}
-		}
-		else if (balls.getFirst()->next->data != nullptr) {
-			balls.getFirst()->next->data->body->ApplyForce(b2Vec2(0, -420), balls.getFirst()->next->data->body->GetWorldCenter(), true);
-		}*/
-
 	}
-
 
 	// INPUT CONTROL FOR FLIPPERS ----------------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
@@ -610,6 +598,19 @@ update_status ModuleSceneIntro::Update()
 			}
 
 		
+	}
+
+	// auto shoot checker
+	if (automaticShoot)
+	{
+		//autoShoot();
+		if (preventyZone)
+		{
+			shootBall();
+			preventyZone = false;
+			automaticShoot = false;
+		}
+
 	}
 
 	// DRAW SCORE
@@ -874,6 +875,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			newBall();
 			// get the next ball ready
 			shootBall();
+			// this is a automatic shoot
+			automaticShoot = true;
 			scene_phase = game_loop::START;
 		}
 
@@ -1147,17 +1150,6 @@ void ModuleSceneIntro::DrawScore()
 
 }
 
-bool ModuleSceneIntro::prepareNextBall()
-{
-	// this functions is called when a ball dies, or user demands a new ball with "lock" functionality
-	// basically the same
-	bool ret = true;
-
-
-
-
-	return ret;
-}
 
 bool ModuleSceneIntro::generateStartBalls()
 {
