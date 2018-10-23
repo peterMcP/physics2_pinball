@@ -526,7 +526,7 @@ update_status ModuleSceneIntro::Update()
 				sensors = sensors->next;
 			}
 			// play sfx
-
+			App->audio->PlayFx(extraBall_sfx);
 			// add extra score
 			App->player->score += allSensorsActives;
 		}
@@ -968,13 +968,13 @@ update_status ModuleSceneIntro::PostUpdate()
 				balls.getLast()->data->listener = this; 
 				inGameBalls++; 
 
-
-
 				balls.getLast()->data->body->SetLinearVelocity(b2Vec2(2, 0));  // so that it doesn't fall straight
 				TopHole.Reset();
 				TopHole.speed = 0;
 				TopHole.loop = false;
 				starsCounter = 0;
+				// play sfx
+				App->audio->PlayFx(extraBall_sfx);
 			}
 		}
 
