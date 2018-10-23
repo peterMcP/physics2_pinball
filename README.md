@@ -11,8 +11,8 @@ Marc Doctor ____ https://github.com/thedoctormarc
 -> Original game: https://www.classicgame.com/game/HotRod+Pinball
 
 -> Differences with the original: 
-
-
+  No main kicker flipper appendix
+  We have some fancy combos 
 
            Controls:
 Arrows
@@ -27,17 +27,20 @@ Debug:
 
             COMBOS: 
 
-::Combo 1 -> When you go through the gravity zone three times 
-  (so youcollect three stars), an extra ball is launched from
-  the hole
+::Combo 1 -> When you go through the gravity zone
+  three times (so you collect three stars), an extra 
+  ball is launched from the hole
 
-::Combo 2 -> Every 500000 points, the "vacuum cleaner" 
-  launches a set of balls
+::Combo 2 -> Every 500000 points, the "vacuum 
+  cleaner" launches a set of balls
 
-::Combo 3 -> 
+::Combo 3 -> You can activate all the light sensors
+  at the top, and they will restart to give you more
+  score
 
---- Take into account --- 
-When gravity is available, the arrow with the burn
-logo shines
-When lock functionality is available, the arrow with
-the lock logo shines 
+        --- Take into account --- 
+
+_When gravity is available, the arrow with the burn
+  logo shines
+_When lock functionality is available, the arrow
+  with the lock logo shines 
