@@ -74,16 +74,6 @@ bool ModuleSceneIntro::Start()
 	ball_launcher_leftWall = App->physics->CreateChain(0, 18, safetyZoneP2, 4, false, false);
 	
 
-	// board main body perimeter parts chain
-	//mainBoardChain = App->physics->CreateChain(0, 18, mainBoard, 178, false, false);
-	// black hole gravity zone circle collider // TODO, search if a circle can have interior collisions, if not, make a chain
-	// blackHoleCircle = App->physics->CreateCircle(65, 162, 56, false);
-	// exit loop tap (prevents the pinball ball to return to the exit loop)
-	//exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
-	//b2Fixture* f = exitLoopTapChain->body->GetFixtureList();
-	//f->SetSensor(true);
-	// ------------------------------------------------------------------------------------
-
 	// TRIGGERS/SENSORS
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
@@ -91,28 +81,11 @@ bool ModuleSceneIntro::Start()
 	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 530, 60, 20);
 	Lose_Life_Trigger->listener = this;
 
-	//// TEST BALL -------
-	//balls.add(App->physics->CreateCircle(400, 420, 11));           // There are 5 balls at the start
-	//balls.add(App->physics->CreateCircle(422, 363, 11));
-	//balls.add(App->physics->CreateCircle(422, 352, 11));
-	//balls.add(App->physics->CreateCircle(422, 341, 11));
-	////balls.add(App->physics->CreateCircle(422, 330, 11));
-	//// set all balls as bullet, maybe we only set the first ball, and when the next ball enters at game set it
-	//p2List_item<PhysBody*>* item = balls.getFirst();
-	//while (item)
-	//{
-	//	item->data->listener = this;
-	//	item->data->body->SetBullet(true);
-	//	item = item->next;
-	//}
-	//// count at start the baseballs we have
-	//baseBalls = balls.count();
-
 	// generate start balls
 	generateStartBalls();
 
-	b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
-	f->SetFriction(0.7f);
+	/*b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
+	f->SetFriction(0.7f);*/
 
 	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
@@ -122,10 +95,6 @@ bool ModuleSceneIntro::Start()
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true));
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, turboCompressorPoints, 32, false, false));
-
-	//Next_To_Flipper_Chain_R = App->physics->CreateChain(0, 18, rightBottomWayPoints, 28, false, true);
-	//Next_To_Flipper_Chain_L = App->physics->CreateChain(0, 18, leftBottomWayPoints, 22, false, true);
-
 
 	// ADD SPECIAL COMPONENTS ------------------------------------------------------------
 	// FLIPPERS ----------------------------------------------------
@@ -167,9 +136,6 @@ bool ModuleSceneIntro::Start()
 
 	// top bouncing balls -----
 	// sensors
-	/*circles.add(App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f));
-	circles.add(App->physics->CreateCircle(258, 221, 12, false, 1.0f, 1.0f));
-	circles.add(App->physics->CreateCircle(174, 221, 12, false, 1.0f, 1.0f));*/
 	int t = 100;
 	topBallsSensors[0].b = App->physics->CreateCircle(217, 186, 12, false, 1.0f, 1.0f);
 	topBallsSensors[0].totalTime = t;
@@ -255,10 +221,6 @@ bool ModuleSceneIntro::Start()
 
 	// -----------------------------------------------------------------------------------------------
 
-	// bottom security kickers
-	//leftSecurityKicker = App->physics->CreateRectangleSensor(97, 420, 10, 10, 0.0f);
-	//rightSecurityKicker = App->physics->CreateRectangleSensor(334, 420, 10, 10, 0.0f);
-
 	// MAIN kicker
 	// rect
 	mainKickerRect = { 0,59,20,76 };
@@ -280,8 +242,6 @@ bool ModuleSceneIntro::Start()
 	// --------------------------------
 	// creates preventy trigger
 	preventyTrigger = App->physics->CreateRectangleSensor(392, 440, 4, 20);
-
-
 
 	// other special sensors
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
