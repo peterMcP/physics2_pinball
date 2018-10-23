@@ -173,9 +173,16 @@ public:
 
 	// variables
 	//
+	bool Vacuum_Combo = true; 
 	bool Inside_Vacuum_Flag = false;
+	bool Vacuum_Combo_Flag = false; 
+	
 
 	uint Vacuum_Time = 0;
+	uint Vacuum_Combo_Time = 0; 
+	uint Ejected_Balls = 0; 
+	uint Vacuum_Combo_Times = 1; 
+
 	//
 	bool Inside_Vacuum = false;
 	uint Reset_Vacuum_Time = 0;

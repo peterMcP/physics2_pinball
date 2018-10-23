@@ -603,7 +603,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (Inside_Vacuum) {
 
-	                                              // do it only when entering
+		if (App->player->score <= 200000 /** Vacuum_Combo_Times*/ || !Vacuum_Combo) {                                 // do it only when entering
 			if (!Inside_Vacuum_Flag) {
 				Vacuum_Time = Now;
 				Vacuum_Body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(215), PIXEL_TO_METERS(301)), 0.0f);
@@ -636,7 +636,37 @@ update_status ModuleSceneIntro::Update()
 				App->player->score += vacuumScore;
 			}
 
-		
+		}
+	}
+
+	uint Now2 = SDL_GetTicks(); 
+
+	if (App->player->score > 200000){//* Vacuum_Combo_Times) {
+		if (Vacuum_Combo) {
+			if (!Vacuum_Combo_Flag) {
+				Vacuum_Cleaner_Trigger->body->SetActive(false);       // first deactivate trigger
+				Vacuum_Combo_Time = Now2; 
+				Vacuum_Combo_Flag = true; 
+			}
+			else if (Now2 > Vacuum_Combo_Time && Ejected_Balls < 20) {        // eject balls
+			
+				balls.add(App->physics->CreateCircle(216, 299, 11));
+				balls.getLast()->data->listener = this; 
+				inGameBalls++;
+				Ejected_Balls++; 
+				balls.getLast()->data->body->ApplyForceToCenter(b2Vec2(10, 100), true);
+
+				Vacuum_Combo_Time += 200;
+			}
+			else if (Ejected_Balls >= 20) {        // reactivate trigger
+				Vacuum_Cleaner_Trigger->body->SetActive(true);
+				Vacuum_Cleaner_Trigger->listener = this; 
+				Vacuum_Combo_Flag = false; 
+				Vacuum_Combo = false; 
+				Ejected_Balls = 0; 
+				Vacuum_Combo_Times++; 
+			}
+		}
 	}
 
 	// auto shoot checker
