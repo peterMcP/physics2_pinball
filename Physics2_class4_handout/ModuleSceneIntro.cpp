@@ -1006,6 +1006,8 @@ update_status ModuleSceneIntro::PostUpdate()
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
 
+				
+
 				if (inGameBalls < 1)
 				{
 					// prepare for next ball
@@ -1082,8 +1084,10 @@ update_status ModuleSceneIntro::PostUpdate()
 
 		if (Switch_From_Hole_To_Ingame) {
 			Reset_Gravity = false; 
+			
 			Switch_From_Hole_To_Ingame = false;   
 			ball_state = ballState::DISAPPEAR; 
+
 			Gravity_Body->body->SetType(b2_staticBody);
 
 			LOG("Ball is static");
@@ -1116,6 +1120,10 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->player->score += topHoleScore;
 				// play sfx ?
 
+				if (Gravity_Body != nullptr) {
+					Gravity_Body = nullptr;
+				}
+
 				scene_phase = game_loop::INGAME;
 			}
 
@@ -1146,6 +1154,8 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case FAILURE:
+
+		
 
 		if (balls.count() > 0) {
 
