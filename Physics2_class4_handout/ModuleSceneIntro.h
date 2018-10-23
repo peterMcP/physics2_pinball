@@ -105,6 +105,8 @@ public:
 
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
+	Animation leftArrowsAnim;
+	Animation rightArrowsAnim;
 
 	SDL_Texture* TopHole_tex = nullptr;
 	Animation TopHole; 

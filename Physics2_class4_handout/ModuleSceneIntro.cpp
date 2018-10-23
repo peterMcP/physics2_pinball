@@ -297,7 +297,10 @@ bool ModuleSceneIntro::Start()
 		centerArrowsAnim.PushBack({ i * 15, 0, 15, 135});
 	centerArrowsAnim.speed = 0.15f;
 
-	
+	for (int i = 3; i >= 0; --i)
+		rightArrowsAnim.PushBack({ i * 15, 0, 15, 135 });
+	rightArrowsAnim.speed = 0.15f;
+
 	for (int i = 0; i<=39; ++i)
 		TopHole.PushBack({ i*28, 1, 28, 28 });
 	TopHole.speed = 0.0f;
@@ -599,6 +602,9 @@ update_status ModuleSceneIntro::Update()
 	// DRAW ANIMATIONS ------------------------------------
 
 	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
+	App->renderer->Blit(centerArrowsAnim_tex, 80, 204, &rightArrowsAnim.GetCurrentFrame(), NULL, -34);
+	
+
 
 	// draw flippers --------------------------------------
 	int x, y;
