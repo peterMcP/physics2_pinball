@@ -251,4 +251,5 @@ public:
 	bool Play_Death = false; 
 	uint Death_Score_Time = 0; 
 	bool Finished_Death = false; 
+
 };

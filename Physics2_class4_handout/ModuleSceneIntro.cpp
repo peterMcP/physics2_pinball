@@ -281,7 +281,10 @@ bool ModuleSceneIntro::Start()
 	Vacuum_Cleaner_Trigger = App->physics->CreateRectangleSensor(216, 299, 26, 16); 
 	Extra_Ball_Trigger = App->physics->CreateRectangleSensor(370, 242, 6, 12, -0.8f);
 	Gravity_Zone_Trigger = App->physics->CreateRectangleSensor(45, 200, 26, 12);
-    Inside_Hole_Trigger = App->physics->CreateRectangleSensor(65, 161, 7, 7);
+    //Inside_Hole_Trigger = App->physics->CreateRectangleSensor(65, 161, 10, 10);
+	Inside_Hole_Trigger = App->physics->CreateCircle(64, 161, 12, false);
+	b2Fixture* ihtf = Inside_Hole_Trigger->body->GetFixtureList();
+	ihtf->SetSensor(true);
 
 	// ANIMATIONS
 	for (int i = 9; i >= 0; --i)
@@ -674,6 +677,8 @@ update_status ModuleSceneIntro::Update()
 				Vacuum_Combo_Time = Now2; 
 				Vacuum_Combo_Flag = true;
 				Vacuum_Combo = true; 
+				// play sfx
+				App->audio->PlayFx(extraBall_sfx);
 			}
 
 			if (Vacuum_Combo) {
