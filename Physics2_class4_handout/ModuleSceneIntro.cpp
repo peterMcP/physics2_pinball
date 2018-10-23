@@ -652,13 +652,12 @@ update_status ModuleSceneIntro::Update()
 
 	uint Now2 = SDL_GetTicks(); 
 
-	if (App->player->score > Vacuum_Combo_Score* Vacuum_Combo_Times) {
+	if (App->player->score > Vacuum_Combo_Score* Vacuum_Combo_Times && !Inside_Vacuum && Vacuum_Cleaner_Trigger != NULL) { // CHECK HERE
 		
 			if (!Vacuum_Combo_Flag) {
-				
-				Vacuum_Cleaner_Trigger->body->SetActive(false);       // first deactivate trigger
+				Vacuum_Cleaner_Trigger->body->SetActive(false);  // first deactivate trigger
 				Vacuum_Combo_Time = Now2; 
-				Vacuum_Combo_Flag = true; 
+				Vacuum_Combo_Flag = true;
 				Vacuum_Combo = true; 
 			}
 

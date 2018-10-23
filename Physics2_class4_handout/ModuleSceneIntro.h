@@ -184,7 +184,7 @@ public:
 	uint Vacuum_Combo_Time = 0; 
 	uint Ejected_Balls = 0; 
 	uint Vacuum_Combo_Times = 1; 
-	uint Vacuum_Combo_Score = 100000; 
+	uint Vacuum_Combo_Score = 500000;
 
 	//
 	bool Inside_Vacuum = false;
