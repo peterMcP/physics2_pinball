@@ -1172,6 +1172,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 
 				Gravity_Body->body->ApplyForceToCenter(Gravity_Force*Distance, true);
+
+				// extra impulse to center
+				Gravity_Body->body->ApplyForceToCenter(Hole_Pos, true);
 				
 			}
 		
