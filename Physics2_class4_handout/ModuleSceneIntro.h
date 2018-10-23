@@ -235,6 +235,9 @@ public:
 	activableNoSensor lockLogo;
 	bool automaticShoot = false;
 
+	//gravity burn logo
+	activableNoSensor gravityLogo; 
+
 	// ball launcher/kicker full functions vars || CORE
 	int safetyPlateBalls = 0; // counts the remaining balls we have to launch
 	SDL_Rect mainKickerRect;

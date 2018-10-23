@@ -245,6 +245,12 @@ bool ModuleSceneIntro::Start()
 	lockLogo.rect[active] = { 22,0,44,44 };
 	lockLogo.rect[inactive] = { 73,103,44,44 };
 
+	// gravity burn logo
+	gravityLogo.instances = 1;
+	gravityLogo.positions[0] = { 81, 265 };
+	gravityLogo.rect[active] = { 110,5,35,39 };
+	gravityLogo.rect[inactive] = { 157,3,35,39 };
+
 	
 
 	// -----------------------------------------------------------------------------------------------
@@ -568,6 +574,16 @@ update_status ModuleSceneIntro::Update()
 	}
 	else
 		App->renderer->Blit(sprites_tex, lockLogo.positions[0].x, lockLogo.positions[0].y, &lockLogo.rect[inactive]);
+
+
+
+	// draw burn sprite graphic
+	if (inGameBalls <= 1) {
+		App->renderer->Blit(sprites_tex, gravityLogo.positions[0].x, gravityLogo.positions[0].y, &gravityLogo.rect[active]);
+	}
+	else {
+		App->renderer->Blit(sprites_tex, gravityLogo.positions[0].x, gravityLogo.positions[0].y, &gravityLogo.rect[inactive]);
+	}
 
 	// DRAW ANIMATIONS ------------------------------------
 
