@@ -797,10 +797,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			checkInactiveBalls = true;
 		}
 
-		if (bodyB == enterBoardTrigger)
+		if (bodyB == enterBoardTrigger || bodyB == enterBoardTrigger2)
 		{
 			LOG("ball entered to game board");
 			enterBoardTrigger->to_delete = true;
+			enterBoardTrigger2->to_delete = true;
 			// count the remaining balls in safe plate
 			safetyPlateBalls--;
 		}
@@ -962,6 +963,8 @@ update_status ModuleSceneIntro::PostUpdate()
 
 				enterBoardTrigger = App->physics->CreateRectangleSensor(280, 100, 8, 8);
 				enterBoardTrigger->listener = this;
+				enterBoardTrigger2 = App->physics->CreateRectangleSensor(320, 240, 8, 8);
+				enterBoardTrigger2->listener = this;
 				// create top dividers
 				topDividerLeft = App->physics->CreateChain(0, 18, topLeftWayPoints, 32, false, true);
 				topDividerRight = App->physics->CreateChain(0, 18, topRightWayPoints, 30, false, true);
@@ -970,13 +973,16 @@ update_status ModuleSceneIntro::PostUpdate()
 
 		}
 
-		if (enterBoardTrigger != nullptr)
+		if (enterBoardTrigger != nullptr || enterBoardTrigger2 != nullptr)
 		{
-			if (enterBoardTrigger->to_delete)
+			if (enterBoardTrigger->to_delete || enterBoardTrigger2->to_delete)
 			{
 				App->physics->DestroyObject(enterBoardTrigger);
+				App->physics->DestroyObject(enterBoardTrigger2);
 				delete enterBoardTrigger;
+				delete enterBoardTrigger2;
 				enterBoardTrigger = nullptr;
+				enterBoardTrigger2 = nullptr;
 				// create tap
 				exitLoopTapChain = App->physics->CreateChain(0, 18, exitLoopTapPivots, 20, false, false);
 				// search inactive balls

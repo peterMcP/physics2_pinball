@@ -147,6 +147,7 @@ public:
 	// TRIGGERS
 	PhysBody* exitLoopTrigger = nullptr;
 	PhysBody* enterBoardTrigger = nullptr;
+	PhysBody* enterBoardTrigger2 = nullptr;
 	PhysBody* Lose_Life_Trigger = nullptr;
 	PhysBody* leftBottomBouncerTrigger = nullptr;
 	PhysBody* rightBottomBouncerTrigger = nullptr;
