@@ -360,7 +360,26 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && balls.count() < 1)
 	{
-		restartBoard();
+		switch (scene_phase)
+		{
+		case START:
+			break;
+		case INGAME:
+			break;
+		case BLACK_HOLE:
+			break;
+		case FAILURE:
+			break;
+		case ENDGAME:
+			scene_phase = game_loop::HIGHSCORE;
+			break;
+		case HIGHSCORE:
+			restartBoard();
+			break;
+		default:
+			break;
+		}
+		//restartBoard();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
@@ -1046,12 +1065,16 @@ update_status ModuleSceneIntro::PostUpdate()
 			//	delete Lose_Life_Trigger;       // change this later in the destroy method       
 			//	Lose_Life_Trigger = nullptr;
 			//}
-			restartBoard(); // restart entire board
-			//scene_phase = game_loop::ENDGAME;
+
+			// saves highscore of all games
+			if (App->player->score > App->player->highScore)
+				App->player->highScore = App->player->score;
+			scene_phase = game_loop::ENDGAME;
 		}
 		break;
 
 	case ENDGAME:
+		//restartBoard();
 		break;
 
 	default:
@@ -1125,7 +1148,16 @@ void ModuleSceneIntro::DrawScore()
 	x = 77;
 	y = 29;// first draw position
 
-	int playerScore = App->player->score; // test
+	int playerScore;
+
+	if (scene_phase == game_loop::HIGHSCORE)
+	{
+		playerScore = App->player->highScore;
+	}
+	else
+	{
+		playerScore = App->player->score;
+	}
 
 	int w, h = 0;
 	int tex_lenght = SDL_QueryTexture(score_tex, NULL, NULL, &w, &h);

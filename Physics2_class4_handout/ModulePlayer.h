@@ -19,4 +19,5 @@ public:
 public:
 	uint8_t Lives = MAX_ROUND_LIVES; 
 	int score = 0;
+	int highScore = 0;
 };

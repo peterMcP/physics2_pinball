@@ -41,7 +41,8 @@ enum game_loop
 	INGAME,
 	BLACK_HOLE,
 	FAILURE,
-	ENDGAME
+	ENDGAME,
+	HIGHSCORE
 };
 
 enum ballState
