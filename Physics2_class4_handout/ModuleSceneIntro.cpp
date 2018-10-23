@@ -251,9 +251,9 @@ bool ModuleSceneIntro::Start()
 	// MAIN kicker
 	// rect
 	mainKickerRect = { 0,59,20,76 };
-	mainKicker_body = App->physics->CreateRectangle(400, 440, 20, 20);
+	mainKicker_body = App->physics->CreateRectangle(402, 441, 20, 20);
 	//mainKicker_body->body->SetType(b2_staticBody);
-	mainKickerAnchorBody = App->physics->CreateRectangle(400, 462, 20, 20);
+	mainKickerAnchorBody = App->physics->CreateRectangle(402, 463, 20, 20);
 	mainKickerAnchorBody->body->SetType(b2_staticBody);
 	// create prismatic joint
 	b2PrismaticJointDef prismJointDef;
@@ -358,7 +358,8 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
-		shootBall();
+		if(!kickerJoint->IsMotorEnabled())
+			shootBall();
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
 		/*if (balls.getFirst()->data->body->IsActive()) {
@@ -851,6 +852,8 @@ update_status ModuleSceneIntro::PostUpdate()
 			linkedBody = nullptr;
 			// prepare the board for the new incoming ball
 			newBall();
+			// get the next ball ready
+			shootBall();
 			scene_phase = game_loop::START;
 		}
 
@@ -868,6 +871,8 @@ update_status ModuleSceneIntro::PostUpdate()
 
 				if (inGameBalls < 1)
 				{
+					// prepare for next ball
+					shootBall();
 					scene_phase = game_loop::FAILURE;
 				}
 				break;
@@ -1158,12 +1163,17 @@ bool ModuleSceneIntro::shootBall()
 	bool ret = true;
 
 	// check if we still have remaining balls
-	if (safetyPlateBalls > 0)
+	if (safetyPlateBalls > 0 && !kickerJoint->IsMotorEnabled())
 	{
 		kickerJoint->EnableMotor(true);
 	}
-
-
+	else if (safetyPlateBalls > 0 && kickerJoint->IsMotorEnabled())
+	{
+		kickerJoint->EnableMotor(false);
+		// classic pinball shake to reposition balls
+		balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -20), balls.getFirst()->data->body->GetWorldCenter(), true);
+	}
+	
 	return ret;
 
 }

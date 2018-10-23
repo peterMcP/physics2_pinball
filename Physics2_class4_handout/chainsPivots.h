@@ -179,7 +179,7 @@ int rightBottomWayPoints[28] = {
 //};
 // Pivot 0, 0
 int safetyZonePoints[28] = {
-	415, 434,
+	415, 435,//434,
 	431, 434,
 	438, 432,
 	442, 428,
@@ -195,7 +195,7 @@ int safetyZonePoints[28] = {
 	414, 287
 };
 
-int safetyZoneP2[4] = { 389, 287, 389, 434 };
+int safetyZoneP2[4] = { 389, 287, 391, 434 };
 
 // Pivot 0, 0
 int loopPartPoints[120] = {
