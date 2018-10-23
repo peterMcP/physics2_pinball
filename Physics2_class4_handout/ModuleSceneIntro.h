@@ -216,8 +216,9 @@ public:
 	SDL_Rect mainKickerRect;
 	PhysBody* mainKicker_body = nullptr;
 	PhysBody* mainKickerAnchorBody = nullptr;
-	public:
 	b2PrismaticJoint* kickerJoint = nullptr;
+	bool preventyZone = false;
+	PhysBody* preventyTrigger = nullptr;
 
 
 	PhysBody* testBall = nullptr;

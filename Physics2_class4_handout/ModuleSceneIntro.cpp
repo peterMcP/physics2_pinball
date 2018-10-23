@@ -255,7 +255,7 @@ bool ModuleSceneIntro::Start()
 	//mainKicker_body->body->SetType(b2_staticBody);
 	mainKickerAnchorBody = App->physics->CreateRectangle(402, 463, 20, 20);
 	mainKickerAnchorBody->body->SetType(b2_staticBody);
-	// create prismatic joint
+	// create prismatic joint --------
 	b2PrismaticJointDef prismJointDef;
 	b2Vec2 worldAxis(0.0f, 1.0f);
 	prismJointDef.Initialize(mainKickerAnchorBody->body,mainKicker_body->body, mainKicker_body->body->GetWorldCenter(), worldAxis);
@@ -266,6 +266,10 @@ bool ModuleSceneIntro::Start()
 	prismJointDef.motorSpeed = -60.0f;
 	//prismJointDef.enableMotor = true;
 	kickerJoint = (b2PrismaticJoint*)App->physics->world->CreateJoint(&prismJointDef);
+	// --------------------------------
+	// creates preventy trigger
+	preventyTrigger = App->physics->CreateRectangleSensor(392, 440, 4, 20);
+
 
 
 	// other special sensors
@@ -327,7 +331,7 @@ update_status ModuleSceneIntro::Update()
 
 	//LOG("NUM OF BALLS: %i", balls.count());
 	//LOG("NUM OF INGAME BALLS: %i", inGameBalls);
-	LOG("SAFETY PLATE BALLS: %i", safetyPlateBalls);
+	//LOG("SAFETY PLATE BALLS: %i", safetyPlateBalls);
 
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -358,8 +362,14 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
 	{
-		if(!kickerJoint->IsMotorEnabled())
-			shootBall();
+		if (preventyZone)
+		{
+			if (!kickerJoint->IsMotorEnabled())
+			{
+				shootBall();
+				preventyZone = false;
+			}
+		}
 		// balls.getLast()->data->body->ApplyForce(b2Vec2(0,-420), balls.getLast()->data->body->GetWorldCenter(), true);
 
 		/*if (balls.getFirst()->data->body->IsActive()) {
@@ -610,6 +620,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	switch (scene_phase)
 	{
 	case START:
+		// prevents launching a ball wich is not already in place
+		if (bodyB == preventyTrigger)
+		{
+			LOG("PREVENTY TRIGGER REACHED");
+			preventyZone = true;
+		}
+
 		//App->audio->PlayFx(bonus_fx);
 		if (bodyB == exitLoopTrigger)
 		{
