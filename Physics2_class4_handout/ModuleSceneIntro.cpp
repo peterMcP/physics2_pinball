@@ -49,6 +49,8 @@ bool ModuleSceneIntro::Start()
 	sprites_tex = App->textures->Load("pinball/sprites.png");
 	score_tex = App->textures->Load("pinball/font.png");
 	turboLogo_tex = App->textures->Load("pinball/turboLogo.png");
+	flames_tex = App->textures->Load("pinball/flames2.png");
+	scoreTypes_tex = App->textures->Load("pinball/scores2.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -290,6 +292,20 @@ bool ModuleSceneIntro::Start()
 	
 	TopHole.loop = false; 
 
+	// flames animation
+	for (int i = 0; i < NUM_FLAMES; ++i)
+	{
+		for (int j = 0; j < 7; ++j)
+		{
+			flamesAnim[i].PushBack({ j * 100 ,0, 100,100 });
+			flamesAnim[i].speed = 0.25f;
+		}
+	}
+
+	// SCORETYPES RECTs
+	yourScoreRect = { 0,0,223,72 };
+	highScoreRect = { 0,77,223,78 };
+
 	return ret;
 }
 
@@ -316,6 +332,10 @@ bool ModuleSceneIntro::CleanUp()
 	centerArrowsAnim_tex = nullptr;
 	App->textures->Unload(TopHole_tex);
 	TopHole_tex = nullptr;
+	App->textures->Unload(flames_tex);
+	flames_tex = nullptr;
+	App->textures->Unload(scoreTypes_tex);
+	scoreTypes_tex = nullptr;
 
 
 	App->textures->Unload(circle);
@@ -630,6 +650,25 @@ update_status ModuleSceneIntro::Update()
 			automaticShoot = false;
 		}
 
+	}
+
+	// DRAW ENDGAME AND HIGHSCORE animations/sprites
+	if (scene_phase == game_loop::ENDGAME || scene_phase == game_loop::HIGHSCORE)
+	{
+		int separation = 70;
+		for (uint i = 0; i < NUM_FLAMES; ++i)
+			App->renderer->Blit(flames_tex, 62 + (separation*i), 10, &flamesAnim[i].GetCurrentFrame());
+		// Draw scoretype
+		
+		switch (scene_phase)
+		{
+		case ENDGAME:
+			App->renderer->Blit(scoreTypes_tex, 106, 70, &yourScoreRect);
+			break;
+		case HIGHSCORE:
+			App->renderer->Blit(scoreTypes_tex, 110, 70, &highScoreRect);
+			break;
+		}
 	}
 
 	// DRAW SCORE

@@ -5,6 +5,8 @@
 #include "Globals.h"
 #include "p2Animation.h"
 
+#define NUM_FLAMES 4
+
 class PhysBody;
 class b2RevoluteJoint;
 class b2PrismaticJoint;
@@ -94,6 +96,9 @@ public:
 	SDL_Texture* leftFlipper_tex = nullptr;
 	SDL_Texture* rightFlipper_tex = nullptr;
 	SDL_Texture* turboLogo_tex = nullptr;
+	SDL_Texture* flames_tex = nullptr;
+	Animation flamesAnim[NUM_FLAMES];
+	SDL_Texture* scoreTypes_tex = nullptr;
 
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
@@ -202,7 +207,8 @@ public:
 	int inGameBalls = 0; // counts the actual balls on board
 
 	// Rects
-	//SDL_Rect turboLogoRect;
+	SDL_Rect yourScoreRect;
+	SDL_Rect highScoreRect;
 
 	
 	// lock functionality variables
