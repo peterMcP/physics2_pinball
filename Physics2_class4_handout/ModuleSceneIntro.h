@@ -184,7 +184,6 @@ public:
 	uint Vacuum_Combo_Time = 0; 
 	uint Ejected_Balls = 0; 
 	uint Vacuum_Combo_Times = 1; 
-	uint Vacuum_Combo_Score = 500000;
 
 	//
 	bool Inside_Vacuum = false;
@@ -216,6 +215,8 @@ public:
 	int allSensorsActives = 152562;
 	int lockScore = 34737;
 	int allStarScore = 50650;
+	uint Vacuum_Combo_Score = 500000;
+	uint comboVaccumShootedBallScore = 6521;
 	// vars
 	//int numBaseBalls = 4; // counts the number of round start balls
 	int inGameBalls = 0; // counts the actual balls on board

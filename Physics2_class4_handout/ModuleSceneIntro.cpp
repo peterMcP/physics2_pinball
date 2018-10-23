@@ -680,6 +680,8 @@ update_status ModuleSceneIntro::Update()
 				Vacuum_Combo_Time += 200;
 				// play sfx
 				App->audio->PlayFx(canon_sfx);
+				// add shooted ball score
+				App->player->score += comboVaccumShootedBallScore;
 			}
 
 			else if (Ejected_Balls >= 20 && Now2 > Vacuum_Combo_Time + 200) {        // reactivate trigger after last ball
