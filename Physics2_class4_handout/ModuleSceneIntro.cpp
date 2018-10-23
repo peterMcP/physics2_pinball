@@ -1179,15 +1179,7 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case ENDGAME:
-		Vacuum_Combo = true;
-		Inside_Vacuum_Flag = false;
-		Vacuum_Combo_Flag = false;
-
-
-		Vacuum_Time = 0;
-	    Vacuum_Combo_Time = 0;
-		Ejected_Balls = 0;
-		Vacuum_Combo_Times = 1;
+		
 		//restartBoard();
 		break;
 
@@ -1202,6 +1194,17 @@ update_status ModuleSceneIntro::PostUpdate()
 bool ModuleSceneIntro::restartBoard()
 {
 	bool ret = true;
+
+	Vacuum_Combo = true;
+	Inside_Vacuum_Flag = false;
+	Vacuum_Combo_Flag = false;
+
+
+	Vacuum_Time = 0;
+	Vacuum_Combo_Time = 0;
+	Ejected_Balls = 0;
+	Vacuum_Combo_Times = 1;
+
 
 	// adds balls to safe plate
 	generateStartBalls();
