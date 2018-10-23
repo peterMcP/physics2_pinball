@@ -99,6 +99,8 @@ public:
 	SDL_Texture* flames_tex = nullptr;
 	Animation flamesAnim[NUM_FLAMES];
 	SDL_Texture* scoreTypes_tex = nullptr;
+	SDL_Texture* Ball_Lost_tex_1 = nullptr;
+	SDL_Texture* Ball_Lost_tex_2 = nullptr;
 
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
@@ -242,4 +244,9 @@ public:
 
 
 	PhysBody* testBall = nullptr;
+
+	// anims
+	bool Play_Death = false; 
+	uint Death_Score_Time = 0; 
+	bool Finished_Death = false; 
 };

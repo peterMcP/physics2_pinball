@@ -52,6 +52,8 @@ bool ModuleSceneIntro::Start()
 	turboLogo_tex = App->textures->Load("pinball/turboLogo.png");
 	flames_tex = App->textures->Load("pinball/flames2.png");
 	scoreTypes_tex = App->textures->Load("pinball/scores2.png");
+    Ball_Lost_tex_1 = App->textures->Load("pinball/Ball_Lost_1.png");
+	Ball_Lost_tex_2 = App->textures->Load("pinball/Ball_Lost_2.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -337,7 +339,10 @@ bool ModuleSceneIntro::CleanUp()
 	flames_tex = nullptr;
 	App->textures->Unload(scoreTypes_tex);
 	scoreTypes_tex = nullptr;
-
+	App->textures->Unload(Ball_Lost_tex_1);
+	Ball_Lost_tex_1 = nullptr;
+	App->textures->Unload(Ball_Lost_tex_2);
+	Ball_Lost_tex_2 = nullptr;
 
 	App->textures->Unload(circle);
 	App->textures->Unload(box);
@@ -493,6 +498,16 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(scoreboard_tex, 30, 0, NULL, 1.0f); 
 
 	// draw animations// balls etc ---------------------------------------------------------------------------
+	SDL_Rect r = { 1, 1, 67, 21 }; 
+	uint now = SDL_GetTicks();
+	 if (!Play_Death) {
+	 	 Death_Score_Time = now; 
+	     App->renderer->Blit(Ball_Lost_tex_1, 181, 538, &r, 1.0f); 
+	 }
+	 else if (now < Death_Score_Time + 1000) {
+		 App->renderer->Blit(Ball_Lost_tex_2, 181, 538, &r, 1.0f);
+		 Finished_Death = true;
+	 }
 
 	// draw all sensors
 	p2List_item<activableSensors>* sensors = sensor_list.getFirst();
@@ -1157,7 +1172,9 @@ update_status ModuleSceneIntro::PostUpdate()
 
 	case FAILURE:
 
-		
+		if (!Finished_Death) {
+			Play_Death = true;
+		}
 
 		if (balls.count() > 0) {
 
