@@ -261,6 +261,8 @@ bool ModuleSceneIntro::Start()
 	// ANIMATIONS
 	for (int i = 9; i >= 0; --i)
 		centerArrowsAnim.PushBack({ i * 15, 0, 15, 135});
+	centerArrowsAnim.PushBack({ 0, 0, 0, 0 });
+	centerArrowsAnim.PushBack({ 0, 0, 0, 0 });
 	centerArrowsAnim.speed = 0.15f;
 
 	for (int i = 3; i >= 0; --i)
@@ -311,6 +313,8 @@ bool ModuleSceneIntro::Start()
 	bigLeftArrowsAnim.PushBack({ 356,136,89,136 });
 	bigLeftArrowsAnim.PushBack({ 267,136,89,136 });
 	bigLeftArrowsAnim.PushBack({ 178,136,89,136 });
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 });
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 });
 	bigLeftArrowsAnim.speed = 0.15f;
 	// right
 	rightArrowsOffRect = { 0,0,89,136 };
@@ -324,6 +328,8 @@ bool ModuleSceneIntro::Start()
 	bigRightArrowsAnim.PushBack({ 267,0,89,136 });
 	bigRightArrowsAnim.PushBack({ 178,0,89,136 });
 	bigRightArrowsAnim.PushBack({ 89,0,89,136 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
 	bigRightArrowsAnim.speed = 0.15f;
 	// -----------------------------------------------------
 
