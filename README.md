@@ -12,13 +12,15 @@ Marc Doctor ____ https://github.com/thedoctormarc
 
 -> Differences with the original: 
   No main kicker flipper appendix
-  We have some fancy combos 
+  We have some fancy combos
+  Implemented highscore at the end of the game
 
            Controls:
 Arrows
 - Left: Left flipper
 - Right: Right flipper
-- Down: Launch new ball
+- Space: Launch new ball (like the original pinball)
+- Return: when game end show highscore, then, restart the game
 
 Debug:
 - F1: draw shapes
