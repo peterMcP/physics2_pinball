@@ -61,6 +61,8 @@ bool ModuleSceneIntro::Start()
 	extraBall_sfx = App->audio->LoadFx("pinball/audio/SFX/2_extraBall.wav");
 	canon_sfx = App->audio->LoadFx("pinball/audio/SFX/7_canon.wav");
 	flipper_sfx = App->audio->LoadFx("pinball/audio/SFX/8_flipper.wav");
+	launchNewBall_sfx = App->audio->LoadFx("pinball/audio/SFX/12_launchNewBall.wav");
+	mainKicker_sfx = App->audio->LoadFx("pinball/audio/SFX/1_mainKicker.wav");
 
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
@@ -997,6 +999,7 @@ update_status ModuleSceneIntro::PostUpdate()
 				TopHole.loop = false;
 				starsCounter = 0;
 				// play sfx
+				App->audio->PlayFx(launchNewBall_sfx);
 				App->audio->PlayFx(extraBall_sfx);
 				// add score
 				App->player->score += allStarScore;
@@ -1359,6 +1362,9 @@ bool ModuleSceneIntro::shootBall()
 		// classic pinball shake to reposition balls
 		balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -20), balls.getFirst()->data->body->GetWorldCenter(), true);
 	}
+
+	//play sfx
+	App->audio->PlayFx(mainKicker_sfx);
 	
 	return ret;
 

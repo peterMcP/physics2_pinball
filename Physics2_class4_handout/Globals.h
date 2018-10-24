@@ -29,4 +29,4 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "Hot Rod Pinball v0.0"
+#define TITLE "Hot Rod Pinball v1.0"
