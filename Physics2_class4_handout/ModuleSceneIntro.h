@@ -100,9 +100,7 @@ public:
 	SDL_Texture* flames_tex = nullptr;
 	Animation flamesAnim[NUM_FLAMES];
 	SDL_Texture* scoreTypes_tex = nullptr;
-	SDL_Texture* Ball_Lost_tex_1 = nullptr;
-	SDL_Texture* Ball_Lost_tex_2 = nullptr;
-
+	
 	SDL_Texture* centerArrowsAnim_tex = nullptr;
 	Animation centerArrowsAnim;
 	Animation leftArrowsAnim;
@@ -257,5 +255,13 @@ public:
 
 	// ball lost indicator
 	activableSensors ballLostLogo;
+
+	// big arrows animations
+	Animation bigLeftArrowsAnim;
+	Animation bigRightArrowsAnim;
+	SDL_Texture* bigArrows_tex = nullptr;
+	SDL_Rect leftArrowsOffRect;
+	SDL_Rect rightArrowsOffRect;
+	SDL_Rect gravityLayerTexTrickRect;
 
 };

@@ -52,9 +52,8 @@ bool ModuleSceneIntro::Start()
 	turboLogo_tex = App->textures->Load("pinball/turboLogo.png");
 	flames_tex = App->textures->Load("pinball/flames2.png");
 	scoreTypes_tex = App->textures->Load("pinball/scores2.png");
-    Ball_Lost_tex_1 = App->textures->Load("pinball/Ball_Lost_1.png");
-	Ball_Lost_tex_2 = App->textures->Load("pinball/Ball_Lost_2.png");
 	BlackArrowsGravity_tex = App->textures->Load("pinball/BlackArrows.png");
+	bigArrows_tex = App->textures->Load("pinball/bigArrowsAnim.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -218,6 +217,9 @@ bool ModuleSceneIntro::Start()
 	gravityLogo.rect[active] = { 104,0,45,60 };
 	gravityLogo.rect[inactive] = { 149,0,45,60 };
 
+	// gravity hole layer trick
+	gravityLayerTexTrickRect = { 56,3,74,110 };
+
 	// ball lost indicator logo
 	ballLostLogo.totalTime = 350;
 	ballLostLogo.rect[inactive] = { 31,79,67,21 };
@@ -296,6 +298,35 @@ bool ModuleSceneIntro::Start()
 	kickerRight.scoreToGain = 12001;
 	kickerRight.totalTime = 150;
 
+	// big arrows animation --------------------------------
+	// left
+	leftArrowsOffRect = { 267,272,89,136 };
+	bigLeftArrowsAnim.PushBack({ 178,272,89,136 });
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 }); // dummy frames
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 });
+	bigLeftArrowsAnim.PushBack({ 89,272,89,136 });
+	bigLeftArrowsAnim.PushBack({ 0,272,89,136 });
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 });
+	bigLeftArrowsAnim.PushBack({ 0,0,0,0 });
+	bigLeftArrowsAnim.PushBack({ 356,136,89,136 });
+	bigLeftArrowsAnim.PushBack({ 267,136,89,136 });
+	bigLeftArrowsAnim.PushBack({ 178,136,89,136 });
+	bigLeftArrowsAnim.speed = 0.15f;
+	// right
+	rightArrowsOffRect = { 0,0,89,136 };
+	bigRightArrowsAnim.PushBack({ 89,136,89,136 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
+	bigRightArrowsAnim.PushBack({ 0,136,89,136 });
+	bigRightArrowsAnim.PushBack({ 356,0,89,136 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
+	bigRightArrowsAnim.PushBack({ 0,0,0,0 });
+	bigRightArrowsAnim.PushBack({ 267,0,89,136 });
+	bigRightArrowsAnim.PushBack({ 178,0,89,136 });
+	bigRightArrowsAnim.PushBack({ 89,0,89,136 });
+	bigRightArrowsAnim.speed = 0.15f;
+	// -----------------------------------------------------
+
 	return ret;
 }
 
@@ -326,12 +357,10 @@ bool ModuleSceneIntro::CleanUp()
 	flames_tex = nullptr;
 	App->textures->Unload(scoreTypes_tex);
 	scoreTypes_tex = nullptr;
-	App->textures->Unload(Ball_Lost_tex_1);
-	Ball_Lost_tex_1 = nullptr;
-	App->textures->Unload(Ball_Lost_tex_2);
-	Ball_Lost_tex_2 = nullptr;
 	App->textures->Unload(BlackArrowsGravity_tex);
 	BlackArrowsGravity_tex = nullptr;
+	App->textures->Unload(bigArrows_tex);
+	bigArrows_tex = nullptr;
 
 
 	App->textures->Unload(circle);
@@ -491,7 +520,7 @@ update_status ModuleSceneIntro::Update()
 
 	 if (SDL_GetTicks() > ballLostLogo.eventTime + ballLostLogo.totalTime)
 		 ballLostLogo.state = sensorState::inactive;
-	 App->renderer->Blit(sprites_tex, 181, 538, &ballLostLogo.rect[ballLostLogo.state]);
+	 App->renderer->Blit(sprites_tex, 182, 538, &ballLostLogo.rect[ballLostLogo.state]);
 
 
 	// draw all sensors
@@ -582,7 +611,20 @@ update_status ModuleSceneIntro::Update()
 	mainKicker_body->GetPosition(x, y);
 	App->renderer->Blit(sprites_tex, x, y, &mainKickerRect);
 
-	// draw balls
+	// DRAW big arrows animations --------------------------
+
+	// fixed off, left zone
+	App->renderer->Blit(bigArrows_tex, 78, 98, &leftArrowsOffRect);
+	// and animated
+	App->renderer->Blit(bigArrows_tex, 78, 98, &bigLeftArrowsAnim.GetCurrentFrame());
+	// fixed off, right zone
+	App->renderer->Blit(bigArrows_tex, 266, 98, &rightArrowsOffRect);
+	// and animated
+	App->renderer->Blit(bigArrows_tex, 266, 98, &bigRightArrowsAnim.GetCurrentFrame());
+
+	// -----------------------------------------------------
+
+	// draw balls ------------------------------------------
 	c = balls.getFirst();
 	
 	while (c != NULL)
@@ -624,19 +666,20 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(sprites_tex, x - 13, y + 66, &kickerRight.rect[active]);
 	}
 	
-	// check if we are on in game phase to draw the second layer on top of the ball
+	// check if we are on in game phase to draw the second layer on top of the ball -------
+	
+	// gravity zone layer trick always
+	App->renderer->Blit(second_layer_tex, 48, 109, &gravityLayerTexTrickRect, 1.0f);
 
 	if (scene_phase == game_loop::INGAME || scene_phase == game_loop::FAILURE)
 	{
 		SDL_Rect r = { 0,0,55,120 };
 		App->renderer->Blit(second_layer_tex, 303, 99, &r, 1.0f); 
-		r = { 56,3,74,110 };
-		App->renderer->Blit(second_layer_tex, 48, 109, &r, 1.0f);
 		r = { 132,31,80,52 };
 		App->renderer->Blit(second_layer_tex, 176, 264, &r, 1.0f);
 
 	}
-
+	// ------------------------------------------------------------------------------------
 	uint Now = SDL_GetTicks();
 
 	if (Inside_Vacuum) {
@@ -879,6 +922,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 			bodyA->body->ApplyForce(b2Vec2(0, -100), bodyA->body->GetWorldCenter(), true);
 			App->audio->PlayFx(rampBallKicked_sfx);
+			// add score
+			App->player->score += 7523;
 		}
 
 
