@@ -267,6 +267,8 @@ bool ModuleSceneIntro::Start()
 
 	for (int i = 3; i >= 0; --i)
 		rightArrowsAnim.PushBack({ i * 15, 0, 15, 135 });
+	rightArrowsAnim.PushBack({ 0, 0, 0, 0 });
+	rightArrowsAnim.PushBack({ 0, 0, 0, 0 });
 	rightArrowsAnim.speed = 0.15f;
 
 	for (int i = 0; i<=39; ++i)
@@ -599,7 +601,8 @@ update_status ModuleSceneIntro::Update()
 	// DRAW ANIMATIONS ------------------------------------
 
 	App->renderer->Blit(centerArrowsAnim_tex, 207, 320, &centerArrowsAnim.GetCurrentFrame());
-	App->renderer->Blit(centerArrowsAnim_tex, 80, 204, &rightArrowsAnim.GetCurrentFrame(), NULL, -34);
+	if(inGameBalls < 2)
+		App->renderer->Blit(centerArrowsAnim_tex, 80, 204, &rightArrowsAnim.GetCurrentFrame(), NULL, -34);
 
 	SDL_Rect r2 = { 0, 0, 50, 50 };
 	App->renderer->Blit(BlackArrowsGravity_tex, 43, 218, &r2, 1.0f, 3);
@@ -690,7 +693,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (Inside_Vacuum) {
 
-		if (App->player->score <= Vacuum_Combo_Score * Vacuum_Combo_Times || !Vacuum_Combo) {                                 // do it only when entering
+		if (App->player->score <= Vacuum_Combo_Score * Vacuum_Combo_Times || !Vacuum_Combo) {  // do it only when entering
 			if (!Inside_Vacuum_Flag) {
 				Vacuum_Time = Now;
 				Vacuum_Body->body->SetTransform(b2Vec2(PIXEL_TO_METERS(215), PIXEL_TO_METERS(301)), 0.0f);
