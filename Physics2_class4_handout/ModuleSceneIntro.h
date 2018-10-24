@@ -115,8 +115,8 @@ public:
 	uint flipper_sfx = 0;
 	uint launchNewBall_sfx = 0;
 	uint mainKicker_sfx = 0;
+	uint mainRamp_sfx = 0;
 
-	uint bonus_fx;
 	uint music; // convert music to ogg
 	// ----------------------------------------
 

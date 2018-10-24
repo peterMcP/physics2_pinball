@@ -53,7 +53,6 @@ bool ModuleSceneIntro::Start()
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
 	// App->audio->PlayFx(1, -1); 
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	ding_sfx = App->audio->LoadFx("pinball/audio/SFX/6_ding.wav");
 	bumper_sfx = App->audio->LoadFx("pinball/audio/SFX/10_bumper.wav");
@@ -63,6 +62,7 @@ bool ModuleSceneIntro::Start()
 	flipper_sfx = App->audio->LoadFx("pinball/audio/SFX/8_flipper.wav");
 	launchNewBall_sfx = App->audio->LoadFx("pinball/audio/SFX/12_launchNewBall.wav");
 	mainKicker_sfx = App->audio->LoadFx("pinball/audio/SFX/1_mainKicker.wav");
+	mainRamp_sfx = App->audio->LoadFx("pinball/audio/SFX/5_mainRamp.wav");
 
 	// -----------------------------------------------------------------------------------
 	// create background chains ---
@@ -776,6 +776,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			enterBoardTrigger2->to_delete = true;
 			// count the remaining balls in safe plate
 			safetyPlateBalls--;
+			// stop main ramp sfx with fade
+			Mix_FadeOutChannel(-1, 1800);
 		}
 
 		break; 
@@ -1355,6 +1357,10 @@ bool ModuleSceneIntro::shootBall()
 	if (safetyPlateBalls > 0 && !kickerJoint->IsMotorEnabled())
 	{
 		kickerJoint->EnableMotor(true);
+		//play kicker itself sfx
+		App->audio->PlayFx(mainKicker_sfx);
+		// play main ramp sfx
+		App->audio->PlayFx(mainRamp_sfx);
 	}
 	else if (safetyPlateBalls > 0 && kickerJoint->IsMotorEnabled())
 	{
@@ -1363,9 +1369,6 @@ bool ModuleSceneIntro::shootBall()
 		balls.getFirst()->data->body->ApplyForce(b2Vec2(0, -20), balls.getFirst()->data->body->GetWorldCenter(), true);
 	}
 
-	//play sfx
-	App->audio->PlayFx(mainKicker_sfx);
-	
 	return ret;
 
 }
