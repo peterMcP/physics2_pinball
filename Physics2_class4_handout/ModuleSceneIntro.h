@@ -82,10 +82,6 @@ public:
 	p2List<PhysBody*> balls;
 	p2List<PhysBody*> mainBoardComponents;
 
-	SDL_Texture* circle = nullptr;
-	SDL_Texture* box = nullptr;
-	SDL_Texture* rick = nullptr;
-
 	SDL_Texture* score_tex = nullptr;
 	SDL_Rect scoreCutRect[10]; // we have 10 numbers on score texture
 	SDL_Texture* sprites_tex = nullptr;
@@ -219,7 +215,7 @@ public:
 	int allSensorsActives = 152562;
 	int lockScore = 34737;
 	int allStarScore = 50650;
-	uint Vacuum_Combo_Score = 500000;
+	uint Vacuum_Combo_Score = 1000000;
 	uint comboVaccumShootedBallScore = 6521;
 	// vars
 	//int numBaseBalls = 4; // counts the number of round start balls

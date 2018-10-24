@@ -14,7 +14,6 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
 	srand(time(NULL));          
 }
 
@@ -28,10 +27,6 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-
-	circle = App->textures->Load("pinball/wheel.png");
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
 
 	// board textures ---
 	board_tex = App->textures->Load("pinball/board.png");
@@ -73,7 +68,6 @@ bool ModuleSceneIntro::Start()
 	Ball_Safety_Chain = App->physics->CreateChain(0, 18, safetyZonePoints, 28, false, false);
 	ball_launcher_leftWall = App->physics->CreateChain(0, 18, safetyZoneP2, 4, false, false);
 	
-
 	// TRIGGERS/SENSORS
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
@@ -367,69 +361,27 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(bigArrows_tex);
 	bigArrows_tex = nullptr;
 
-
-	App->textures->Unload(circle);
-	App->textures->Unload(box);
-	App->textures->Unload(rick);
-
 	return true;
 }
 
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
 	//LOG("NUM OF BALLS: %i", balls.count());
 	//LOG("NUM OF INGAME BALLS: %i", inGameBalls);
 	//LOG("SAFETY PLATE BALLS: %i", safetyPlateBalls);
-
-
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 11));
-		balls.getLast()->data->listener = this;
-		balls.getLast()->data->body->SetActive(false);
-		//Current_Ball = balls.getLast()->data;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-	{
-		balls.getLast()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(50), PIXEL_TO_METERS(50)), 0);
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		
-		
-		//startChainBg = App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), startChain, 166, false);
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && balls.count() < 1)
 	{
 		switch (scene_phase)
 		{
-		case START:
-			break;
-		case INGAME:
-			break;
-		case BLACK_HOLE:
-			break;
-		case FAILURE:
-			break;
 		case ENDGAME:
 			scene_phase = game_loop::HIGHSCORE;
 			break;
 		case HIGHSCORE:
 			restartBoard();
 			break;
-		default:
-			break;
 		}
-		//restartBoard();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && scene_phase != ENDGAME)
@@ -472,26 +424,6 @@ update_status ModuleSceneIntro::Update()
 	mouse.y = App->input->GetMouseY();
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-
 	// draw background
 	App->renderer->Blit(background_tex, 0, 0, NULL, 1.0f); //, c->data->GetRotation());
 	// draw board
@@ -631,8 +563,7 @@ update_status ModuleSceneIntro::Update()
 	// -----------------------------------------------------
 
 	// draw balls ------------------------------------------
-	c = balls.getFirst();
-	
+	p2List_item<PhysBody*>* c = balls.getFirst();
 	while (c != NULL)
 	{
 		int x, y;
@@ -644,12 +575,9 @@ update_status ModuleSceneIntro::Update()
 		else if (ball_state == ballState::DISAPPEAR && c->data != Gravity_Body) {
 			App->renderer->Blit(ball_tex, x, y - 1, NULL, 1.0f, c->data->GetRotation());
 		}
-		
-			
 		c = c->next;
 	}
 
-	
 	// DRAW TURBO SPRITE
 
 	App->renderer->Blit(turboLogo_tex, -24, 66, NULL);
@@ -780,14 +708,12 @@ update_status ModuleSceneIntro::Update()
 	// auto shoot checker
 	if (automaticShoot)
 	{
-		//autoShoot();
 		if (preventyZone)
 		{
 			shootBall();
 			preventyZone = false;
 			automaticShoot = false;
 		}
-
 	}
 
 	// DRAW ENDGAME AND HIGHSCORE animations/sprites
@@ -982,17 +908,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 update_status ModuleSceneIntro::PostUpdate()
 {
-
 	// START PHASE
 	// check if we have to delete any body
 
 	p2List_item<PhysBody*>* itemBalls = balls.getFirst();
-
-	/*if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-	{
-		balls.getLast()->data->body->SetTransform(b2Vec2(PIXEL_TO_METERS(50), PIXEL_TO_METERS(50)), 0);
-	}*/
-
 
 	switch (scene_phase)
 	{
@@ -1111,8 +1030,6 @@ update_status ModuleSceneIntro::PostUpdate()
 				App->physics->DestroyObject(itemBalls->data);
 				balls.del(itemBalls); // todo, delete item from list crashes?
 				//itemBalls = nullptr;
-
-				
 
 				if (inGameBalls < 1)
 				{
@@ -1270,14 +1187,6 @@ update_status ModuleSceneIntro::PostUpdate()
 			scene_phase = game_loop::START;
 		}
 		else {
-			//if (Lose_Life_Trigger != nullptr) {
-			//	Lose_Life_Trigger->to_delete = true;
-			//	App->physics->DestroyObject(Lose_Life_Trigger);
-
-			//	delete Lose_Life_Trigger;       // change this later in the destroy method       
-			//	Lose_Life_Trigger = nullptr;
-			//}
-
 			// saves highscore of all games
 			if (App->player->score > App->player->highScore)
 				App->player->highScore = App->player->score;
@@ -1286,15 +1195,13 @@ update_status ModuleSceneIntro::PostUpdate()
 		break;
 
 	case ENDGAME:
-		
-		//restartBoard();
 		break;
 
 	default:
 		break;
 
-
 	}
+
 	return UPDATE_CONTINUE;
 
 }
@@ -1302,17 +1209,14 @@ bool ModuleSceneIntro::restartBoard()
 {
 	bool ret = true;
 
+	// vacuum combo relatives
 	Vacuum_Combo = true;
 	Inside_Vacuum_Flag = false;
 	Vacuum_Combo_Flag = false;
-
-
 	Vacuum_Time = 0;
 	Vacuum_Combo_Time = 0;
 	Ejected_Balls = 0;
 	Vacuum_Combo_Times = 1;
-
-
 	// adds balls to safe plate
 	generateStartBalls();
 	// recount base balls
@@ -1332,8 +1236,7 @@ bool ModuleSceneIntro::restartBoard()
 		sensors = sensors->next;
 	}
 
-
-	// delete aactive boides, if any
+	// maybe delete something or create any physbody, if any
 
 	if (Vacuum_Body != nullptr) {
 		// Vacuum_Body->body->SetActive(false); 
@@ -1347,9 +1250,7 @@ bool ModuleSceneIntro::restartBoard()
 
 	// change ingame state to start
 	scene_phase = game_loop::START;
-	// maybe delete something or create any physbody
-
-
+	
 	return ret;
 }
 
@@ -1357,15 +1258,13 @@ bool ModuleSceneIntro::newBall()
 {
 	bool ret = true;
 
-	// add listener to next ball
-	//balls.getFirst()->data->listener = this;
-
 	// deletes main board chain
 	App->physics->DestroyObject(mainBoardChain);
 	// deletes corner tap exit loop
 	App->physics->DestroyObject(exitLoopTapChain);
 	// deletes top dividers
 	App->physics->DestroyObject(topDividerLeft);
+	//if(topDividerRight != nullptr)
 	App->physics->DestroyObject(topDividerRight);
 
 	// create needed triggers
@@ -1374,7 +1273,6 @@ bool ModuleSceneIntro::newBall()
 	// create the loop chain part
 	onlyLoopChain = App->physics->CreateChain(0, 18, loopPartPoints, 120, false, false);
 
-		
 	return ret;
 }
 
@@ -1438,7 +1336,6 @@ bool ModuleSceneIntro::generateStartBalls()
 		item->data->body->SetBullet(true);
 		// tweaks the ball restitution
 		setRestitution(item->data, 0.2f);
-		//item->data->body->SetActive(false);
 		item = item->next;
 	}
 	// count at start the baseballs we have
