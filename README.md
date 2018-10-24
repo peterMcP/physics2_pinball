@@ -3,8 +3,8 @@
 ----- Hot Rod Pinball -----
 
 Made by: 
-José Antonio Prieto ____ https://github.com/peterMcP
-Marc Doctor ____ https://github.com/thedoctormarc
+- José Antonio Prieto ____ https://github.com/peterMcP
+- Marc Doctor ____ https://github.com/thedoctormarc
 
 -> Source code: https://github.com/peterMcP/physics2_pinball 
 
@@ -14,13 +14,15 @@ Marc Doctor ____ https://github.com/thedoctormarc
   - No main kicker flipper appendix
   - We have some fancy combos
   - Implemented highscore at the end of the game
+  - Custom background
 
            Controls:
 Arrows
 - Left: Left flipper
 - Right: Right flipper
 - Space: Launch new ball (like the original pinball)
-- Return: when game end show highscore, then, restart the game
+- Return: when game ends show highscore, then, restart the game
+- Esc: Exit game
 
 Debug:
 - F1: draw shapes
