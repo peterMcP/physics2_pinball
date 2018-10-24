@@ -117,7 +117,6 @@ public:
 	uint mainKicker_sfx = 0;
 	uint mainRamp_sfx = 0;
 
-	uint music; // convert music to ogg
 	// ----------------------------------------
 
 	// background chain physbodys

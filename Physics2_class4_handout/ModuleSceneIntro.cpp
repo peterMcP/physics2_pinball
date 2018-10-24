@@ -51,8 +51,7 @@ bool ModuleSceneIntro::Start()
 	bigArrows_tex = App->textures->Load("pinball/bigArrowsAnim2.png");
 	
 	// audio
-	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
-	// App->audio->PlayFx(1, -1); 
+	App->audio->PlayMusic("pinball/audio/soundtrack.ogg");
 
 	ding_sfx = App->audio->LoadFx("pinball/audio/SFX/6_ding.wav");
 	bumper_sfx = App->audio->LoadFx("pinball/audio/SFX/10_bumper.wav");
