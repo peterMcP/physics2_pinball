@@ -53,7 +53,7 @@ bool ModuleSceneIntro::Start()
 	flames_tex = App->textures->Load("pinball/flames2.png");
 	scoreTypes_tex = App->textures->Load("pinball/scores2.png");
 	BlackArrowsGravity_tex = App->textures->Load("pinball/BlackArrows.png");
-	bigArrows_tex = App->textures->Load("pinball/bigArrowsAnim.png");
+	bigArrows_tex = App->textures->Load("pinball/bigArrowsAnim2.png");
 	
 	// audio
 	// music = App->audio->LoadFx("pinball/audio/soundtrack.wav");    // music as a Fx, so that it plays many times 
@@ -674,16 +674,13 @@ update_status ModuleSceneIntro::Update()
 	
 	// check if we are on in game phase to draw the second layer on top of the ball -------
 	
-	// gravity zone layer trick always
-	App->renderer->Blit(second_layer_tex, 48, 109, &gravityLayerTexTrickRect, 1.0f);
-
 	if (scene_phase == game_loop::INGAME || scene_phase == game_loop::FAILURE)
 	{
 		SDL_Rect r = { 0,0,55,120 };
 		App->renderer->Blit(second_layer_tex, 303, 99, &r, 1.0f); 
 		r = { 132,31,80,52 };
 		App->renderer->Blit(second_layer_tex, 176, 264, &r, 1.0f);
-
+		App->renderer->Blit(second_layer_tex, 48, 109, &gravityLayerTexTrickRect, 1.0f);
 	}
 	// ------------------------------------------------------------------------------------
 	uint Now = SDL_GetTicks();
