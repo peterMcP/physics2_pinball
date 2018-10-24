@@ -70,7 +70,6 @@ bool ModuleSceneIntro::Start()
 	ball_launcher_leftWall = App->physics->CreateChain(0, 18, safetyZoneP2, 4, false, false);
 	
 	// TRIGGERS/SENSORS
-	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
 	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 536, 60, 5);
@@ -100,7 +99,7 @@ bool ModuleSceneIntro::Start()
 
 	// adding revolution joint and motor to flipper - TEST, implement on setjoints function
 	b2RevoluteJointDef jointDef;
-	jointDef.bodyB = Flipper_Chain_L->body; //testCircle->body;
+	jointDef.bodyB = Flipper_Chain_L->body;
 	jointDef.bodyA = anchorFlipperL->body;
 	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
 	jointDef.lowerAngle = -0.1f * b2_pi; //
@@ -114,10 +113,6 @@ bool ModuleSceneIntro::Start()
 	jointDef.bodyB = Flipper_Chain_R->body;
 	jointDef.bodyA = anchorFlipperR->body;
 	jointDef.Initialize(jointDef.bodyA, jointDef.bodyB, jointDef.bodyA->GetWorldCenter());
-	//jointDef.lowerAngle = -0.1f * b2_pi;//-0.1f * b2_pi; //
-	//jointDef.upperAngle = 0.1f * b2_pi; //
-	//jointDef.enableLimit = true;
-	//jointDef.maxMotorTorque = 1000.0f;
 	jointDef.motorSpeed = 20.0f;
 	flipper_joint_right = App->physics->SetJoint(&jointDef);
 
@@ -626,12 +621,6 @@ update_status ModuleSceneIntro::Update()
 			}
 
 
-			/*if (Now < Vacuum_Time + 3000) {
-				LOG("Ball is trapped in vacuum");
-
-
-			}*/
-
 			else if (Now > Vacuum_Time + 3000) {
 				LOG("Ball ejected from vacuum!");
 
@@ -803,13 +792,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			// active lost ball logo
 			ballLostLogo.state = sensorState::active;
 			ballLostLogo.eventTime = SDL_GetTicks();
-			//scene_phase = game_loop::FAILURE;
 		}
 
 		if (bodyB == leftBottomBouncerTrigger)
 		{
 			LOG("LEFT BOUNCER");
-			//bodyA->body->ApplyLinearImpulse(b2Vec2(1.5f, -1.5f), bodyA->body->GetWorldCenter(), true); //ApplyForce(b2Vec2(50, -50), bodyA->body->GetWorldCenter(), true);//
 			bodyA->body->ApplyForceToCenter(b2Vec2(60, -60), true);
 			App->audio->PlayFx(bumper_sfx);
 			App->player->score += bumperScore;
@@ -1127,7 +1114,6 @@ update_status ModuleSceneIntro::PostUpdate()
 		}
 		
 			else if (TopHole.Finished()) {
-				// 	balls.getFirst()->data->body->GetTransform();   // teleport
 
 				Gravity_Body->body->SetType(b2_dynamicBody);
 				Gravity_Body->body->SetGravityScale(1.0f);
@@ -1243,7 +1229,6 @@ bool ModuleSceneIntro::restartBoard()
 	// maybe delete something or create any physbody, if any
 
 	if (Vacuum_Body != nullptr) {
-		// Vacuum_Body->body->SetActive(false); 
 		Vacuum_Body = nullptr;
 	}
 
