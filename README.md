@@ -3,7 +3,7 @@
 ----- Hot Rod Pinball -----
 
 Made by: 
-José Antonio Prieto ____ https://github.com/peterMcP
+JosÃ© Antonio Prieto ____ https://github.com/peterMcP
 Marc Doctor ____ https://github.com/thedoctormarc
 
 -> Source code: https://github.com/peterMcP/physics2_pinball 
@@ -11,9 +11,9 @@ Marc Doctor ____ https://github.com/thedoctormarc
 -> Original game: https://www.classicgame.com/game/HotRod+Pinball
 
 -> Differences with the original: 
-  No main kicker flipper appendix
-  We have some fancy combos
-  Implemented highscore at the end of the game
+  - No main kicker flipper appendix
+  - We have some fancy combos
+  - Implemented highscore at the end of the game
 
            Controls:
 Arrows
