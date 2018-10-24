@@ -31,12 +31,12 @@ Debug:
   three times (so you collect three stars), an extra 
   ball is launched from the hole
 
-::Combo 2 -> Every 500000 points, the "vacuum 
+::Combo 2 -> Every 1.000.000 points, the "vacuum 
   cleaner" launches a set of balls
 
 ::Combo 3 -> You can activate all the light sensors
-  at the top, and they will restart to give you more
-  score
+  at the top, and they give you a plus score and after will 
+  restart to give you more score
 
         --- Take into account --- 
 
