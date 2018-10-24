@@ -78,14 +78,11 @@ bool ModuleSceneIntro::Start()
 	// 364,129,8,8
 	exitLoopTrigger = App->physics->CreateRectangleSensor(372, 140, 8, 8);
 	exitLoopTrigger->listener = this;
-	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 530, 60, 20);
+	Lose_Life_Trigger = App->physics->CreateRectangleSensor(216, 536, 60, 5);
 	Lose_Life_Trigger->listener = this;
 
 	// generate start balls
 	generateStartBalls();
-
-	/*b2Fixture* f = balls.getFirst()->data->body->GetFixtureList();
-	f->SetFriction(0.7f);*/
 
 	// ADD MAIN COMPONENTS TO LIST, its components are static and never change
 	mainBoardComponents.add(App->physics->CreateChain(0, 18, topSeparatorPoints, 12, false, true));
@@ -581,7 +578,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// draw lock sprite graphic
-	if (safetyPlateBalls > 0 && inGameBalls < 2) // TODO, check all possibilities, maybe we must to track the balls on "start box"
+	if (safetyPlateBalls > 0 && inGameBalls < 2)
 	{
 		App->renderer->Blit(sprites_tex, lockLogo.positions[0].x, lockLogo.positions[0].y, &lockLogo.rect[active]);
 	}
